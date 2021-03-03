@@ -12,7 +12,7 @@ def get_vector(direction: int) -> tuple:
     """
     direction = direction % 4
     if direction < 2:
-        return VECTOR_UP if direction == 1 else VECTOR_RIGHT
+        return VECTOR_UP if direction == 0 else VECTOR_RIGHT
     return VECTOR_DOWN if direction == 2 else VECTOR_LEFT
 
 
