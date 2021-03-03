@@ -66,15 +66,16 @@ def db_get_user_data(token: str) -> dict:
     return data
 
 
-class RegistrationError(Exception):
+class BaseResponseError(Exception):
     def __init__(self, error_id: int, message: str, *args, **kwargs):
         super.__init__(*args, **kwargs)
         self.error_id = error_id
         self.message = message
 
 
-class LoginError(Exception):
-    def __init__(self, error_id: int, message: str, *args, **kwargs):
-        super.__init__(*args, **kwargs)
-        self.message = message
-        self.error_id = error_id
+class RegistrationError(BaseResponseError):
+    pass
+
+
+class LoginError(BaseResponseError):
+    pass
