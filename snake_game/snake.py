@@ -5,11 +5,6 @@ VECTOR_LEFT = (-1, 0)
 
 
 def get_vector(direction: int) -> tuple:
-    """
-    Возвращает вектор от номера направления
-    :param direction: Номер направления
-    :return: Вектор
-    """
     direction = direction % 4
     if direction < 2:
         return VECTOR_UP if direction == 0 else VECTOR_RIGHT
@@ -17,23 +12,15 @@ def get_vector(direction: int) -> tuple:
 
 
 class Snake:
-    def __init__(self, x: int, y: int, direction: int):
-        self.head = Element(x, y, direction)
+    def __init__(self, x: int, y: int, direction: int, second_element):
+        self.head = Element(x, y, direction, second_element)
 
     @property
     def second_element(self):
-        """
-        Возвращает второй элемент змейки
-        :return: Второй элемент змейки
-        """
         return self.head.next_element
 
     @property
     def last_element(self):
-        """
-        Возвращает последний элемент змейки
-        :return: Последний элемент змейки
-        """
         temp = self.head.next_element
         while temp.next_element is not None:
             temp = temp.next_element
@@ -42,10 +29,6 @@ class Snake:
 
     @property
     def length(self) -> int:
-        """
-        Возвращает длинну змейки
-        :return: Длинна змейки
-        """
         temp = self.head.next_element
         length = temp.distance_to_next_element
         while temp is not None:
@@ -54,24 +37,12 @@ class Snake:
         return length
 
     def turn_right(self) -> None:
-        """
-        Поворачиает голову змейки направо
-        :return:
-        """
         self.head.turn_right()
 
     def turn_left(self) -> None:
-        """
-        Поворачиает голову змейки налево
-        :return:
-        """
         self.head.turn_left()
 
     def move(self) -> None:
-        """
-        Двигает змейку на 1 элемент
-        :return:
-        """
         if self.head.direction != self.second_element.direction:
             new_element = Element(self.head.x, self.head.y, self.head.direction, self.second_element)
 
@@ -103,17 +74,9 @@ class Element:
         self.next_element = next_element
 
     def turn_right(self) -> None:
-        """
-        Поворачиает звено змейки направо
-        :return:
-        """
         self._direction += 1
 
     def turn_left(self) -> None:
-        """
-        Поворачиает звено змейки налево
-        :return:
-        """
         self._direction -= 1
 
     @property
@@ -122,10 +85,6 @@ class Element:
 
     @property
     def distance_to_next_element(self) -> int:
-        """
-        Возвращает расстояние до следующего звена
-        :return: Расстояние до следующего звена
-        """
         if self.next_element is None:
             return 0
 
