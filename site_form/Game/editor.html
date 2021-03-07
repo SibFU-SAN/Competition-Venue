@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Редактор</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	
+	<form method="post" action="">
+		<fieldset>
+			<legend>Введите код для игры</legend>
+			<p>
+				<label>Id Игры<input type="text" name="game_id" id="game_id" required></label>
+			</p>
+			<p>+ Информация о будущей игре</p>
+			<!-- Нужно как то передать информацию об аккаунте -->
+			<p>
+				<textarea name="game_code" cols="40" rows="20" required></textarea>
+			</p>
+		</fieldset>
+		<p>
+			<input type="submit" value="Отправить">
+			<input type="reset" value="Очистить">
+		</p>
+		<!-- Форма ввода "кода для игры". Нужно изменить -->
+	</form>
+</body>
+</html>

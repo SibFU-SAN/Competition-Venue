@@ -1,0 +1,33 @@
+.InfoBlog {
+	border-radius: 20px;
+	background: red;
+	border: 1px solid #000000;
+	padding: 10px;
+	margin: 0 auto;
+	max-width: 60%;
+}
+
+.InfoBlog p{
+	padding: 0;
+	margin: 0 auto;
+}
+
+.info-field{
+	margin-bottom: 10px;
+	margin-top: 10px;
+	background: #fafafa;
+	border: 1px solid #000000;
+	
+}
+
+.info-field .short-info{
+	
+}
+
+.info-field .full-info{
+
+}
+
+.info-field .links-info{
+
+}
