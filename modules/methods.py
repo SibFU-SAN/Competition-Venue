@@ -32,6 +32,12 @@ def register(**data) -> dict:
     if data['password'] != data["confirmation"]:
         return r_error(21, 'Пароли не совпадают')
 
+    if not(5 < len(data['password']) < 33):
+        return r_error(24, 'Введена недопустимая длина пароля. Допустимый диапазон начинается от 6 до 32 символов')
+
+    if not(3 < len(data['login']) < 33):
+        return r_error(23, 'Введена недопустимая длина логина. Допустимый диапазон начинается от 4 до 32 символов')
+
     if not re.match("^[aA-zZ\\d]+$", data['login']):
         return r_error(22, 'В логине присутствуют недопустимые символы')
 
