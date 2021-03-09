@@ -32,7 +32,7 @@ def register(**data) -> dict:
     if data['password'] != data["confirmation"]:
         return r_error(21, 'Пароли не совпадают')
 
-    if not re.match("^[aA-zZ\\d]$", data['login']):
+    if not re.match("^[aA-zZ\\d]+$", data['login']):
         return r_error(22, 'В логине присутствуют недопустимые символы')
 
     try:
