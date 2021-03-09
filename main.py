@@ -1,4 +1,3 @@
-import re
 import flask
 
 from json.encoder import JSONEncoder
