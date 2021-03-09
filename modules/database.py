@@ -60,7 +60,7 @@ def db_get_user_data(token: str) -> dict:
     :param token: Токен
     :return: Данные пользователя
     """
-    data = db.get_collection('users').find_one({'token': token}, {'password': 0})
+    data = db.get_collection('users').find_one({'token': token}, {'password': 0, 'token': 0})
     if data is None:
         raise LoginError(32, "Введен неверный токен")
     return data
