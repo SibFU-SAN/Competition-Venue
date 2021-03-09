@@ -88,3 +88,15 @@ def reset_password(**data) -> dict:
         return r_success(**result)
     except database.ResetPasswordError as ex:
         return r_error(ex.error_id, ex.message)
+
+
+def update_data(**data) -> dict:
+    if 'token' not in data:
+        return r_error(30, "Не заполнены все поля",
+                       token=('token' in data))
+
+    try:
+        result = database.db_update_info(data['token'], **data)
+        return r_success(**result)
+    except database.UpdateInfoError as ex:
+        return r_error(ex.error_id, ex.message)

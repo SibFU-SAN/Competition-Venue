@@ -23,5 +23,10 @@ def user_data_api():
     return json_encoder.encode(methods.get_data(**flask.request.form))
 
 
+@app.route("/api/user_data_update")
+def user_data_update_api():
+    return json_encoder.encode(methods.update_data(**flask.request.form))
+
+
 if __name__ == '__main__':
     app.run()

@@ -85,6 +85,25 @@ def db_reset_password(token: str, new_password: str) -> dict:
     return {'token': new_token}
 
 
+def db_update_info(token: str, **data) -> dict:
+    """
+    Обновление данных пользователем
+    :param token: Токен
+    :param data: Значения
+    :return: Измененные поля
+    """
+    allowed_fields = {"name", "second_name", "about", 'gender'}
+    fields = dict()
+    for key, value in data:
+        if key in allowed_fields:
+            fields[key] = value
+
+    result = db.get_collection('users').find_one_and_update({'token': token}, {'$set': fields}, {'_id': 1})
+    if result is None:
+        raise UpdateInfoError(50, "Введен неверный токен")
+    return fields
+
+
 class BaseResponseError(Exception):
     def __init__(self, error_id: int, message: str):
         self.error_id = error_id
@@ -100,4 +119,8 @@ class LoginError(BaseResponseError):
 
 
 class ResetPasswordError(BaseResponseError):
+    pass
+
+
+class UpdateInfoError(BaseResponseError):
     pass
