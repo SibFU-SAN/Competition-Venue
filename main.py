@@ -18,5 +18,10 @@ def login_api():
     return json_encoder.encode(methods.login(**flask.request.form))
 
 
+@app.route("/api/user_data")
+def user_data_api():
+    return json_encoder.encode(methods.get_data(**flask.request.form))
+
+
 if __name__ == '__main__':
     app.run()
