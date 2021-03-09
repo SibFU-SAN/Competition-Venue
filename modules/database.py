@@ -66,6 +66,25 @@ def db_get_user_data(token: str) -> dict:
     return data
 
 
+def db_reset_password(token: str, new_password: str) -> dict:
+    """
+    Сброс пароля пользователем
+    :param token: Токен
+    :param new_password: Новый пароль пользователя
+    :return: Данные с новым токеном
+    """
+    data = db.get_collection('users').find_one({'token': token}, {'login': 1})
+    if data is None:
+        raise ResetPasswordError(40, "Введен неверный токен")
+
+    new_token = generate_token(data['login'], new_password)
+    db.get_collection('users').update({'token': token}, {'$set': {
+        'password': hashlib.sha1(new_password.encode()).hexdigest(),
+        'token': new_token
+    }})
+    return {'token': new_token}
+
+
 class BaseResponseError(Exception):
     def __init__(self, error_id: int, message: str):
         self.error_id = error_id
@@ -77,4 +96,8 @@ class RegistrationError(BaseResponseError):
 
 
 class LoginError(BaseResponseError):
+    pass
+
+
+class ResetPasswordError(BaseResponseError):
     pass

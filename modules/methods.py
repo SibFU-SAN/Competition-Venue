@@ -72,3 +72,19 @@ def get_data(**data) -> dict:
         return r_success(**result)
     except database.LoginError as ex:
         return r_error(ex.error_id, ex.message)
+
+
+def reset_password(**data) -> dict:
+    if not('token' in data and 'new_password' in data):
+        return r_error(30, "Не заполнены все поля",
+                       token=('token' in data),
+                       new_password=('new_password' in data))
+
+    if not(5 < len(data['password']) < 33):
+        return r_error(41, 'Введена недопустимая длина пароля. Допустимый диапазон начинается от 6 до 32 символов')
+
+    try:
+        result = database.db_reset_password(data['token'], data['new_password'])
+        return r_success(**result)
+    except database.ResetPasswordError as ex:
+        return r_error(ex.error_id, ex.message)
