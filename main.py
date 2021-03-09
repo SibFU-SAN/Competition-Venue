@@ -10,14 +10,12 @@ app = flask.Flask(__name__)
 
 @app.route("/api/register", methods=['POST'])
 def register_api():
-    response = flask.request.form
-    return json_encoder.encode(methods.register(**response))
+    return json_encoder.encode(methods.register(**flask.request.form))
 
 
 @app.route("/api/login", methods=['POST'])
 def login_api():
-    response = flask.request.form
-    return json_encoder.encode(methods.login(**response))
+    return json_encoder.encode(methods.login(**flask.request.form))
 
 
 if __name__ == '__main__':
