@@ -1,0 +1,30 @@
+.form-field {
+	display: flex;
+	justify-content: center;
+    align-items: center;
+	height: 100%;
+}
+.form-field h2 {
+	text-align: center;
+	font-weight: normal;
+	margin: 0 0 32px 0;
+}
+.form-field p {
+	margin: 0 auto;	
+	margin-top: 5px;
+}
+
+.form-field input {
+	display:inline-block;
+	margin: 10px 0;
+	padding:3px;
+	border-radius:10px;
+	border: 1px solid #eee;
+	transition: .3s border-color;
+}
+.form-field input[type="submit"] {
+	padding: 10px;
+}
+.form-field input:hover {
+	border: 1px solid #aaa;
+}	
