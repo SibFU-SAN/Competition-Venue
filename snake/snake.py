@@ -13,17 +13,17 @@ class Map:
         game_map_array = []
         for i in range(self.height):
             game_map_array.append([])
-            for j in range(self.weight):
-                game_map_array[i].append(0)
+            for _ in range(self.weight):
+                game_map_array[i].append(' ')
         for i in range(self.height):
             for j in range(self.weight):
                 if i == 0 or i == self.height - 1:
-                    game_map_array[i][j] = 1
+                    game_map_array[i][j] = '▖'
                 elif j == 0 or j == self.weight - 1:
-                    game_map_array[i][j] = 1
+                    game_map_array[i][j] = '▖'
         for i in range(len(self.apple_array)):
             game_map_array[int(self.apple_array[i][0])][int(
-                self.apple_array[i][1])] = 5
+                self.apple_array[i][1])] = '◎'
         return game_map_array
 
 
@@ -39,20 +39,23 @@ class SnakePlayer:
     def snake_move_forward(self):
         """Метод для движения змейки прямолинейно
         1 - Вверх, 2 - Вниз, 3 - Влево, 4 - Вправо"""
+
         warning = 0
         self.game_map_ARRAY[self.snake_position[0][0]][
-            self.snake_position[0][1]] = 3
+            self.snake_position[0][1]] = '🐸'
         for i in range(len(snake_position)-1):
             if i != 0:
                 self.game_map_ARRAY[self.snake_position[-1][0]][
-                    self.snake_position[-1][1]] = 2
+                    self.snake_position[-1][1]] = '◻'
+        "Проверка на то, ела ли змейка"
+        self.eating()
 
         snake_head = [snake_position[0][0], snake_position[0][1]]
 
         "Очистка змейки"
         for i in range(len(self.snake_position)):
             self.game_map_ARRAY[self.snake_position[i][0]][
-                self.snake_position[i][1]] = 0
+                self.snake_position[i][1]] = ' '
 
         "Изменение координат змейки"
         for j in range(len(self.snake_position)-1):
@@ -73,13 +76,11 @@ class SnakePlayer:
         for i in range(len(self.snake_position)):
             if i == 0:
                 self.game_map_ARRAY[self.snake_position[i][0]][
-                    self.snake_position[i][1]] = 3
+                    self.snake_position[i][1]] = '🐸'
             else:
                 self.game_map_ARRAY[self.snake_position[i][0]][
-                    self.snake_position[i][1]] = 2
-        "Проверка на то, ела ли змейка"
-        self.eating()
-        "Проверка на столкновение со стенами"
+                    self.snake_position[i][1]] = '◻'
+        "Проверка на столкновение со стенами и с собой"
         for i in range(len(self.game_map_ARRAY)):
             if self.game_map_ARRAY[self.snake_position[0][0]][
              self.snake_position[0][1]] == self.game_map_ARRAY[i][0]:
@@ -94,6 +95,12 @@ class SnakePlayer:
              self.snake_position[0][1]] == self.game_map_ARRAY[9][i]:
                 warning += 1
 
+        "Проверка на столкновение с собой"
+        for i in range(len(snake_position)):
+            if i != 0:
+                if self.snake_position[0] == self.snake_position[i]:
+                    warning += 1
+
         "Выход из игры при гибели"
         if warning == 0:
             for i in range(len(self.game_map_ARRAY)):
@@ -101,8 +108,9 @@ class SnakePlayer:
             print()
         else:
             print("Game Over")
-            quit()
+            raise SelfEatingError
 
+        server_info.append(copy.deepcopy(self.snake_position))
         return self.snake_position
 
     def snake_move_around(self, new_way):
@@ -146,23 +154,25 @@ class SnakePlayer:
     def eating(self):
         """Метод для изменения данных при увеличении змейки"""
         for i in range(len(self.apples)):
-            if self.game_map_ARRAY[snake_position[0][0]][
-             snake_position[0][1]] == self.game_map_ARRAY[
+            if self.game_map_ARRAY[self.snake_position[0][0]][
+             self.snake_position[0][1]] == self.game_map_ARRAY[
              apples[i][0]][apples[i][1]]:
-                self.snake_position = self.plus_size(snake_position)
-                for j in range(len(self.game_map_ARRAY)):
-                    print(self.game_map_ARRAY[j])
-                print()
+                self.snake_position = self.plus_size(self.snake_position)
                 for j in range(len(self.snake_position)):
                     if j == 0:
                         self.game_map_ARRAY[self.snake_position[j][0]][
-                            self.snake_position[j][1]] = 3
+                            self.snake_position[j][1]] = '🐸'
                     else:
                         self.game_map_ARRAY[self.snake_position[j][0]][
-                            self.snake_position[j][1]] = 2
+                            self.snake_position[j][1]] = '◻'
+
+                for j in range(len(self.game_map_ARRAY)):
+                    print(self.game_map_ARRAY[j])
+                print()
 
 
 if __name__ == '__main__':
+    server_info = []
     snake_position = [[4, 3], [5, 3]]
     apples = [[7, 2], [2, 2], [2, 7], [7, 7]]
     map_1 = Map(10, 10, apples).map()
@@ -170,6 +180,26 @@ if __name__ == '__main__':
         snake_move_forward()
     snake_position = SnakePlayer(map_1, snake_position, apples, 1).\
         snake_move_forward()
+    snake_position = SnakePlayer(map_1, snake_position, apples, 1).\
+        snake_move_around(3)
+    snake_position = SnakePlayer(map_1, snake_position, apples, 3).\
+        snake_move_around(2)
+    snake_position = SnakePlayer(map_1, snake_position, apples, 2).\
+        snake_move_forward()
+    snake_position = SnakePlayer(map_1, snake_position, apples, 2).\
+        snake_move_forward()
+    snake_position = SnakePlayer(map_1, snake_position, apples, 2).\
+        snake_move_forward()
+    snake_position = SnakePlayer(map_1, snake_position, apples, 2).\
+        snake_move_around(4)
+    snake_position = SnakePlayer(map_1, snake_position, apples, 4).\
+        snake_move_forward()
+    snake_position = SnakePlayer(map_1, snake_position, apples, 4).\
+        snake_move_forward()
+    snake_position = SnakePlayer(map_1, snake_position, apples, 4).\
+        snake_move_forward()
+    snake_position = SnakePlayer(map_1, snake_position, apples, 2).\
+        snake_move_around(1)
     snake_position = SnakePlayer(map_1, snake_position, apples, 1).\
         snake_move_around(3)
     snake_position = SnakePlayer(map_1, snake_position, apples, 3).\
