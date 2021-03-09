@@ -67,8 +67,7 @@ def db_get_user_data(token: str) -> dict:
 
 
 class BaseResponseError(Exception):
-    def __init__(self, error_id: int, message: str, *args, **kwargs):
-        super.__init__(*args, **kwargs)
+    def __init__(self, error_id: int, message: str):
         self.error_id = error_id
         self.message = message
 
