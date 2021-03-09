@@ -1,5 +1,5 @@
 import re
-import database
+import modules.database as database
 
 
 def r_error(code: int, description: str, **kwargs):
