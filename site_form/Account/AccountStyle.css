@@ -1,33 +1,79 @@
 .InfoBlog {
 	border-radius: 20px;
-	background: red;
+	background: #FAFAFA;
 	border: 1px solid #000000;
-	padding: 10px;
+	padding: 40px;
 	margin: 0 auto;
 	max-width: 60%;
+	min-width: 500px;
 }
-
 .InfoBlog p{
 	padding: 0;
 	margin: 0 auto;
+}
+.InfoBlog>div{
+	padding: 0;
+	margin: 10px auto;
 }
 
 .info-field{
 	margin-bottom: 10px;
 	margin-top: 10px;
-	background: #fafafa;
+	background: #FFE7D1;
 	border: 1px solid #000000;
-	
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-.info-field .short-info{
-	
+.top-info{
+	display:flex;
+	flex-direction:row;
+}
+.top-info .short{
+	width: 100%;
+	margin: 0 0 0 30px;
+}
+.top-info .profile_logo{
+	width: 120px;
+	height: 120px;
+	border: 1px solid #000000;
+	border-radius: 20px;
 }
 
-.info-field .full-info{
-
+.middle-info{
 }
 
-.info-field .links-info{
-
+.bottom-info{
 }
+
+/* Повторяющийся код (скопирован с другого css) */
+.form-field {
+}
+.form-field h2 {
+	text-align: center;
+	font-weight: normal;
+	margin: 0 0 32px 0;
+}
+.form-field p {
+	margin: 0 auto;	
+	margin-top: 5px;
+}
+.form-field input {
+	display:inline-block;
+	margin: 10px;
+	padding:3px;
+	border-radius:10px;
+	border: 1px solid #eee;
+	transition: .3s border-color;
+}
+.form-field input {
+	padding: 10px;
+}
+.form-field input:hover {
+	border: 1px solid #aaa;
+}	
+.form-field textarea{
+	width: 500px;
+	min-height: 200px;
+	resize: vertical;
+}
+/* Повторяющийся код (скопирован с другого css) */
