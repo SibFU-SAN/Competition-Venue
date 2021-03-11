@@ -28,8 +28,8 @@
 		<!-- main-menu -->
 	</header>
 	
-	<main class="main form-field">
-		<form method="post" action="" class="focus-block">
+	<main class="main centered-box">
+		<form method="post" action="" class="focus-block form-field">
 			<h2>Создание Сессии Игры</h2>
 			<p>
 				<label>Время начала игры: <input type="time" name="start_time" id="start_time" required></label>
@@ -38,9 +38,9 @@
 			<p>
 				<label>Длительность игры: <input type="number" name="d" id="d" min="5" max="60" step="5" value="5"> (min)</label>
 			</p>
-			<p>
+			<div>
 				<input type="submit" value="Отправить">
-			</p>
+			</div>
 		</form>
 	</main>
 	
@@ -54,5 +54,6 @@
 			</ul>
 		</div>
 	</footer>
+	
 </body>
 </html>
