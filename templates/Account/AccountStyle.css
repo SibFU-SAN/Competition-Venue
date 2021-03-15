@@ -1,0 +1,85 @@
+.InfoBlog {
+	border-radius: 20px;
+	background: #FAFAFA;
+	border: 1px solid #000000;
+	padding: 40px;
+	margin: 0 auto;
+	width: 500px;
+}
+.InfoBlog p{
+	padding: 0;
+	margin: 0 auto;
+}
+.InfoBlog>div{
+	margin: 10px auto;
+}
+
+.info-field{
+	margin-bottom: 10px;
+	margin-top: 10px;
+	padding: 10px;
+	background: #FFE7D1;
+	border: 1px solid #000000;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.top-info{
+	display:flex;
+	flex-direction:row;
+}
+.top-info .short{
+	width: 100%;
+	margin: 0 0 0 30px;
+	font-size: 16pt;
+	display: flex;
+	flex-direction: column;
+}
+.short p{
+	margin: auto; 
+	width: 100%;
+}
+.top-info .profile_logo{
+	width: 120px;
+	height: 120px;
+	border: 1px solid #000000;
+	border-radius: 20px;
+}
+
+
+.middle-info{
+}
+
+.bottom-info{
+}
+
+
+.attrs {/* dl */
+	overflow: hidden;
+	margin: 0;
+}
+.attrs dt {
+	float: left;
+	margin: 0 10px 0 10px;
+	padding: 3px 0;
+}
+.attrs dt:after {
+	content: ":";
+}
+.attrs dd {
+	padding: 3px 0;
+}
+
+.about {
+	overflow: hidden;
+	margin: 0;
+}
+.about dt {
+	margin: 0 10px 0 10px;
+	padding: 3px 0;
+}
+.about dt:after {
+	content: ":";
+}
+.about dd {
+	padding: 3px 0;
+}
