@@ -5,7 +5,10 @@ from modules import methods
 
 
 json_encoder = JSONEncoder()
-app = flask.Flask(__name__)
+app = flask.Flask(__name__,
+                  static_folder="./templates/static/",
+                  static_host="./templates/pages/"
+                  )
 
 
 @app.route("/api/register", methods=['POST'])

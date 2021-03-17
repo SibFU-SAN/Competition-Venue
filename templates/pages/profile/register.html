@@ -1,8 +1,5 @@
 {% block links %}
-	<link rel="stylesheet" href="AccountStyle.css">
-{% endblock %}
-{% block links %}
-	<link rel="stylesheet" href="AccountStyle.css">
+	<link rel="stylesheet" href="{{ url_for("static", filename="css/account.css") }}">
 {% endblock %}
 
 {% block content %}
@@ -16,7 +13,7 @@
 				<label>Пароль <input type="password" name="password" id="password" required></label>
 			</p>
 			<p>
-				<label>Повторите пароль <input type="password" name="cpassword" id="cpassword" required></label>
+				<label>Повторите пароль <input type="password" name="confirmation" id="confirmation" required></label>
 			</p>
 			<p><input type="submit" value="Регистрация"></p>
 		</form>

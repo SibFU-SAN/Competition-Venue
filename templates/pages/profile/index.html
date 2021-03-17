@@ -1,12 +1,12 @@
 {% block links %}
-	<link rel="stylesheet" href="AccountStyle.css">
+	<link rel="stylesheet" href="{{ url_for("static", filename="css/account.css") }}">
 {% endblock %}
 
 {% block content %}
 	<main class="main centered-box">
 		<section class="InfoBlog">
 			<div class="top-info">
-				<img src="../images/profile_stub.png" class="profile_logo">
+				<img src="{{ url_for("static", filename="images/profile_stub.png") }}" class="profile_logo">
 				<div class="short info-field">
 					<p>Петров Петя</p>
 					<p>mail@gm.com</p>
