@@ -6,8 +6,8 @@ from modules import methods
 
 json_encoder = JSONEncoder()
 app = flask.Flask(__name__,
-                  static_folder="./templates/static/",
-                  static_host="./templates/pages/"
+                  static_folder="./templates/",
+                  template_folder="./templates/"
                   )
 
 
@@ -36,17 +36,17 @@ def index_page():
     return flask.render_template("pages/index.html")
 
 
-@app.route("/game/connect")
+@app.route("/game/connect", methods=["POST", "GET"])
 def game_connect_page():
     return flask.render_template("pages/game/connect.html")
 
 
-@app.route("/game/create")
+@app.route("/game/create", methods=["POST", "GET"])
 def game_create_page():
     return flask.render_template("pages/game/create.html")
 
 
-@app.route("/game/editor")
+@app.route("/game/editor", methods=["POST", "GET"])
 def game_editor_page():
     return flask.render_template("pages/game/editor.html")
 
@@ -61,17 +61,17 @@ def info_guide_page():
     return flask.render_template("pages/info/guide.html")
 
 
-@app.route("/profile")
+@app.route("/profile", methods=["POST", "GET"])
 def profile_page():
     return flask.render_template("pages/profile/index.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=["POST", "GET"])
 def login_page():
     return flask.render_template("pages/profile/login.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["POST", "GET"])
 def register_page():
     return flask.render_template("pages/profile/register.html")
 

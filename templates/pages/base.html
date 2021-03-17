@@ -3,15 +3,15 @@
 <head> <!-- Этот файл шаблон -->
 	<meta charset="UTF-8">
 	<title>Соревновательная Площадка</title>
-	<link rel="stylesheet" href="{{ url_for("static", filename="css/styles.css") }}">
-	<link rel="icon" href="{{ url_for("static", filename="images/logo.png") }}" sizes="32x32">
+	<link rel="stylesheet" href="{{ url_for("static", filename="static/css/styles.css") }}">
+	<link rel="icon" href="{{ url_for("static", filename="static/images/logo.png") }}" sizes="32x32">
 	{% block links %}
 	{% endblock %}
 </head>
 <body>
 	<header class="header">
 		<div class="headline">
-			<p><img src="{{ url_for("static", filename="images/logo.png") }}" >Соревновательная Площадка</p>
+			<p><img src="{{ url_for("static", filename="static/images/logo.png") }}" >Соревновательная Площадка</p>
 		</div><!-- Лого / Название width=40pt-->
 		<nav>
 			<ul class="head-menu">
