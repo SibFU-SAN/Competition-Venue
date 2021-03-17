@@ -2,7 +2,7 @@ from snake_game import Map
 import copy
 
 all_info = []
-server_info1 = [[[4, 3], [3, 3]], [[5, 3], [4, 3]], ['stop']]
+server_info1 = [[[3, 3], [2, 3]], [[4, 3], [3, 3]], ['stop']]
 server_info2 = [[[4, 4], [4, 5]], [[4, 3], [4, 4]], [[4, 2], [4, 3]], ['stop']]
 all_info.append(server_info1)
 all_info.append(server_info2)
@@ -16,10 +16,8 @@ def head_to_tail(info, pl_snake, num, ite, warn, except_list):
     for non_pl_snake in range(num):
         if pl_snake != non_pl_snake and info[pl_snake][ite] != ['stop']:
             if info[pl_snake][ite][0] == info[non_pl_snake][ite][1:]:
-                print("Game Over")
                 warn += 1
             elif info[pl_snake][ite][1:][0] == info[non_pl_snake][ite][0]:
-                print("Game Over")
                 warn += 1
 
             if warn > 0:
@@ -28,11 +26,9 @@ def head_to_tail(info, pl_snake, num, ite, warn, except_list):
 
 
 def head_to_head(info, pl_snake, num, ite, warn, except_list):
-    """НЕ ДОДЕЛАНО!!"""
     for non_pl_snake in range(num):
-        if pl_snake == non_pl_snake and info[pl_snake][ite] != ['stop']:
+        if pl_snake != non_pl_snake and info[pl_snake][ite] != ['stop']:
             if info[pl_snake][ite][0] == info[non_pl_snake][ite][0]:
-                print("Game Over")
                 warn += 1
 
             if warn > 0:
