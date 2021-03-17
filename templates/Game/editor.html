@@ -1,0 +1,22 @@
+{% block content %}
+	<main class="main centered-box">
+		<form method="post" action="" class="focus-block form-field">
+			<h2>Введите код для игры</h2>
+			<p>Информация о будущей игре: <!-- Нужно как то передать информацию об аккаунте -->
+				<ul>
+					<li>Режим: Змейка</li>
+					<li>Карта: Река</li>
+					<li>Число игроков: 23</li>
+				</ul>
+			</p>
+			
+			<textarea name="game_code" cols="40" rows="20" required></textarea>
+			
+			<div class="centered-box">
+				<input type="submit" value="Отправить">
+				<input type="reset" value="Очистить">
+			</div>
+			<!-- Форма ввода "кода для игры". Нужно изменить -->
+		</form>
+	</main>
+{% endblock %}

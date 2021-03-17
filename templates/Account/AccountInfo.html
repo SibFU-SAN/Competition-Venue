@@ -1,38 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head> <!--  -->
-	<meta charset="UTF-8">
-	<title>Соревновательная Площадка</title>
-	<link rel="stylesheet" href="../style.css">
+{% block links %}
 	<link rel="stylesheet" href="AccountStyle.css">
-	<link rel="icon" href="logo.png" sizes="32x32">
-</head>
-<body>
-	<header class="header">
-		<div class="headline">
-			<p><img src="logo.png" >Соревновательная Площадка</p>
-		</div><!-- Лого / Название width=40pt-->
-		<nav>
-			<ul class="head-menu">
-				<li><a href="#">Главная</a></li>
-				<li><a href="#">Аккаунт</a></li>
-				<li><a href="#">Игра</a>
-					<ul class="submenu">
-						<li><a href="#">Редактор</a></li>
-                        <li><a href="#">Создать Сессию</a></li>
-						<li><a href="#">Лидеры</a></li>
-					</ul>
-				</li>
-				<li><a href="#">Справочник</a></li>
-			</ul>
-		</nav>
-		<!-- main-menu -->
-	</header>
-	
+{% endblock %}
+
+{% block content %}
 	<main class="main centered-box">
 		<section class="InfoBlog">
 			<div class="top-info">
-				<img src="profile_stub.png" class="profile_logo">
+				<img src="../images/profile_stub.png" class="profile_logo">
 				<div class="short info-field">
 					<p>Петров Петя</p>
 					<p>mail@gm.com</p>
@@ -86,19 +60,4 @@
 		
 		</section>
 	</main>
-
-	<footer class="footer">
-		<div class="footer-info">
-			Проект был создан:
-			<ul>
-			<li>sometext sometext</li>
-			<li>sometext sometext</li>
-			<li>sometext sometext</li>
-			</ul>
-		</div>
-
-	</footer>
-
-</body>
-</html>
-
+{% endblock %}
