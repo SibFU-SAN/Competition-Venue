@@ -109,7 +109,7 @@ class SnakePlayer:
             print()
         else:
             print("Game Over")
-            raise ValueError
+            self.snake_position.append(['stop'])
 
         return self.snake_position, self.way
 
