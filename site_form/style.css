@@ -161,3 +161,31 @@ body {
 	resize: vertical;
 }
 /* Стили для Форм */
+
+.table-section {
+    border-radius: 20px 20px 0 0;
+    background: #F1B178;
+    padding: 15px;
+    width:100%;
+}
+.table {
+    border: 2px solid #000000;
+    background: #ffffff;
+    width: 100%;
+    font-size: 14pt;
+    text-align: center;
+    border-collapse: collapse;
+}
+.table caption{
+    font-size: 18pt;
+    text-align: center;
+}
+.table tr {
+    border-top: 1px solid #000000;
+}
+.table td, th {
+    padding: 10px;
+}
+.table th {
+    border: 1px solid #000000;
+}
