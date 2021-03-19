@@ -19,6 +19,16 @@ def db_is_exists_user(login: str) -> bool:
     return result is not None
 
 
+def db_check_token(token: str) -> bool:
+    """
+    Проверить наличие пользователя в базе данных по токену
+    :param token: Токен пользователя
+    :return: Результат
+    """
+    result = db.get_collection('users').find_one({'token': token})
+    return result is not None
+
+
 def db_create_user(login: str, password: str) -> str:
     """
     Создание пользователя
@@ -38,19 +48,19 @@ def db_create_user(login: str, password: str) -> str:
     return token
 
 
-def db_auth(login: str, password: str) -> dict:
+def db_auth(login: str, password: str) -> str:
     """
     Авторизация
     :param login: Логин
     :param password: Пароль
-    :return: Данные о пользователе
+    :return: Токен
     """
     token = generate_token(login, password)
     data = db.get_collection('users').find_one({'token': token}, {'token': 1})
 
     if data is None:
         raise LoginError(31, "Неверный логин и пароль")
-    return data
+    return token
 
 
 def db_get_user_data(token: str) -> dict:
