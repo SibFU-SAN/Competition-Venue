@@ -3,6 +3,13 @@ import modules.database as database
 
 
 def r_error(code: int, description: str, **kwargs):
+    """
+    Генерация ответа ошибки
+    :param code: Код ошибки
+    :param description: Описание ошибки
+    :param kwargs: Введенные поля метода
+    :return: Ответ
+    """
     response = {
         'type': 'error',
         'code': code,
@@ -14,6 +21,11 @@ def r_error(code: int, description: str, **kwargs):
 
 
 def r_success(**kwargs):
+    """
+    Генерация ответа успешного запроса
+    :param kwargs: Ключи для ответа в object
+    :return: Ответ
+    """
     response = {
         'type': 'success',
         'object': kwargs
