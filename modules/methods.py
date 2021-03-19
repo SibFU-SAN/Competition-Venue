@@ -7,7 +7,8 @@ def r_error(code: int, description: str, **kwargs):
         'type': 'error',
         'code': code,
         'description': description,
-        'object': kwargs
+        'params': kwargs,
+        'object': None
     }
     return response
 
@@ -21,6 +22,14 @@ def r_success(**kwargs):
 
 
 def register(**data) -> dict:
+    """
+    Регистрация пользователя и получение его токена.
+    :param data: Параметры. Обязательные: login(String), password(String), confirmation(String)
+    :return: Ошибка или результат в виде:
+    {'object': {
+        'token': String, // Токен пользователя
+    }}
+    """
     if not ('login' in data and
             'password' in data and
             'confirmation' in data):
@@ -49,6 +58,14 @@ def register(**data) -> dict:
 
 
 def login(**data) -> dict:
+    """
+    Авторизация пользователя и получение его токена.
+    :param data: Параметры. Обязательные: login(String), password(String)
+    :return: Ошибка или результат в виде:
+    {'object': {
+        'token': String, // Токен пользователя
+    }}
+    """
     if not ('login' in data and
             'password' in data):
         return r_error(30, 'Не заполнены все поля',
@@ -63,6 +80,14 @@ def login(**data) -> dict:
 
 
 def get_data(**data) -> dict:
+    """
+    Получение данных пользователя.
+    :param data: Параметры. Обязательные: token(String)
+    :return: Ошибка или результат в виде:
+    {'object': {
+        // Данные пользователя. Ключей может быть произволькое кол-во
+    }}
+    """
     if 'token' not in data:
         return r_error(30, "Не заполнены все поля",
                        token=('token' in data))
@@ -75,6 +100,14 @@ def get_data(**data) -> dict:
 
 
 def reset_password(**data) -> dict:
+    """
+    Смена пароля пользователя и получение нового токена.
+    :param data: Параметры. Обязательные: token(String), new_password(String)
+    :return: Ошибка или результат в виде:
+    {'object': {
+       'token': String, // Новый токен пользователя
+    }}
+    """
     if not('token' in data and 'new_password' in data):
         return r_error(30, "Не заполнены все поля",
                        token=('token' in data),
@@ -91,6 +124,13 @@ def reset_password(**data) -> dict:
 
 
 def update_data(**data) -> dict:
+    """
+    :param data: Параметры. Обязательные: token(String)
+    :return: Ошибка или результат в виде:
+    {'object': {
+        // Данные пользователя. Ключей может быть произволькое кол-во
+    }}
+    """
     if 'token' not in data:
         return r_error(30, "Не заполнены все поля",
                        token=('token' in data))
