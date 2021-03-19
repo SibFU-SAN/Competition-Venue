@@ -16,7 +16,6 @@
 		<nav>
 			<ul class="head-menu">
 				<li><a href="/">Главная</a></li>
-				<li><a href="/login">Аккаунт</a></li>
 				<li><a href="#">Игра</a>
 					<ul class="submenu">
 						<li><a href="/game/connect">Играть</a></li>
@@ -25,6 +24,16 @@
 					</ul>
 				</li>
 				<li><a href="/help/guide">Справочник</a></li>
+
+				<li class="left-bottom">
+					<!-- Когда пользователь НЕ авторизовался
+					<li><a href="/help/guide">Вход</a></li> -->
+					<!-- Когда пользователь авторизовался -->
+					<a href="/login"><img src="/templates/static/images/profile_stub.png" alt=" " class="small-profile_logo"> Аккаунт</a>
+					<ul class="submenu">
+						<li><a href="/game/connect">Выход</a></li>
+					</ul>
+				</li>
 			</ul>
 		</nav>
 		<!-- main-menu -->

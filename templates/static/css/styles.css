@@ -28,7 +28,6 @@ body {
 	margin-left: 10%;
 	margin-right: 10%;
 	flex: 1; /* Для организации подвала */
-	
 }
 
 .footer{
@@ -44,7 +43,6 @@ body {
 	margin: 10px;
 }
 .headline p {
-	
 	font-size: 200%;
 	margin: 0;
 }
@@ -56,16 +54,16 @@ body {
 
 .head-menu{
 	margin: 10px;
-	padding-left: 20px;
+	padding: 0 20px 0 20px;
 	background: #E79144;
 	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 	border-radius: 20px;
 	display: block;
 	list-style: none;
-	
 }
 .head-menu a {
-	color: #000000; 
+    border: 2px dashed #dc8334;
+	color: #000000;
 	padding: 10px;
 	text-decoration: none; /* Убираем подчёркивание */
 	display: block; /* Блочная ссылка*/
@@ -75,7 +73,18 @@ body {
 .head-menu a:hover {
 	color: #FFFFFF;
     background: #2c3e50;
-	
+}
+.head-menu .left-bottom {
+    float: right;
+}
+.small-profile_logo {
+    width: 22px;
+    height: 22px;
+    border-radius: 10px;
+    vertical-align: middle;
+}
+.small-profile_logo:after{
+    content:" "
 }
 .head-menu li{
 	margin-left: 1px;
@@ -97,12 +106,17 @@ body {
 	color: red;
 	background: #dd9141;
 }
+.submenu a {
+    border: 0;
+}
 
 .footer-info{
 	padding: 5px;
-	text-align: left;	
+	text-align: left;
 }
-.footer-info ul{margin: 0;}
+.footer-info ul{
+    margin: 0;
+}
 
 .main-text{
 	font-size: 24px;
@@ -117,7 +131,7 @@ body {
 	background: #fffbf6;
 	border: 1px solid #000000;
 	padding: 10px;
-	margin: 0 auto; 
+	margin: 0 auto;
 	min-width: 30%;
 }
 
@@ -138,7 +152,7 @@ body {
 	margin: 0 0 32px 0;
 }
 .form-field p {
-	margin: 0 auto;	
+	margin: 0 auto;
 	margin-top: 5px;
 }
 .form-field input {
@@ -154,10 +168,44 @@ body {
 }
 .form-field input:hover {
 	border: 1px solid #aaa;
-}	
+}
 .form-field textarea{
 	width: 500px;
 	min-height: 200px;
 	resize: vertical;
 }
 /* Стили для Форм */
+
+/* Таблица */
+.table-section {
+    border-radius: 20px 20px 0 0;
+    background: #F1B178;
+    padding: 15px;
+    min-width: 500px;
+    width: 70%;
+}
+.table {
+    border: 2px solid #000000;
+    background: #ffffff;
+    width: 100%;
+    font-size: 14pt;
+    text-align: center;
+    border-collapse: collapse;
+}
+.table caption{
+    font-size: 18pt;
+    text-align: center;
+
+}
+.table tr {
+    border-top: 1px solid #000000;
+    width: 100px;
+}
+.table td, th {
+    padding: 10px;
+
+}
+.table th {
+    border: 1px solid #000000;
+}
+/* Таблица */

@@ -162,6 +162,7 @@ body {
 }
 /* Стили для Форм */
 
+/* Таблица */
 .table-section {
     border-radius: 20px 20px 0 0;
     background: #F1B178;
@@ -189,3 +190,4 @@ body {
 .table th {
     border: 1px solid #000000;
 }
+/* Таблица */
