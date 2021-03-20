@@ -93,5 +93,18 @@ def register_page():
     return flask.render_template("pages/profile/register.html")
 
 
+@app.route("/profile/sign_out")
+def sign_out_page():
+    response = flask.make_response(flask.redirect("/", 302))
+    response.set_cookie("auth", "", 0)
+    return response
+
+
+@app.route("/profile/settings", methods=["POST", "GET"])
+@account_methods.authorize_require
+def settings_data():
+    return ""
+
+
 if __name__ == '__main__':
     app.run()
