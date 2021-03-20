@@ -2,7 +2,16 @@ import re
 import hashlib
 import pymongo
 
-db = pymongo.MongoClient("localhost")['test']
+
+db = None
+
+
+def connect(host: str, port: str, base: str, auth: bool, user: str, password: str, auth_base: str):
+    global db
+
+    db = pymongo.MongoClient(f"{host}:{port}")[base]
+    if auth:
+        db.authenticate(user, password, auth_base)
 
 
 def generate_token(login: str, password: str) -> str:
@@ -16,6 +25,16 @@ def db_is_exists_user(login: str) -> bool:
     :return: Результат
     """
     result = db.get_collection('users').find_one({'login': re.compile(f'^{login}$', re.IGNORECASE)})
+    return result is not None
+
+
+def db_check_token(token: str) -> bool:
+    """
+    Проверить наличие пользователя в базе данных по токену
+    :param token: Токен пользователя
+    :return: Результат
+    """
+    result = db.get_collection('users').find_one({'token': token})
     return result is not None
 
 
@@ -33,25 +52,24 @@ def db_create_user(login: str, password: str) -> str:
         '_id': hashlib.md5(login.lower().encode()).hexdigest(),
         'login': login,
         'password': hashlib.sha1(password.encode()).hexdigest(),
-        'group': 0,
         'token': token
     })
     return token
 
 
-def db_auth(login: str, password: str) -> dict:
+def db_auth(login: str, password: str) -> str:
     """
     Авторизация
     :param login: Логин
     :param password: Пароль
-    :return: Данные о пользователе
+    :return: Токен
     """
     token = generate_token(login, password)
     data = db.get_collection('users').find_one({'token': token}, {'token': 1})
 
     if data is None:
         raise LoginError(31, "Неверный логин и пароль")
-    return data
+    return token
 
 
 def db_get_user_data(token: str) -> dict:
