@@ -190,6 +190,24 @@ body {
 	text-decoration: none; /* Убираем подчёркивание */
 	display: inline-block;
 }
+
+.lost-access {
+    margin: 0 auto;
+    height: 40px;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lost-access .text-danger {
+    border-top: 1px dashed red;
+    border-bottom: 1px dashed red;
+    margin: 0;
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+    color: red;
+}
 /* Стили для Форм */
 
 /* Таблица */
