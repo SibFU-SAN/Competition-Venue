@@ -1,7 +1,8 @@
 import flask
+import yaml
 
 from json.encoder import JSONEncoder
-from modules import methods, account_methods
+from modules import methods, account_methods, database
 
 
 json_encoder = JSONEncoder()
@@ -107,4 +108,29 @@ def settings_data():
 
 
 if __name__ == '__main__':
+    data = {}
+    try:
+        with open("database.yml", 'r') as file:
+            data = yaml.load(file.read(), Loader=yaml.FullLoader)
+    except FileNotFoundError:
+        pass
+
+    with open("database.yml", 'w') as file:
+        if 'host' not in data:
+            data['host'] = "localhost"
+        if 'port' not in data:
+            data['port'] = "27017"
+        if 'base' not in data:
+            data['base'] = "test"
+        if 'auth' not in data:
+            data['auth'] = False
+        if 'user' not in data:
+            data['user'] = "userName"
+        if 'password' not in data:
+            data['password'] = "1234567890"
+        if 'auth_base' not in data:
+            data['auth_base'] = "admin"
+        file.write(yaml.dump(data))
+    database.connect(**data)
+
     app.run()

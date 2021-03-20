@@ -2,7 +2,16 @@ import re
 import hashlib
 import pymongo
 
-db = pymongo.MongoClient("localhost")['test']
+
+db = None
+
+
+def connect(host: str, port: str, base: str, auth: bool, user: str, password: str, auth_base: str):
+    global db
+
+    db = pymongo.MongoClient(f"{host}:{port}")[base]
+    if auth:
+        db.authenticate(user, password, auth_base)
 
 
 def generate_token(login: str, password: str) -> str:
