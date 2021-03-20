@@ -1,0 +1,29 @@
+{% extends "pages/base.html" %}
+
+{% block links %}
+	<link rel="stylesheet" href="{{ url_for("static", filename="static/css/account.css") }}">
+{% endblock %}
+
+{% block content %}
+	<main class="main centered-box">
+		<section>
+			<form method="post" action="/profile" class="focus-block form-field">
+				<h2>Именение профиля</h2>
+				<div>
+					<label>Имя <input type="text" name="FirstName" required value="Имя"></label>
+					<label>Фамилия <input type="text" name="LastName" required value="Фамилия"></label>
+					<label>Дата Рождения <input type="password" name="confirmation" id="confirmation" required></label>
+					<label>E-mail <input type="email" name="email" required></label>
+				</div>
+				<div>
+					<!-- TODO: добавить поле для изменения иконки профиля -->
+					<label>Иконка <input name="logo"></label>
+				</div>
+				<div class="form-menu">
+					<input type="submit" value="Изменить" class="form-btn"> <!-- TODO: Добавить возможность изменять данные профиля -->
+					<a href="#" class="form-btn">Отмена</a> <!-- TODO: Добавить ссылку на профиль -->
+				</div>
+			</form>
+		</section>
+	</main>
+{% endblock %}
