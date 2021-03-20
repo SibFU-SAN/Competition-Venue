@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head> <!-- Этот файл шаблон -->
+<head>
 	<meta charset="UTF-8">
 	<title>Соревновательная Площадка</title>
 	<link rel="stylesheet" href="../style.css">
-	<link rel="icon" href="logo.png" sizes="32x32">
+	<link rel="stylesheet" href="AccountStyle.css">
 </head>
 <body>
 	<header class="header">
@@ -29,26 +29,20 @@
 	</header>
 	
 	<main class="main centered-box">
-		<!-- Таблица будет реализована в дальнейшем -->
-
-		<section class="table-section">
-			<table class="table">
-				<caption>Таблица лидеров</caption>
-				<tr><th>Имя</th><th>Лучший счет</th><th>Кол-во игр</th></tr>
-				<tr><td>Валера</td><td>41</td><td>300</td></tr>
-				<tr><td>Валера</td><td>22</td><td>300</td></tr>
-				<tr><td>Валера</td><td>34</td><td>300</td></tr>
-				<tr><td>Валера</td><td>42</td><td>300</td></tr>
-				<tr><td>Валера</td><td>41</td><td>300</td></tr>
-				<tr><td>Валера</td><td>22</td><td>300</td></tr>
-				<tr><td>Валера</td><td>34</td><td>300</td></tr>
-				<tr><td>Валера</td><td>42</td><td>300</td></tr>
-				<tr><td>Валера</td><td>41</td><td>300</td></tr>
-				<tr><td>Валера</td><td>22</td><td>300</td></tr>
-			</table>
-		</section>
+		<form method="post" action="" class="focus-block form-field">
+			<h2>ВХОД</h2>
+			<p>
+				<label>Логин <input type="text" name="login_in" id="login_in"></label>
+			</p>
+			<p>
+				<label>Пароль <input type="password" name="password_in" id="password_in"></label>
+			</p>
+			<p><input type="submit" value="Вход"></p>
+			
+			<a href="/register" class="btm">Регистрация</a>
+		</form>
 	</main>
-
+	
 	<footer class="footer">
 		<div class="footer-info">
 			Проект был создан:
@@ -59,8 +53,6 @@
 			</ul>
 		</div>
 	</footer>
-
 </body>
 </html>
-
 
