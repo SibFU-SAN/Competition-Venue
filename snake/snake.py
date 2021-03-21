@@ -102,14 +102,9 @@ class SnakePlayer:
                 if self.snake_position[0] == self.snake_position[i]:
                     warning += 1
 
-        "Выход из игры при гибели"
-        if warning == 0:
-            for i in range(len(self.game_map_ARRAY)):
-                print('   '.join(self.game_map_ARRAY[i]))
-            print()
-        else:
-            print("Game Over")
-            self.snake_position.append(['stop'])
+        "Выход из игры при гибели и печать массива"
+        if warning != 0:
+            self.snake_position = ['stop']
 
         return self.snake_position, self.way
 
@@ -165,7 +160,3 @@ class SnakePlayer:
                     else:
                         self.game_map_ARRAY[self.snake_position[j][0]][
                             self.snake_position[j][1]] = '◻'
-
-                for j in range(len(self.game_map_ARRAY)):
-                    print('   '.join(self.game_map_ARRAY[j]))
-                print()
