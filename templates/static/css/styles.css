@@ -71,7 +71,8 @@ body {
 	display: inline-block; /* Блочная ссылка*/
 	white-space: nowrap;
 	text-align: center;
-	min-width:80px;
+	width:120px;
+	height:23px;
 }
 .head-menu a:hover {
 	color: #FFFFFF;
@@ -80,7 +81,6 @@ body {
 .head-menu .left-bottom {
     margin-left: auto;
 }
-
 .small-profile_logo {
     width: 22px;
     height: 22px;
@@ -110,6 +110,7 @@ body {
 }
 .submenu a {
     border: 0;
+    height: 16px;
 }
 
 .footer-info{
@@ -157,16 +158,14 @@ body {
 	margin: 0 auto;
 	margin-top: 5px;
 }
-.form-field input {
+.form-field input, .form-field a {
 	display:inline-block;
 	margin: 10px;
-	padding:3px;
+	padding: 10px;
+	min-width: 70px;
 	border-radius:10px;
 	border: 1px solid #eee;
 	transition: .3s border-color;
-}
-.form-field input {
-	padding: 10px;
 }
 .form-field input:hover {
 	border: 1px solid #aaa;
@@ -175,6 +174,39 @@ body {
 	width: 500px;
 	min-height: 200px;
 	resize: vertical;
+}
+.form-menu {
+    width:100%;
+    display: flex;
+}
+.form-menu .form-btn {
+    background: #FFC898;
+    border-radius: 0;
+    color: #000000;
+    font-size: 14pt;
+}
+.form-menu a {
+    margin-left: auto;
+	text-decoration: none; /* Убираем подчёркивание */
+	display: inline-block;
+}
+
+.lost-access {
+    margin: 0 auto;
+    height: 40px;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lost-access .text-danger {
+    border-top: 1px dashed red;
+    border-bottom: 1px dashed red;
+    margin: 0;
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+    color: red;
 }
 /* Стили для Форм */
 
