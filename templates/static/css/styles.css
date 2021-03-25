@@ -158,7 +158,7 @@ body {
 	margin: 0 auto;
 	margin-top: 5px;
 }
-.form-field input, .form-field a {
+.form-field input, .form-field a, .form-field select{
 	display:inline-block;
 	margin: 10px;
 	padding: 10px;
@@ -166,6 +166,7 @@ body {
 	border-radius:10px;
 	border: 1px solid #eee;
 	transition: .3s border-color;
+	background: #ffffff;
 }
 .form-field input:hover {
 	border: 1px solid #aaa;

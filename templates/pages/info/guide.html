@@ -1,9 +1,18 @@
 {% extends "pages/base.html" %}
 
 {% block content %}
-    <section>
-		<p>Гайд по определенной теме</p>
-		<p>Для каждой теме своя информация</p>
-        <p>Они есть, но тут ничего нет. Не знаю зачем это сделали.</p>
-	</section>
+	<main class="main">
+		<nav class="focus-block">
+			<ul>
+				<li><a href="#">О игре</a></li>
+				<li><a href="#">О Сайте</a></li>
+				<li><a href="#">И т.д</a></li>
+			</ul>
+		</nav>
+		<section class="focus-block">
+			<p>Гайд по определенной теме</p>
+			<p>Для каждой теме своя информация</p>
+			<p>Они есть, но тут ничего нет. Не знаю зачем это сделали.</p>
+		</section>
+	</main>
 {% endblock %}

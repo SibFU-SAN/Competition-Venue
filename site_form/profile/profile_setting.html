@@ -1,10 +1,43 @@
-{% extends "pages/base.html" %}
+<!DOCTYPE html>
+<html lang="ru">
+<head> <!-- Этот файл шаблон -->
+	<meta charset="UTF-8">
+	<title>Соревновательная Площадка</title>
+	<link rel="stylesheet" href="../style.css">
+	<link rel="stylesheet" href="AccountStyle.css">
 
-{% block links %}
-	<link rel="stylesheet" href="{{ url_for("static", filename="static/css/account.css") }}">
-{% endblock %}
+</head>
+<body>
+	<header class="header">
+		<div class="headline">
+			<p><img src="logo.png" >Соревновательная Площадка</p>
+		</div><!-- Лого / Название width=40pt-->
+		<nav>
+			<ul class="head-menu">
+				<li><a href="/">Главная</a></li>
 
-{% block content %}
+				<li><a href="#">Игра</a>
+					<ul class="submenu">
+						<li><a href="/game/connect">Играть</a></li>
+                        <li><a href="/game/create">Создать Сессию</a></li>
+						<li><a href="/game/top">Лидеры</a></li>
+					</ul>
+				</li>
+
+				<li><a href="/help/guide">Справочник</a></li>
+
+				<li class="left-bottom">
+					<a href="/login"><img src="/templates/static/images/profile_stub.png" alt=" " class="small-profile_logo"> Аккаунт</a>
+					<ul class="submenu">
+						<li><a href="/profile/settings">Редактировать</a></li>
+						<li><a href="/profile/sign_out">Выход</a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+		<!-- main-menu -->
+	</header>
+
 	<main class="main centered-box">
 		<section>
 			<form method="post" action="/profile" class="focus-block form-field">
@@ -40,4 +73,17 @@
 			</form>
 		</section>
 	</main>
-{% endblock %}
+
+	<footer class="footer">
+		<div class="footer-info">
+			Проект был создан:
+			<ul>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			</ul>
+		</div>
+	</footer>
+
+</body>
+</html>
