@@ -34,64 +34,74 @@ def user_data_update_api():
 
 @app.route("/")
 def index_page():
-    return flask.render_template("pages/index.html")
+    return flask.render_template("pages/index.html", auth=account_methods.is_authorized())
 
 
 @app.route("/game/connect", methods=["POST", "GET"])
 @account_methods.authorize_require
 def game_connect_page():
-    return flask.render_template("pages/game/connect.html")
+    return flask.render_template("pages/game/connect.html", auth=True)
 
 
 @app.route("/game/create", methods=["POST", "GET"])
 @account_methods.authorize_require
 def game_create_page():
-    return flask.render_template("pages/game/create.html")
+    return flask.render_template("pages/game/create.html", auth=True)
 
 
 @app.route("/game/editor", methods=["POST", "GET"])
 @account_methods.authorize_require
 def game_editor_page():
-    return flask.render_template("pages/game/editor.html")
+    return flask.render_template("pages/game/editor.html", auth=True)
 
 
 @app.route("/game/top")
 def name_top_page():
-    return flask.render_template("pages/game/table.html")
+    return flask.render_template("pages/game/table.html", auth=account_methods.is_authorized())
 
 
 @app.route("/help/guide")
 def info_guide_page():
-    return flask.render_template("pages/info/guide.html")
+    return flask.render_template("pages/info/guide.html", auth=account_methods.is_authorized())
 
 
 @app.route("/profile", methods=["POST", "GET"])
 @account_methods.authorize_require
 def profile_page():
-    return flask.render_template("pages/profile/index.html")
+    return flask.render_template("pages/profile/index.html", auth=True)
 
 
 @app.route("/login", methods=["POST", "GET"])
 @account_methods.not_authorize_require
 def login_page():
-    data = methods.login(**flask.request.form)
+    response = flask.request.form
+
+    if len(response) == 0:
+        return flask.render_template("pages/profile/login.html")
+
+    data = methods.login(**response)
     if data['type'] == 'success':
         response = flask.make_response(flask.redirect("/profile"))
         response.set_cookie("auth", value=data['object']['token'], max_age=60*60*24*7)
-        print(data['object']['token'])
         return response
-    return flask.render_template("pages/profile/login.html")
+
+    return flask.render_template("pages/profile/login.html", error=data['description'])
 
 
 @app.route("/register", methods=["POST", "GET"])
 @account_methods.not_authorize_require
 def register_page():
-    data = methods.register(**flask.request.form)
+    response = flask.request.form
+
+    if len(response) == 0:
+        return flask.render_template("pages/profile/register.html")
+
+    data = methods.register(**response)
     if data['type'] == 'success':
         response = flask.make_response(flask.redirect("/profile", 302))
         response.set_cookie("auth", value=data['object']['token'], max_age=60*60*24*7)
         return response
-    return flask.render_template("pages/profile/register.html")
+    return flask.render_template("pages/profile/register.html", error=data['description'])
 
 
 @app.route("/profile/sign_out")

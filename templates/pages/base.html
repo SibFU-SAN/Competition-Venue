@@ -16,6 +16,7 @@
 		<nav>
 			<ul class="head-menu">
 				<li><a href="/">Главная</a></li>
+                {% if auth %}
 				<li><a href="#">Игра</a>
 					<ul class="submenu">
 						<li><a href="/game/connect">Играть</a></li>
@@ -23,17 +24,19 @@
 						<li><a href="/game/top">Лидеры</a></li>
 					</ul>
 				</li>
+                {% endif %}
 				<li><a href="/help/guide">Справочник</a></li>
 
 				<li class="left-bottom">
-					<!-- Когда пользователь НЕ авторизовался
-					<li><a href="/help/guide">Вход</a></li> -->
-					<!-- Когда пользователь авторизовался -->
+					{% if auth %}
 					<a href="/login"><img src="/templates/static/images/profile_stub.png" alt=" " class="small-profile_logo"> Аккаунт</a>
 					<ul class="submenu">
 						<li><a href="/profile/settings">Редактировать</a></li>
 						<li><a href="/profile/sign_out">Выход</a></li>
 					</ul>
+                    {% else %}
+                    <a href="/login">Вход</a>
+                    {% endif %}
 				</li>
 			</ul>
 		</nav>
