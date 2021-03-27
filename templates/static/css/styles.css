@@ -13,7 +13,7 @@ body {
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
-		min-width: 700px;
+	min-width: 800px;
 }
 
 /* Стили для шапки и подвала */
@@ -245,3 +245,48 @@ body {
     border: 1px solid #000000;
 }
 /* Таблица */
+
+/* Лента гайдов */
+.guide-nav {
+    padding: 10px;
+    margin: 10px 0 0 0;
+    position: absolute;
+    left: 10px;
+    min-width: 10px;
+    width: 180px;
+    font-size: 16px;
+}
+.guide-nav h2 {
+    text-align: center;
+    margin: 0 0 10px 0;
+}
+.guide-nav a {
+    text-decoration: none;
+}
+.guide-nav ul {
+    padding-left: 25px;
+    margin: 0;
+}
+.guide-nav li {
+    margin-bottom: 5px;
+}
+.guide-content {
+    width: 60%;
+    min-width: 470px;
+    margin-left: 230px;
+    font-size: 18px;
+}
+.guide-content > header {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.guide-content p {
+    margin-bottom: 10px;
+}
+.guide-content .listing {
+    font-style: italic;
+    font-size: 16px;
+}
+/* Лента гайдов */
