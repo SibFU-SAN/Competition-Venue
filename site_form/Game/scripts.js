@@ -1,15 +1,20 @@
-/* Размеры поля в клетках */
-let height = 32;
-let width = 48;
+// Размеры поля в клетках
+const height = 32;
+const width = 48;
 
+// Связь с htm
 const canvas  = document.getElementById("game_screen");
 const ctx = canvas.getContext('2d');
-/*
-	height='320' width='480'
-	
-	ctx.clearRect(20 + i * 32, 20 + j * 32, 32, 32);
-	ctx.clearRect(20 + (i + 1) * 32, 20 + (j + 1) * 32, 32, 32);
-*/
+
+// Кнопка остановки просмотра игры
+let stop_flag = false;
+const btnStop  = document.getElementById("stop");
+btnStop.addEventListener("click", goameControlStop);
+
+
+const btn  = document.getElementById("1");
+btn.addEventListener("click", drawField);
+
 
 function drawField() {
 	/* Рисуем поле */
@@ -52,17 +57,42 @@ function drawFood(x, y) {
 	ctx.fill();
 }
 
+function drawSnake(x, y, str) {
+	const friendSnake = '#57ff64';
+	const enemySnake = '#7536f0';
+}
+
+function goameControlStop() {
+	if (stop_flag) {
+		console.log("btnStop: ", stop_flag);
+		btnStop.value = "Запуск";
+	} else {
+		btnStop.value = "Остановить";
+		console.log("btnStop: ",stop_flag);
+	}
+	stop_flag = !stop_flag;
+}
 
 function drawGame() {
+	if (!stop_flag) return;
+	
+	// Получение координат объектов
+	let arr = ""; 
+	
 	/* Нарисовать поле */
 	drawField();
 
 	/* Пройтись по массиву, отображая каждый элемент */
 	drawFood(5, 5);
-
-	/* Взять следующий "кадр" */
+	
+	drawFood(3, 3);
 }
 
-drawGame();
 
-//let game = setInterval(drawGame, 500);
+/* --- */
+function main(){
+	drawField();
+	let game = setInterval(drawGame, 500);
+}
+
+main();
