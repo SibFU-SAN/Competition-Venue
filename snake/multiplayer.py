@@ -1,20 +1,24 @@
 from snake_game import Map
 import copy
+from visualisation import image
 
 all_info = []
 server_info1 = [[[3, 3], [2, 3]], [[4, 3], [3, 3]], ['stop']]
-server_info2 = [[[4, 4], [4, 5]], [[4, 3], [4, 4]], [[4, 2], [4, 3]], ['stop']]
+server_info2 = [[[4, 4], [4, 5]], [[5, 4], [4, 4]], [[6, 4], [5, 4]],
+                [[7, 4], [6, 4]], [[7, 3], [7, 4]], [[7, 2], [7, 3]],
+                [[7, 1], [7, 2], [7, 3]], ['stop']]
 all_info.append(server_info1)
 all_info.append(server_info2)
 apples = [[7, 2], [2, 2], [2, 7], [7, 7]]
 map1 = Map(10, 10, apples).map()
 players_number = len(all_info)
-iteration_count = 3
+iteration_count = 7
 
 
 def head_to_tail(info, pl_snake, num, ite, warn, except_list):
     for non_pl_snake in range(num):
-        if pl_snake != non_pl_snake and info[pl_snake][ite] != ['stop']:
+        if pl_snake != non_pl_snake and info[pl_snake][ite] != ['stop'] \
+                and info[non_pl_snake] not in except_list:
             if info[pl_snake][ite][0] == info[non_pl_snake][ite][1:]:
                 warn += 1
             elif info[pl_snake][ite][1:][0] == info[non_pl_snake][ite][0]:
@@ -27,7 +31,8 @@ def head_to_tail(info, pl_snake, num, ite, warn, except_list):
 
 def head_to_head(info, pl_snake, num, ite, warn, except_list):
     for non_pl_snake in range(num):
-        if pl_snake != non_pl_snake and info[pl_snake][ite] != ['stop']:
+        if pl_snake != non_pl_snake and info[pl_snake][ite] != ['stop'] \
+                and info[non_pl_snake] not in except_list:
             if info[pl_snake][ite][0] == info[non_pl_snake][ite][0]:
                 warn += 1
 
@@ -40,6 +45,7 @@ def head_to_head(info, pl_snake, num, ite, warn, except_list):
 def multi(info, map_1, num, it_count):
     except_list = []
     warn = 0
+    number = 1
     map_before = copy.deepcopy(map_1)
     for ite in range(it_count):
         for pl_snake in range(num):
@@ -78,6 +84,9 @@ def multi(info, map_1, num, it_count):
         for j in range(10):
             print('   '.join(map_1[j]))
         print()
+
+        image(number, map_1)
+        number += 1
 
         map_1 = copy.deepcopy(map_before)
 
