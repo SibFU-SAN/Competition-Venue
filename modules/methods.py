@@ -147,8 +147,11 @@ def update_data(**data) -> dict:
         return r_error(30, "Не заполнены все поля",
                        token=('token' in data))
 
+    if 'gender' in data:
+        data['gender'] = int(data['gender'])
+
     try:
-        result = database.db_update_info(data['token'], **data)
+        result = database.db_update_info(**dict(data))
         return r_success(**result)
     except database.UpdateInfoError as ex:
         return r_error(ex.error_id, ex.message)
