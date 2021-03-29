@@ -114,33 +114,40 @@ def sign_out_page():
 @app.route("/profile/settings", methods=["POST", "GET"])
 @account_methods.authorize_require
 def settings_data():
-    return flask.render_template("pages/profile/settings.html", auth=True)
+    response = flask.request.form
+    token = account_methods.get_token()
+    if len(response) != 0:
+        methods.update_data(token=token, **response)
+    data = methods.get_data(token=token)
+
+    genders = ['Мужской', 'Женский']
+    return flask.render_template("pages/profile/settings.html", auth=True, data=data['object'], genders=genders)
 
 
 if __name__ == '__main__':
-    data = {}
+    db_options = {}
     try:
         with open("database.yml", 'r') as file:
-            data = yaml.load(file.read(), Loader=yaml.FullLoader)
+            db_options = yaml.load(file.read(), Loader=yaml.FullLoader)
     except FileNotFoundError:
         pass
 
     with open("database.yml", 'w') as file:
-        if 'host' not in data:
-            data['host'] = "localhost"
-        if 'port' not in data:
-            data['port'] = "27017"
-        if 'base' not in data:
-            data['base'] = "test"
-        if 'auth' not in data:
-            data['auth'] = False
-        if 'user' not in data:
-            data['user'] = "userName"
-        if 'password' not in data:
-            data['password'] = "1234567890"
-        if 'auth_base' not in data:
-            data['auth_base'] = "admin"
-        file.write(yaml.dump(data))
-    database.connect(**data)
+        if 'host' not in db_options:
+            db_options['host'] = "localhost"
+        if 'port' not in db_options:
+            db_options['port'] = "27017"
+        if 'base' not in db_options:
+            db_options['base'] = "test"
+        if 'auth' not in db_options:
+            db_options['auth'] = False
+        if 'user' not in db_options:
+            db_options['user'] = "userName"
+        if 'password' not in db_options:
+            db_options['password'] = "1234567890"
+        if 'auth_base' not in db_options:
+            db_options['auth_base'] = "admin"
+        file.write(yaml.dump(db_options))
+    database.connect(**db_options)
 
     app.run()
