@@ -114,7 +114,7 @@ def sign_out_page():
 @app.route("/profile/settings", methods=["POST", "GET"])
 @account_methods.authorize_require
 def settings_data():
-    return ""
+    return flask.render_template("pages/profile/settings.html", auth=True)
 
 
 if __name__ == '__main__':
