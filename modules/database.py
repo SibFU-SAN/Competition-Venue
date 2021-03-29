@@ -110,7 +110,7 @@ def db_update_info(token: str, **data) -> dict:
     :param data: Значения
     :return: Измененные поля
     """
-    allowed_fields = {"name", "second_name", "about", 'gender'}
+    allowed_fields = {"first_name", "second_name", "about", 'gender', 'email'}
     fields = dict()
     for key, value in data:
         if key in allowed_fields:
