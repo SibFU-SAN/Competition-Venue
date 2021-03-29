@@ -3,9 +3,6 @@ import hashlib
 import pymongo
 
 
-db = None
-
-
 def connect(host: str, port: str, base: str, auth: bool, user: str, password: str, auth_base: str):
     global db
 
@@ -110,9 +107,10 @@ def db_update_info(token: str, **data) -> dict:
     :param data: Значения
     :return: Измененные поля
     """
-    allowed_fields = {"first_name", "second_name", "about", 'gender', 'email'}
+    allowed_fields = {'first_name', 'second_name', 'about', 'gender', 'email'}
     fields = dict()
-    for key, value in data:
+    for key in data:
+        value = data[key]
         if key in allowed_fields:
             fields[key] = value
 
