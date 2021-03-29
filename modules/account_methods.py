@@ -3,7 +3,7 @@ import modules.database as db
 
 
 def is_authorized():
-    token = flask.request.cookies.get("auth")
+    token = get_token()
     if token is None:
         return False
     return db.db_check_token(token)
@@ -29,3 +29,7 @@ def not_authorize_require(func):
 
     check_no_auth.__name__ = func.__name__
     return check_no_auth
+
+
+def get_token() -> str or None:
+    return flask.request.cookies.get("auth")
