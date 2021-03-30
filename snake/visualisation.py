@@ -1,4 +1,6 @@
 import cairo
+import os
+import imageio
 
 
 def image(number, map1):
@@ -37,8 +39,20 @@ def image(number, map1):
                 x = 0
                 y += size_y / height
 
-    ims.write_to_png(f"C:/Users/Пользователь/Desktop/snake_folder/images/image{number}.png")
+    ims.write_to_png(f"C:/Users/Пользователь/Desktop/"
+                     f"snake_folder/images/image{number}.png")
+    video()
 
 
 def video():
-    pass
+    pics = []
+    file = os.listdir(path="C:/Users/Пользователь/"
+                           "Desktop/snake_folder/images")
+    with imageio.get_writer("C:/Users/Пользователь/Desktop/"
+                            "snake_folder/video.gif", mode='I') as writer:
+        for length in range(len(file)):
+            pics.append(f"C:/Users/Пользователь/Desktop/"
+                        f"snake_folder/images/image{length+1}.png")
+        for filename in pics:
+            images = imageio.imread(filename)
+            writer.append_data(images)
