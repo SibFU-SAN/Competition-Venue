@@ -3,16 +3,26 @@ import copy
 from visualisation import image
 
 all_info = []
-server_info1 = [[[3, 3], [2, 3]], [[4, 3], [3, 3]], ['stop']]
-server_info2 = [[[4, 4], [4, 5]], [[5, 4], [4, 4]], [[6, 4], [5, 4]],
-                [[7, 4], [6, 4]], [[7, 3], [7, 4]], [[7, 2], [7, 3]],
-                [[7, 1], [7, 2], [7, 3]], ['stop']]
+list_for_Sasha = []
+with open("single_user.txt", "r", encoding="utf-8") as multi:
+    players = multi.read()
+players = players[0:-1]
+players = eval(players)
+print(players[0])
+for pl in range(len(players)):
+    all_info.append(players[pl])
+
+"""Для примера"""
+all_info.clear()
+
+server_info1 = [[[4, 3], [3, 3]], [[5, 3], [4, 3]], ['stop']]
+server_info2 = [[[4, 4], [4, 5]], [[4, 3], [4, 4]], [[4, 2], [4, 3]], ['stop']]
 all_info.append(server_info1)
 all_info.append(server_info2)
 apples = [[7, 2], [2, 2], [2, 7], [7, 7]]
 map1 = Map(10, 10, apples).map()
 players_number = len(all_info)
-iteration_count = 7
+iteration_count = 3
 
 
 def head_to_tail(info, pl_snake, num, ite, warn, except_list):
@@ -20,8 +30,10 @@ def head_to_tail(info, pl_snake, num, ite, warn, except_list):
         if pl_snake != non_pl_snake and info[pl_snake][ite] != ['stop'] \
                 and info[non_pl_snake] not in except_list:
             if info[pl_snake][ite][0] == info[non_pl_snake][ite][1:]:
+                info[pl_snake][ite] = ['stop']
                 warn += 1
             elif info[pl_snake][ite][1:][0] == info[non_pl_snake][ite][0]:
+                info[non_pl_snake][ite] = ['stop']
                 warn += 1
 
             if warn > 0:
@@ -37,6 +49,8 @@ def head_to_head(info, pl_snake, num, ite, warn, except_list):
                 warn += 1
 
             if warn > 0:
+                info[pl_snake][ite] = ['stop']
+                info[non_pl_snake][ite] = ['stop']
                 except_list.append(info[non_pl_snake])
                 except_list.append(info[pl_snake])
                 break
@@ -87,9 +101,20 @@ def multi(info, map_1, num, it_count):
 
         image(number, map_1)
         number += 1
+        with open("output_map.txt", 'a+', encoding='utf-8') as file_map:
+            file_map.write(str(map_1))
 
         map_1 = copy.deepcopy(map_before)
 
 
 if __name__ == '__main__':
     multi(all_info, map1, players_number, iteration_count)
+    for i_ in range(len(all_info)):
+        for j_ in range(len(all_info[i_])):
+            if all_info[i_][j_] == ['stop']:
+                list_for_Sasha.append(['stop'])
+                break
+            else:
+                list_for_Sasha.append(all_info[i_][j_])
+    with open("output.txt", 'w', encoding='utf-8') as file:
+        file.write(str(list_for_Sasha))
