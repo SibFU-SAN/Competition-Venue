@@ -18,7 +18,10 @@ for x in range(10):
 
 
 def collision():
-    """Обработка коллизий"""
+    """
+    Обработка коллизий
+    :returns True or False
+    """
     global snake_position, map_1
     if [snake_position[0][0], snake_position[0][1]] in wall:
         return True
@@ -107,7 +110,8 @@ def move():
 
 
 def wall_is_left(rad=1):
-    """Обнаружение стены слева"""
+    """Обнаружение стены слева
+    :returns True or False"""
     global snake_position, wall
     for step in range(len(wall)):
         if [snake_position[0][0], snake_position[0][1] - rad] == wall[step]:
@@ -189,3 +193,6 @@ if __name__ == '__main__':
 
     if ['stop'] not in server_info:
         server_info.append(['stop'])
+
+    with open("single_user.txt", "+a", encoding="utf-8") as user:
+        user.write(str(server_info)+',')
