@@ -2,14 +2,12 @@
 let height = 32;
 let width = 48;
 
+const map = new Array(height);
+for (let i = 0; i < height; i++)
+	map[i] = new Array(width);
+
 const canvas  = document.getElementById("game_screen");
 const ctx = canvas.getContext('2d');
-/*
-	height='320' width='480'
-	
-	ctx.clearRect(20 + i * 32, 20 + j * 32, 32, 32);
-	ctx.clearRect(20 + (i + 1) * 32, 20 + (j + 1) * 32, 32, 32);
-*/
 
 function drawField() {
 	/* Рисуем поле */
