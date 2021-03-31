@@ -68,7 +68,8 @@ def info_guide_page():
 @app.route("/profile", methods=["POST", "GET"])
 @account_methods.authorize_require
 def profile_page():
-    return flask.render_template("pages/profile/index.html", auth=True)
+    data = methods.get_data(token=account_methods.get_token())['object']
+    return flask.render_template("pages/profile/index.html", auth=True, data=data, genders=genders)
 
 
 @app.route("/login", methods=["POST", "GET"])
@@ -114,13 +115,13 @@ def sign_out_page():
 @app.route("/profile/settings", methods=["POST", "GET"])
 @account_methods.authorize_require
 def settings_data():
+    global genders
     response = flask.request.form
     token = account_methods.get_token()
     if len(response) != 0:
         methods.update_data(token=token, **response)
     data = methods.get_data(token=token)
 
-    genders = ['Мужской', 'Женский']
     return flask.render_template("pages/profile/settings.html", auth=True, data=data['object'], genders=genders)
 
 
@@ -149,5 +150,7 @@ if __name__ == '__main__':
             db_options['auth_base'] = "admin"
         file.write(yaml.dump(db_options))
     database.connect(**db_options)
+
+    genders = ('Мужской', 'Женский')
 
     app.run()
