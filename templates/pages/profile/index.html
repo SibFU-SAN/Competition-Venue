@@ -21,7 +21,7 @@
 			<div class="middle-info info-field">
 				<div>
 					<dl class="attrs">
-                        {% if data['gender'] %}
+                        {% if 'gender' in data %}
 						    <dt>Пол</dt>
 							    <dd>{{ genders[data['gender']] if data['gender'] != -1 else "Не указан"}}</dd>
                         {% endif %}
