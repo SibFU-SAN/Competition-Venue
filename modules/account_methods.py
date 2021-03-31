@@ -1,3 +1,4 @@
+import hashlib
 import flask
 import modules.database as db
 
@@ -33,3 +34,7 @@ def not_authorize_require(func):
 
 def get_token() -> str or None:
     return flask.request.cookies.get("auth")
+
+
+def get_login_hash(login: str) -> str:
+    return hashlib.md5(login.lower().encode()).hexdigest()
