@@ -4,7 +4,6 @@ import yaml
 from json.encoder import JSONEncoder
 from modules import methods, account_methods, database
 
-
 json_encoder = JSONEncoder()
 app = flask.Flask(__name__,
                   static_folder="./templates/",
@@ -72,6 +71,18 @@ def profile_page():
     return flask.render_template("pages/profile/index.html", auth=True, data=data, genders=genders)
 
 
+@app.route("/target/<login>", methods=["POST", "GET"])
+def other_profile_page(login):
+    target_data = methods.get_data(token=account_methods.get_login_hash(login), by_token=False)['object']
+    if target_data is not None:
+        return flask.render_template("pages/profile/index.html",
+                                     auth=account_methods.is_authorized(),
+                                     data=target_data,
+                                     genders=genders)
+    # TODO: Сделать страницу-заглушку
+    return flask.redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
+
 @app.route("/login", methods=["POST", "GET"])
 @account_methods.not_authorize_require
 def login_page():
@@ -83,7 +94,7 @@ def login_page():
     data = methods.login(**response)
     if data['type'] == 'success':
         response = flask.make_response(flask.redirect("/profile"))
-        response.set_cookie("auth", value=data['object']['token'], max_age=60*60*24*7)
+        response.set_cookie("auth", value=data['object']['token'], max_age=60 * 60 * 24 * 7)
         return response
 
     return flask.render_template("pages/profile/login.html", error=data['description'])
@@ -100,7 +111,7 @@ def register_page():
     data = methods.register(**response)
     if data['type'] == 'success':
         response = flask.make_response(flask.redirect("/profile", 302))
-        response.set_cookie("auth", value=data['object']['token'], max_age=60*60*24*7)
+        response.set_cookie("auth", value=data['object']['token'], max_age=60 * 60 * 24 * 7)
         return response
     return flask.render_template("pages/profile/register.html", error=data['description'])
 
