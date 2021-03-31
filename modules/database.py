@@ -72,13 +72,14 @@ def db_auth(login: str, password: str) -> str:
     return token
 
 
-def db_get_user_data(token: str) -> dict:
+def db_get_user_data(key: str, by_token=True) -> dict:
     """
     Получение данных пользователя
-    :param token: Токен
+    :param key: Значение
+    :param by_token: Искать ли по токену? Иначе ищет по логину
     :return: Данные пользователя
     """
-    data = db.get_collection('users').find_one({'token': token}, {'password': 0, 'token': 0})
+    data = db.get_collection('users').find_one({('token' if by_token else '_id'): key}, {'password': 0, 'token': 0})
     if data is None:
         raise LoginError(32, "Введен неверный токен")
     return data

@@ -105,7 +105,7 @@ def get_data(**data) -> dict:
                        token=('token' in data))
 
     try:
-        result = database.db_get_user_data(data['token'])
+        result = database.db_get_user_data(data['token'], 'by_token' not in data or data['by_token'])
         return r_success(**result)
     except database.LoginError as ex:
         return r_error(ex.error_id, ex.message)
