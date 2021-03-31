@@ -49,7 +49,10 @@ def db_create_user(login: str, password: str) -> str:
         '_id': hashlib.md5(login.lower().encode()).hexdigest(),
         'login': login,
         'password': hashlib.sha1(password.encode()).hexdigest(),
-        'token': token
+        'token': token,
+        'wins': 0,
+        'played_games': 0,
+        'best_score': 0,
     })
     return token
 
