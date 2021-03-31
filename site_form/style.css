@@ -24,10 +24,7 @@ body {
 }
 
 .main {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	margin-left: 10%;
-	margin-right: 10%;
+	margin: auto;
 	flex: 1; /* Для организации подвала */
 }
 
@@ -244,3 +241,6 @@ body {
     border: 1px solid #000000;
 }
 /* Таблица */
+
+.canvas-box{
+}

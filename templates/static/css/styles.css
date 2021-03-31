@@ -13,6 +13,7 @@ body {
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
+	min-width: 800px;
 }
 
 /* Стили для шапки и подвала */
@@ -20,14 +21,11 @@ body {
 	background: #ffae18;
 	display: block; 
 	border-bottom: 2px solid #000000;
-	min-width: 550px;
+
 }
 
 .main {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	margin-left: 10%;
-	margin-right: 10%;
+	margin: auto;
 	flex: 1; /* Для организации подвала */
 }
 
@@ -127,6 +125,8 @@ body {
 	font-family: times new roman;
 	font-style: normal;
 	font-weight: normal;
+	margin-left: 10%;
+	margin-right: 10%;
 }
 
 .focus-block{
@@ -134,7 +134,7 @@ body {
 	background: #fffbf6;
 	border: 1px solid #000000;
 	padding: 10px;
-	margin: 0 auto;
+	margin: 10px auto 10px auto;
 	min-width: 30%;
 }
 
@@ -213,11 +213,12 @@ body {
 
 /* Таблица */
 .table-section {
+    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 20px 20px 0 0;
     background: #F1B178;
     padding: 15px;
     min-width: 500px;
-    width: 70%;
 }
 .table {
     border: 2px solid #000000;
@@ -238,9 +239,54 @@ body {
 }
 .table td, th {
     padding: 10px;
-
+    min-width: 200px;
 }
 .table th {
     border: 1px solid #000000;
 }
 /* Таблица */
+
+/* Лента гайдов */
+.guide-nav {
+    padding: 10px;
+    margin: 10px 0 0 0;
+    position: absolute;
+    left: 10px;
+    min-width: 10px;
+    width: 180px;
+    font-size: 16px;
+}
+.guide-nav h2 {
+    text-align: center;
+    margin: 0 0 10px 0;
+}
+.guide-nav a {
+    text-decoration: none;
+}
+.guide-nav ul {
+    padding-left: 25px;
+    margin: 0;
+}
+.guide-nav li {
+    margin-bottom: 5px;
+}
+.guide-content {
+    width: 60%;
+    min-width: 470px;
+    margin-left: 230px;
+    font-size: 18px;
+}
+.guide-content > header {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.guide-content p {
+    margin-bottom: 10px;
+}
+.guide-content .listing {
+    font-style: italic;
+    font-size: 16px;
+}
+/* Лента гайдов */
