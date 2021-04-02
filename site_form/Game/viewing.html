@@ -30,23 +30,23 @@
 	
 	<main class="main centered-box">
 		<!-- Таблица будет реализована в дальнейшем -->
-		<section class="focus-block">
-		<h2>Просмотр Игры</h2>
+		<section class="focus-block centered-box">
 			<div>
-			<p>Информация о игре:</p>
+				<canvas height='600' width='800'  style = "border:4px solid black; "
+				id='game_screen'>#</canvas>
+				<div class="centered-box">
+					<input type = "button" id="stop" value="Запуск">
+				</div>
+			</div>
+			<div>
+				<h2>Просмотр Игры</h2>
+				<p>Информация о игре:</p>
 				<dl>
 					<dt>Кол-во игроков</dt>
 						<dd>6</dd>
 					<dt>Размер карты</dt>
 						<dd>32x48</dd>
 				</dl>
-			</div>
-			<div>
-				<canvas height='600' width='800'  style = "border:4px solid black; "
-				id='game_screen'>#</canvas>
-			</div>
-			<div class="centered-box">
-				<input type = "button" id="stop" value="Запуск">
 			</div>
 		</section>
 	</main>
