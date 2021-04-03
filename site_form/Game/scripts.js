@@ -133,7 +133,7 @@ function drawGame() {
 	/* Отрисовка одного кадра игры */
 	if (gameStopped) return;
 	
-	// TODO: получить данные кадра 
+	// Получить данные кадра
 	let currentFrame = gameReplay.frames[frameCount];
 	console.log(`frame ${frameCount}`);
 
