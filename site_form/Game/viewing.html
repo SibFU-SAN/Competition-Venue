@@ -27,26 +27,33 @@
 		</nav>
 		<!-- main-menu -->
 	</header>
-	
+
 	<main class="main centered-box">
 		<!-- Таблица будет реализована в дальнейшем -->
-		<section class="focus-block centered-box">
+		<section class="focus-block game-section">
 			<div>
-				<canvas height='600' width='800'  style = "border:4px solid black; "
-				id='game_screen'>#</canvas>
-				<div class="centered-box">
-					<input type = "button" id="stop" value="Запуск">
+				<canvas height='400' width='600' id='game_screen' class="snake-game">#</canvas>
+				<div class="game-control">
+					<input type = "button" id="stop" value="Запуск" class="btn">
+					<input type = "button" value="Вперед/Назад" class="btn">
 				</div>
 			</div>
-			<div>
-				<h2>Просмотр Игры</h2>
-				<p>Информация о игре:</p>
+			<div class="game-info">
+				<h3>Информация о игре:</h3>
 				<dl>
 					<dt>Кол-во игроков</dt>
 						<dd>6</dd>
 					<dt>Размер карты</dt>
 						<dd>32x48</dd>
 				</dl>
+				<div>
+					<hr>
+					<h3>Список участиков</h3>
+					<ul>
+						<li>Валера 1</li>
+						<li>Валера 2</li>
+					</ul>
+				</div>
 			</div>
 		</section>
 	</main>
