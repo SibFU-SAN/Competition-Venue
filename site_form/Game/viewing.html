@@ -31,11 +31,28 @@
 	<main class="main centered-box">
 		<!-- Таблица будет реализована в дальнейшем -->
 		<section class="focus-block game-section">
-			<div>
-				<canvas height='400' width='600' id='game_screen' class="snake-game">#</canvas>
+			<div class="game-screen-container">
+				<canvas height='400' width='600' id='game_screen' class="game-screen">#</canvas>
 				<div class="game-control">
-					<input type = "button" id="stop" value="Запуск" class="btn">
-					<input type = "button" value="Вперед/Назад" class="btn">
+					<div class="slide-container">
+						<input type="range" min="0" max="100" value="0" class="slider" id="ReplayRange">
+					</div>
+					<div class="control-buttons">
+						<input type = "button" id="stop" value="Запуск" class="control-btn">
+						<div class="replay-setting">
+							<div class="control-btn">&#9776;&#10148;</div>
+							<div class="replay-setting-menu">
+								<input type="button" id="reverse" value="reverse" class="replay-reverse">
+								<select id="speed_selection" class="replay-speed">
+									<option value="0.25">x0.25</option>
+									<option value="0.5">x0.5</option>
+									<option selected value="1">x1</option>
+									<option value="2">x2</option>
+									<option value="4">x4</option>
+								</select>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="game-info">
