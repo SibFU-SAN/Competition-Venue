@@ -27,7 +27,7 @@
 		</nav>
 		<!-- main-menu -->
 	</header>
-
+	
 	<main class="main centered-box">
 		<!-- Таблица будет реализована в дальнейшем -->
 		<section class="focus-block game-section">
@@ -40,11 +40,10 @@
 					<div class="control-buttons">
 						<input type = "button" id="stop" value="Запуск" class="control-btn">
 						<div class="replay-setting">
-							<div class="control-btn">&#9776;&#10148;</div>
+							<div class="control-btn">&#9776;</div>
 							<div class="replay-setting-menu">
-								<input type="button" id="reverse" value="reverse" class="replay-reverse">
-								<select id="speed_selection" class="replay-speed">
-									<option value="0.25">x0.25</option>
+								<input type="button" id="reverse" value="reverse" class="replay-reverse control-btn">
+								<select id="speed_selection" class="replay-speed control-btn">
 									<option value="0.5">x0.5</option>
 									<option selected value="1">x1</option>
 									<option value="2">x2</option>
@@ -59,18 +58,18 @@
 				<h3>Информация о игре:</h3>
 				<dl>
 					<dt>Кол-во игроков</dt>
-						<dd>6</dd>
+						<dd id="info_number">6</dd>
 					<dt>Размер карты</dt>
-						<dd>32x48</dd>
+						<dd id="info_map">32x48</dd>
 				</dl>
-				<div>
+				<!--<div>
 					<hr>
 					<h3>Список участиков</h3>
 					<ul>
 						<li>Валера 1</li>
 						<li>Валера 2</li>
 					</ul>
-				</div>
+				</div> -->
 			</div>
 		</section>
 	</main>

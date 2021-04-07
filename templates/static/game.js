@@ -1,20 +1,15 @@
-// HTML лементы
-const canvas  = document.getElementById("game_screen");
-const ctx = canvas.getContext('2d');
-
-let gameStopped = true;
-const btnStop  = document.getElementById("stop");
-btnStop.addEventListener("click", stopButtonClick);
-
 // Данные Зрителя
-let accountHesh = null;
-let personalSnakeId = 29437191;
+const accountHesh = 1;
+let personalSnakeId = null;
+
+// Данные Игроков: Hesh <=> Name
+//const playersHesh = JSON.parse(``);
 
 // Карта Игры
 const gameReplay = JSON.parse(`
 	{
 		"players": {
-			"29437191": 0,
+			"29437191": 1,
 			"77539713": 0
 			},
 		"gameSettings": {
@@ -31,21 +26,51 @@ const gameReplay = JSON.parse(`
 			]
 	}
 `);
+
+// HTML лементы
+const canvas  = document.getElementById("game_screen");
+const ctx = canvas.getContext('2d');
+
+// Кнопка остановки - запуска
+let gameStopped = true;
+const btnStop  = document.getElementById("stop");
+btnStop.addEventListener("click", stopButtonClick);
+
+
+console.log(gameReplay);
+
 let frameCount = 0;
 let frameStep = 1;
-console.log(gameReplay);
 
 const height = gameReplay.gameSettings.height;
 const width = gameReplay.gameSettings.weight;
-
 const step_x = Math.floor(canvas.width / width);
 const step_y = Math.floor(canvas.height / height);
 
-
-function setCanvasSettings () {
-	canvas.width = width * step_x;
-	canvas.height = height * step_y;
+// Прокрутка видео
+let slider = document.getElementById("ReplayRange");
+slider.setAttribute("max", gameReplay.frames.length - 1);
+slider.oninput = function() {
+    frameCount = parseInt(this.value);
+	console.log("set value range", frameCount);
 }
+
+// Кнопка reverse
+const reverse = document.getElementById("reverse");
+reverse.addEventListener("click", reverseButtonClick);
+
+function reverseButtonClick() {
+	if (frameStep == 1)
+		reverse.value = "normal";
+	else
+	{
+		reverse.value = "reverse";
+	}
+	frameStep *= -1;
+}
+
+// Скорость
+let speedSelection = document.getElementById("speed_selection");
 
 function stopButtonClick() {
 	if (gameStopped) {
@@ -58,11 +83,11 @@ function stopButtonClick() {
 
 function drawField() {
 	/* Рисуем поле */
-	ctx.fillStyle = "#ffffff"; //8cca88
+	ctx.fillStyle = "#ffffff";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 	// ?
-	ctx.strokeStyle = "#eef7fd"; //77b373
+	ctx.strokeStyle = "#bee5ff";
 	for (let j = step_x; j < canvas.width; j += step_x) {
 		ctx.beginPath();
 		ctx.moveTo(j, 0);
@@ -135,7 +160,7 @@ function drawGame() {
 
 	// Получить данные кадра
 	let currentFrame = gameReplay.frames[frameCount];
-	console.log(`frame ${frameCount}`);
+	document.getElementById("ReplayRange").value = frameCount;
 
 	// Поле
 	drawField();
@@ -146,6 +171,7 @@ function drawGame() {
 			drawFood(apple[0] - 1, apple[1] - 1);
 		else
 			console.log(`Ошибка. Корд яблока - ${apple}`);
+
 	// Змеи
 	let isFriend = null;
 	for (let snake in currentFrame.snakes) {
@@ -155,29 +181,36 @@ function drawGame() {
 			isFriend = false;
 		drawSnake(currentFrame.snakes[snake], isFriend);
 	}
-	if (frameCount < gameReplay.frames.length - 1)
-		frameCount += frameStep;
-	else
+
+
+	if ((frameCount == gameReplay.frames.length - 1 && frameStep == 1) ||
+		(frameCount == 0 && frameStep == -1))
+	{
 		stopButtonClick();
+		return;
+	}
+	frameCount += frameStep;
 }
 
 function main() {
-	setCanvasSettings();
+	canvas.width = width * step_x;
+	canvas.height = height * step_y;
+	document.getElementById("info_number").innerHTML = `${Object.keys(gameReplay.players).length}`;
+	document.getElementById("info_map").innerHTML = `${gameReplay.gameSettings.weight}x${gameReplay.gameSettings.height}`;
 
 	// Нахождение нужного id
-	let players = JSON.parse('{ "players": { "15777391": 0, "54685904": 20 } }');
-	for (let i in players.players) {
-		if (players.players[i] == accountHesh)
+	for (let i in gameReplay.players) {
+		if (gameReplay.players[i] == accountHesh)
 			personalSnakeId = i;
 	}
 	console.log("personalSnakeId = ", personalSnakeId);
-	console.log(gameReplay.frames.length);
 
-	// Начальный кадр
 	drawField();
 
-	let game = setInterval(drawGame, 1000);
+	let timerId  = setTimeout(function timer() {
+		drawGame();
+		timerId  = setTimeout(timer, 500 / parseFloat(speedSelection.value));
+		}, 500 / parseFloat(speedSelection.value));
 }
 
 main();
-
