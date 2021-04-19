@@ -310,6 +310,8 @@ body {
 	background: #FFC898;
     color: #000000;
     outline: none;
+	min-width: 46px;
+	height: 25px;
 }
 .control-buttons {
     padding: 0 10px 3px 10px;
@@ -319,23 +321,7 @@ body {
     display: inline-block;
     margin-left: auto;
 }
-.replay-setting-menu {
-    display: none;
-}
-.replay-setting:hover .replay-setting-menu {
-    padding: 3px 3px 0 3px;
-    margin: auto;
-    display: block;
-    cursor: pointer;
-    position: absolute;
-    background: #000000;
-}
-.replay-setting-menu > * {
-    display: block;
-    margin-bottom: 3px;
-}
-.replay-reverse {}
-.replay-speed {}
+
 
 
 .slide-container{padding:0 5px;}

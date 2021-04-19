@@ -13,8 +13,8 @@ const gameReplay = JSON.parse(`
 			"77539713": 0
 			},
 		"gameSettings": {
-			"height": 10,
-			"weight": 10
+			"height": 50,
+			"weight": 100
 			},
 		"frames": [
 			{ "apples": [ [ 7, 2 ], [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 4, 3 ], [ 3, 3 ] ], "77539713": [ [ 4, 4 ], [ 4, 5 ] ] } },
@@ -44,8 +44,10 @@ let frameStep = 1;
 
 const height = gameReplay.gameSettings.height;
 const width = gameReplay.gameSettings.weight;
-const step_x = Math.floor(canvas.width / width);
-const step_y = Math.floor(canvas.height / height);
+let step_x = Math.floor(canvas.width / width);
+let step_y = Math.floor(canvas.height / height);
+	step_x = Math.min(step_x, step_y);
+	step_y = step_x;
 
 // Прокрутка видео
 let slider = document.getElementById("ReplayRange");
@@ -53,6 +55,7 @@ slider.setAttribute("max", gameReplay.frames.length - 1);
 slider.oninput = function() {
     frameCount = parseInt(this.value);
 	console.log("set value range", frameCount);
+	drawFrame(frameCount);
 }
 
 // Кнопка reverse
@@ -153,26 +156,19 @@ function drawSnake(coordinates, isFriend) {
 		drawSnakeElement(coordinates[i][0] - 1, coordinates[i][1] - 1);
 }
 
+function drawFrame (numberFrame)
+{
+	let currentFrame = gameReplay.frames[numberFrame];
+	document.getElementById("ReplayRange").value = numberFrame;
 
-function drawGame() {
-	/* Отрисовка одного кадра игры */
-	if (gameStopped) return;
-
-	// Получить данные кадра
-	let currentFrame = gameReplay.frames[frameCount];
-	document.getElementById("ReplayRange").value = frameCount;
-
-	// Поле
 	drawField();
 
-	// Яблоки
 	for (let apple of currentFrame.apples)
 		if (apple.length = 2)
 			drawFood(apple[0] - 1, apple[1] - 1);
 		else
 			console.log(`Ошибка. Корд яблока - ${apple}`);
 
-	// Змеи
 	let isFriend = null;
 	for (let snake in currentFrame.snakes) {
 		if (snake == personalSnakeId)
@@ -181,7 +177,13 @@ function drawGame() {
 			isFriend = false;
 		drawSnake(currentFrame.snakes[snake], isFriend);
 	}
+}
 
+function drawGame() {
+	/* Отрисовка одного кадра игры */
+	if (gameStopped) return;
+
+	drawFrame(frameCount);
 
 	if ((frameCount == gameReplay.frames.length - 1 && frameStep == 1) ||
 		(frameCount == 0 && frameStep == -1))
@@ -206,6 +208,7 @@ function main() {
 	console.log("personalSnakeId = ", personalSnakeId);
 
 	drawField();
+	drawFrame(0);
 
 	let timerId  = setTimeout(function timer() {
 		drawGame();
