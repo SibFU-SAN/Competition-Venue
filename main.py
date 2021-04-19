@@ -4,7 +4,6 @@ import yaml
 from json.encoder import JSONEncoder
 from modules import methods, account_methods, database
 
-
 json_encoder = JSONEncoder()
 app = flask.Flask(__name__,
                   static_folder="./templates/",
@@ -68,7 +67,20 @@ def info_guide_page():
 @app.route("/profile", methods=["POST", "GET"])
 @account_methods.authorize_require
 def profile_page():
-    return flask.render_template("pages/profile/index.html", auth=True)
+    data = methods.get_data(token=account_methods.get_token())['object']
+    return flask.render_template("pages/profile/index.html", auth=True, data=data, genders=genders)
+
+
+@app.route("/target/<login>", methods=["POST", "GET"])
+def other_profile_page(login):
+    target_data = methods.get_data(token=account_methods.get_login_hash(login), by_token=False)['object']
+    if target_data is not None:
+        return flask.render_template("pages/profile/index.html",
+                                     auth=account_methods.is_authorized(),
+                                     data=target_data,
+                                     genders=genders)
+    # TODO: Сделать страницу-заглушку
+    return flask.redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
 
 @app.route("/login", methods=["POST", "GET"])
@@ -82,7 +94,7 @@ def login_page():
     data = methods.login(**response)
     if data['type'] == 'success':
         response = flask.make_response(flask.redirect("/profile"))
-        response.set_cookie("auth", value=data['object']['token'], max_age=60*60*24*7)
+        response.set_cookie("auth", value=data['object']['token'], max_age=60 * 60 * 24 * 7)
         return response
 
     return flask.render_template("pages/profile/login.html", error=data['description'])
@@ -99,7 +111,7 @@ def register_page():
     data = methods.register(**response)
     if data['type'] == 'success':
         response = flask.make_response(flask.redirect("/profile", 302))
-        response.set_cookie("auth", value=data['object']['token'], max_age=60*60*24*7)
+        response.set_cookie("auth", value=data['object']['token'], max_age=60 * 60 * 24 * 7)
         return response
     return flask.render_template("pages/profile/register.html", error=data['description'])
 
@@ -114,33 +126,42 @@ def sign_out_page():
 @app.route("/profile/settings", methods=["POST", "GET"])
 @account_methods.authorize_require
 def settings_data():
-    return ""
+    global genders
+    response = flask.request.form
+    token = account_methods.get_token()
+    if len(response) != 0:
+        methods.update_data(token=token, **response)
+    data = methods.get_data(token=token)
+
+    return flask.render_template("pages/profile/settings.html", auth=True, data=data['object'], genders=genders)
 
 
 if __name__ == '__main__':
-    data = {}
+    db_options = {}
     try:
         with open("database.yml", 'r') as file:
-            data = yaml.load(file.read(), Loader=yaml.FullLoader)
+            db_options = yaml.load(file.read(), Loader=yaml.FullLoader)
     except FileNotFoundError:
         pass
 
     with open("database.yml", 'w') as file:
-        if 'host' not in data:
-            data['host'] = "localhost"
-        if 'port' not in data:
-            data['port'] = "27017"
-        if 'base' not in data:
-            data['base'] = "test"
-        if 'auth' not in data:
-            data['auth'] = False
-        if 'user' not in data:
-            data['user'] = "userName"
-        if 'password' not in data:
-            data['password'] = "1234567890"
-        if 'auth_base' not in data:
-            data['auth_base'] = "admin"
-        file.write(yaml.dump(data))
-    database.connect(**data)
+        if 'host' not in db_options:
+            db_options['host'] = "localhost"
+        if 'port' not in db_options:
+            db_options['port'] = "27017"
+        if 'base' not in db_options:
+            db_options['base'] = "test"
+        if 'auth' not in db_options:
+            db_options['auth'] = False
+        if 'user' not in db_options:
+            db_options['user'] = "userName"
+        if 'password' not in db_options:
+            db_options['password'] = "1234567890"
+        if 'auth_base' not in db_options:
+            db_options['auth_base'] = "admin"
+        file.write(yaml.dump(db_options))
+    database.connect(**db_options)
+
+    genders = ('Мужской', 'Женский')
 
     app.run()

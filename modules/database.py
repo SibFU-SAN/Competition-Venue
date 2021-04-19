@@ -3,9 +3,6 @@ import hashlib
 import pymongo
 
 
-db = None
-
-
 def connect(host: str, port: str, base: str, auth: bool, user: str, password: str, auth_base: str):
     global db
 
@@ -52,7 +49,10 @@ def db_create_user(login: str, password: str) -> str:
         '_id': hashlib.md5(login.lower().encode()).hexdigest(),
         'login': login,
         'password': hashlib.sha1(password.encode()).hexdigest(),
-        'token': token
+        'token': token,
+        'wins': 0,
+        'played_games': 0,
+        'best_score': 0,
     })
     return token
 
@@ -72,13 +72,14 @@ def db_auth(login: str, password: str) -> str:
     return token
 
 
-def db_get_user_data(token: str) -> dict:
+def db_get_user_data(key: str, by_token=True) -> dict:
     """
     Получение данных пользователя
-    :param token: Токен
+    :param key: Значение
+    :param by_token: Искать ли по токену? Иначе ищет по логину
     :return: Данные пользователя
     """
-    data = db.get_collection('users').find_one({'token': token}, {'password': 0, 'token': 0})
+    data = db.get_collection('users').find_one({('token' if by_token else '_id'): key}, {'password': 0, 'token': 0})
     if data is None:
         raise LoginError(32, "Введен неверный токен")
     return data
@@ -110,9 +111,10 @@ def db_update_info(token: str, **data) -> dict:
     :param data: Значения
     :return: Измененные поля
     """
-    allowed_fields = {"name", "second_name", "about", 'gender'}
+    allowed_fields = {'first_name', 'second_name', 'about', 'gender', 'email'}
     fields = dict()
-    for key, value in data:
+    for key in data:
+        value = data[key]
         if key in allowed_fields:
             fields[key] = value
 
