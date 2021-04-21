@@ -1,35 +1,96 @@
-// Связь с htm
+// Данные Зрителя
+const accountHesh = 1;
+let personalSnakeId = null;
+
+// Данные Игроков: Hesh <=> Name
+//const playersHesh = JSON.parse(``);
+
+// Карта Игры
+const gameReplay = JSON.parse(`
+	{
+		"players": {
+			"29437191": 1,
+			"77539713": 0
+			},
+		"gameSettings": {
+			"height": 50,
+			"weight": 100
+			},
+		"frames": [
+			{ "apples": [ [ 7, 2 ], [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 4, 3 ], [ 3, 3 ] ], "77539713": [ [ 4, 4 ], [ 4, 5 ] ] } },
+			{ "apples": [ [ 7, 2 ], [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 5, 3 ], [ 4, 3 ] ], "77539713": [ "stop" ] } },
+			{ "apples": [ [ 7, 2 ], [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 6, 3 ], [ 5, 3 ] ], "77539713": [ "stop" ] } },
+			{ "apples": [ [ 7, 2 ], [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 7, 3 ], [ 6, 3 ] ], "77539713": [ "stop" ] } },
+			{ "apples": [ [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 7, 2 ], [ 7, 3 ] ], "77539713": [ "stop" ] } },
+			{ "apples": [ [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 6, 2 ], [ 7, 2 ], [ 7, 3 ] ], "77539713": [ "stop" ] } }
+			]
+	}
+`);
+
+// HTML лементы
 const canvas  = document.getElementById("game_screen");
 const ctx = canvas.getContext('2d');
 
+// Кнопка остановки - запуска
 let gameStopped = true;
 const btnStop  = document.getElementById("stop");
 btnStop.addEventListener("click", stopButtonClick);
 
-// Карта Игры
-const height = 32;
-const width = 48;
 
+console.log(gameReplay);
+
+let frameCount = 0;
+let frameStep = 1;
+
+const height = gameReplay.gameSettings.height;
+const width = gameReplay.gameSettings.weight;
 let step_x = Math.floor(canvas.width / width);
 let step_y = Math.floor(canvas.height / height);
+	step_x = Math.min(step_x, step_y);
+	step_y = step_x;
 
-canvas.width = width * step_x;
-canvas.height = height * step_y;
+// Прокрутка видео
+let slider = document.getElementById("ReplayRange");
+slider.setAttribute("max", gameReplay.frames.length - 1);
+slider.oninput = function() {
+    frameCount = parseInt(this.value);
+	console.log("set value range", frameCount);
+	drawFrame(frameCount);
+}
 
-/* Наброски
-const map = new Array(height);
-for (let i = 0; i < height; i++)
-	map[i] = new Array(width);
-*/
+// Кнопка reverse
+const reverse = document.getElementById("reverse");
+reverse.addEventListener("click", reverseButtonClick);
 
+function reverseButtonClick() {
+	if (frameStep == 1)
+		reverse.value = "normal";
+	else
+	{
+		reverse.value = "reverse";
+	}
+	frameStep *= -1;
+}
+
+// Скорость
+let speedSelection = document.getElementById("speed_selection");
+
+function stopButtonClick() {
+	if (gameStopped) {
+		btnStop.value = "Остановить";
+	} else {
+		btnStop.value = "Запуск";
+	}
+	gameStopped = !gameStopped;
+}
 
 function drawField() {
 	/* Рисуем поле */
-	ctx.fillStyle = "#8cca88";
+	ctx.fillStyle = "#ffffff";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 	// ?
-	ctx.strokeStyle = "#77b373";
+	ctx.strokeStyle = "#bee5ff";
 	for (let j = step_x; j < canvas.width; j += step_x) {
 		ctx.beginPath();
 		ctx.moveTo(j, 0);
@@ -57,10 +118,12 @@ function drawFood(x, y) {
 }
 
 function drawSnakeElement(x, y) {
+	/* Рисуем элемент тела змейки */
 	ctx.fillRect(x * step_x, y * step_y, step_x, step_y);
 }
 
 function drawSnakeHead(x, y) {
+	/* Рисуем гогову змейки */
 	ctx.fillRect(x * step_x, y * step_y, step_x, step_y);
 
 	let tempColor = ctx.fillStyle;
@@ -75,69 +138,82 @@ function drawSnakeHead(x, y) {
 	ctx.fillStyle = tempColor;
 }
 
-function drawSnake() //  user_id, snakeCoordinates
-{
-	let isFriend = false;
-	if (true) // TODO: Добавить проверку на пользователя
-		isFriend = true;
+function drawSnake(coordinates, isFriend) {
+	/* Рисуем змейку */
+	const friendSnake = '#c7737d';
+	const enemySnake = '#4f4833';
 
-	const friendSnake = '#57ff64';
-	const enemySnake = '#f64d27';
+	if (typeof(coordinates[0]) == 'stop')
+		return;
 
 	if (isFriend)
 		ctx.fillStyle = friendSnake;
 	else
 		ctx.fillStyle = enemySnake;
 
-	//
-	drawSnakeHead(1, 1, isFriend);
-	drawSnakeElement(2, 1, isFriend);
-	drawSnakeElement(3, 1, isFriend);
-	drawSnakeElement(4, 1, isFriend);
+	drawSnakeHead(coordinates[0][0] - 1, coordinates[0][1] - 1)
+	for (let i = 1; i < coordinates.length; i++)
+		drawSnakeElement(coordinates[i][0] - 1, coordinates[i][1] - 1);
 }
 
-function stopButtonClick() {
-	if (gameStopped) {
-		btnStop.value = "Остановить";
-	} else {
-		btnStop.value = "Запуск";
+function drawFrame (numberFrame)
+{
+	let currentFrame = gameReplay.frames[numberFrame];
+	document.getElementById("ReplayRange").value = numberFrame;
+
+	drawField();
+
+	for (let apple of currentFrame.apples)
+		if (apple.length = 2)
+			drawFood(apple[0] - 1, apple[1] - 1);
+		else
+			console.log(`Ошибка. Корд яблока - ${apple}`);
+
+	let isFriend = null;
+	for (let snake in currentFrame.snakes) {
+		if (snake == personalSnakeId)
+			isFriend = true;
+		else
+			isFriend = false;
+		drawSnake(currentFrame.snakes[snake], isFriend);
 	}
-	gameStopped = !gameStopped;
 }
 
 function drawGame() {
+	/* Отрисовка одного кадра игры */
 	if (gameStopped) return;
 
-	// получить данные кадра
-	// ...
+	drawFrame(frameCount);
 
-	let command = gameReplay[stepCount];
-	let command_context = "";
-
-	// отрисовака кадра
-	drawField();
-
-	if (command == "s") {
-		drawSnake();
-	} else if (command == "a") {
-		drawFood(3 + stepCount,3 + stepCount);
+	if ((frameCount == gameReplay.frames.length - 1 && frameStep == 1) ||
+		(frameCount == 0 && frameStep == -1))
+	{
+		stopButtonClick();
+		return;
 	}
-
-	// ...
-	if (stepCount < maxStep - 1) stepCount += 1;
+	frameCount += frameStep;
 }
 
-function main(){
+function main() {
+	canvas.width = width * step_x;
+	canvas.height = height * step_y;
+	document.getElementById("info_number").innerHTML = `${Object.keys(gameReplay.players).length}`;
+	document.getElementById("info_map").innerHTML = `${gameReplay.gameSettings.weight}x${gameReplay.gameSettings.height}`;
+
+	// Нахождение нужного id
+	for (let i in gameReplay.players) {
+		if (gameReplay.players[i] == accountHesh)
+			personalSnakeId = i;
+	}
+	console.log("personalSnakeId = ", personalSnakeId);
+
 	drawField();
-	drawFood(0,0);
-	drawFood(width - 1, height - 1);
+	drawFrame(0);
 
-	let game = setInterval(drawGame, 1000);
+	let timerId  = setTimeout(function timer() {
+		drawGame();
+		timerId  = setTimeout(timer, 500 / parseFloat(speedSelection.value));
+		}, 500 / parseFloat(speedSelection.value));
 }
-
-gameReplay = "sa";
-let maxStep = gameReplay.length;
-let stepCount = 0;
 
 main();
-

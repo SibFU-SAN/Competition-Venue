@@ -1,23 +1,44 @@
 {% block content %}
 <main class="main centered-box">
 	<!-- Таблица будет реализована в дальнейшем -->
-	<section class="focus-block">
-	<h2>Просмотр Игры</h2>
-		<div>
-		<p>Информация о игре:</p>
+	<section class="focus-block game-section">
+		<div class="game-screen-container">
+			<canvas height='400' width='600' id='game_screen' class="game-screen">#</canvas>
+			<div class="game-control">
+				<div class="slide-container">
+					<input type="range" min="0" max="100" value="0" class="slider" id="ReplayRange">
+				</div>
+				<div class="control-buttons">
+					<input type = "button" id="stop" value="Запуск" class="control-btn">
+
+					<div class="replay-setting">
+						<input type="button" id="reverse" value="reverse" class="control-btn">
+						<select id="speed_selection" class="control-btn">
+							<option value="0.5">x0.5</option>
+							<option selected value="1">x1</option>
+							<option value="2">x2</option>
+							<option value="4">x4</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="game-info">
+			<h3>Информация о игре:</h3>
 			<dl>
 				<dt>Кол-во игроков</dt>
-					<dd>6</dd>
+					<dd id="info_number">6</dd>
 				<dt>Размер карты</dt>
-					<dd>32x48</dd>
+					<dd id="info_map">32x48</dd>
 			</dl>
-		</div>
-		<div>
-			<canvas height='600' width='800'  style = "border:4px solid black; "
-			id='game_screen'>#</canvas>
-		</div>
-		<div class="centered-box">
-			<input type = "button" id="stop" value="Запуск">
+			<!--<div>
+				<hr>
+				<h3>Список участиков</h3>
+				<ul>
+					<li>Валера 1</li>
+					<li>Валера 2</li>
+				</ul>
+			</div>-->
 		</div>
 	</section>
 </main>

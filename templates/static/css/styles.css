@@ -19,9 +19,8 @@ body {
 /* Стили для шапки и подвала */
 .header{
 	background: #ffae18;
-	display: block; 
+	display: block;
 	border-bottom: 2px solid #000000;
-
 }
 
 .main {
@@ -158,7 +157,7 @@ body {
 	margin: 0 auto;
 	margin-top: 5px;
 }
-.form-field input, .form-field a, .form-field select{
+.form-field input, .form-field a, .form-field select .btn{
 	display:inline-block;
 	margin: 10px;
 	padding: 10px;
@@ -249,12 +248,11 @@ body {
 /* Лента гайдов */
 .guide-nav {
     padding: 10px;
-    margin: 10px 0 0 0;
-    position: absolute;
-    left: 10px;
-    min-width: 10px;
+    margin: 10px;
+    min-width: 10px; /* ? */
     width: 180px;
     font-size: 16px;
+    align-self: flex-start;
 }
 .guide-nav h2 {
     text-align: center;
@@ -273,7 +271,7 @@ body {
 .guide-content {
     width: 60%;
     min-width: 470px;
-    margin-left: 230px;
+    margin-left: 10px;
     font-size: 18px;
 }
 .guide-content > header {
@@ -290,3 +288,80 @@ body {
     font-size: 16px;
 }
 /* Лента гайдов */
+
+/* Игровое Поле */
+.game-section {
+    display: flex;
+}
+.game-screen-container{
+    padding: 0 10px;
+}
+.game-screen {
+    border: 3px solid black;
+    vertical-align:bottom;
+}
+.game-control {
+    margin: 0;
+    width: 100%;
+    background: #a0a0a0;
+}
+.control-btn {
+	background: #FFC898;
+    color: #000000;
+    outline: none;
+	min-width: 46px;
+	height: 25px;
+}
+.control-buttons {
+    padding: 0 10px 3px 10px;
+    display: flex;
+}
+.replay-setting {
+    display: inline-block;
+    margin-left: auto;
+}
+
+
+
+.slide-container{padding:0 5px;}
+ .slider {
+    margin:0;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+.slider:hover {opacity: 1;}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 15px;
+    background: #313131;
+    cursor: pointer;
+}
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 15px;
+    background: #313131;
+    cursor: pointer;
+}
+
+
+.game-info {
+    width:220px;
+    padding: 10px;
+    margin-bottom: auto;
+}
+.game-info dt:after {
+	content: ":";
+}
+.game-info p, .game-info h3, .game-info dl{
+    margin: 0;
+    margin-bottom: 20px;
+}
+/* Игровое Поле */
