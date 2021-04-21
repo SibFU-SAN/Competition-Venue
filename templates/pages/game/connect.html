@@ -1,0 +1,15 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+	<main class="main centered-box">
+		<form method="post" action="/game/editor" class="focus-block form-field">
+			<h2>Вход в игру</h2>
+			<p>
+				<label>Id Игры <input type="text" name="game_id" id="game_id" required maxlength="20"></label>
+			</p>
+			<div class="form-menu centered-box">
+				<input type="submit" value="Присоединится" class="form-btn">
+			</div> <!-- Добавить возможность перехода на страницу редактора с Id игры -->
+		</form>
+	</main>
+{% endblock %}

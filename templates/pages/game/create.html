@@ -1,0 +1,19 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+	<main class="main centered-box">
+		<form method="post" action="/game/editor" class="focus-block form-field">
+			<h2>Создание Сессии Игры</h2>
+			<p>
+				<label>Время начала игры: <input type="time" name="start_time" id="start_time" required></label>
+				<input type="date" id="datemax" name="datemax" max="1979-12-31" required>
+			</p>
+			<p>
+				<label>Длительность игры: <input type="number" name="d" id="d" min="5" max="60" step="5" value="5"> (min)</label>
+			</p>
+			<div class="form-menu centered-box">
+				<input type="submit" value="Отправить" class="form-btn" >
+			</div>
+		</form>
+	</main>
+{% endblock %}

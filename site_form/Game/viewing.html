@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head> <!-- Этот файл шаблон -->
+	<meta charset="UTF-8">
+	<title>Соревновательная Площадка</title>
+	<link rel="stylesheet" href="../style.css">
+	<link rel="icon" href="logo.png" sizes="32x32">
+</head>
+<body>
+	<header class="header">
+		<div class="headline">
+			<p><img src="logo.png" >Соревновательная Площадка</p>
+		</div><!-- Лого / Название width=40pt-->
+		<nav>
+			<ul class="head-menu">
+				<li><a href="#">Главная</a></li>
+				<li><a href="#">Аккаунт</a></li>
+				<li><a href="#">Игра</a>
+					<ul class="submenu">
+						<li><a href="#">Играть</a></li>
+                        <li><a href="#">Создать Сессию</a></li>
+						<li><a href="#">Лидеры</a></li>
+					</ul>
+				</li>
+				<li><a href="#">Справочник</a></li>
+			</ul>
+		</nav>
+		<!-- main-menu -->
+	</header>
+	
+	<main class="main centered-box">
+		<!-- Таблица будет реализована в дальнейшем -->
+		<section class="focus-block game-section">
+			<div class="game-screen-container">
+				<canvas height='400' width='600' id='game_screen' class="game-screen">#</canvas>
+				<div class="game-control">
+					<div class="slide-container">
+						<input type="range" min="0" max="100" value="0" class="slider" id="ReplayRange">
+					</div>
+					<div class="control-buttons">
+						<input type = "button" id="stop" value="Запуск" class="control-btn">
+
+						<div class="replay-setting">
+							<input type="button" id="reverse" value="reverse" class="control-btn">
+							
+							<select id="speed_selection" class="control-btn">
+								<option value="0.5">x0.5</option>
+								<option selected value="1">x1</option>
+								<option value="2">x2</option>
+								<option value="4">x4</option>
+							</select>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="game-info">
+				<h3>Информация о игре:</h3>
+				<dl>
+					<dt>Кол-во игроков</dt>
+						<dd id="info_number">6</dd>
+					<dt>Размер карты</dt>
+						<dd id="info_map">32x48</dd>
+				</dl>
+				<!--<div>
+					<hr>
+					<h3>Список участиков</h3>
+					<ul>
+						<li>Валера 1</li>
+						<li>Валера 2</li>
+					</ul>
+				</div>-->
+			</div>
+		</section>
+	</main>
+
+	<script src="scripts.js"></script>
+
+	<footer class="footer">
+		<div class="footer-info">
+			Проект был создан:
+			<ul>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			</ul>
+		</div>
+	</footer>
+</body>
+</html>
+
+

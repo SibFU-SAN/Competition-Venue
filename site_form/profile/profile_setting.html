@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head> <!-- Этот файл шаблон -->
+	<meta charset="UTF-8">
+	<title>Соревновательная Площадка</title>
+	<link rel="stylesheet" href="../style.css">
+	<link rel="stylesheet" href="AccountStyle.css">
+
+</head>
+<body>
+	<header class="header">
+		<div class="headline">
+			<p><img src="logo.png" >Соревновательная Площадка</p>
+		</div><!-- Лого / Название width=40pt-->
+		<nav>
+			<ul class="head-menu">
+				<li><a href="/">Главная</a></li>
+
+				<li><a href="#">Игра</a>
+					<ul class="submenu">
+						<li><a href="/game/connect">Играть</a></li>
+                        <li><a href="/game/create">Создать Сессию</a></li>
+						<li><a href="/game/top">Лидеры</a></li>
+					</ul>
+				</li>
+
+				<li><a href="/help/guide">Справочник</a></li>
+
+				<li class="left-bottom">
+					<a href="/login"><img src="/templates/static/images/profile_stub.png" alt=" " class="small-profile_logo"> Аккаунт</a>
+					<ul class="submenu">
+						<li><a href="/profile/settings">Редактировать</a></li>
+						<li><a href="/profile/sign_out">Выход</a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+		<!-- main-menu -->
+	</header>
+
+	<main class="main centered-box">
+		<section>
+			<form method="post" action="/profile" class="focus-block form-field">
+				<h2>Именение профиля</h2>
+				<div>
+					<!-- TODO: добавить поле для изменения иконки профиля -->
+					<p><label>Иконка <input type="file" name="logo" accept="image/*,image/jpeg"></label></p>
+				</div>
+				<div>
+					<!-- TODO: При редактировании в поля должны вставляться старые данные (value) -->
+					<p><label>Имя <input type="text" name="FirstName" required value=""></label></p>
+					<p><label>Фамилия <input type="text" name="LastName" required value=""></label></p>
+					<p>
+						<label>Пол
+							<select name="gender">
+								<option value="r1">М</option>
+								<option value="r2">Ж</option>
+							</select>
+						</label>
+					</p>
+					<p><label>E-mail <input type="email" name="email" value=""></label></p>
+					<p><label>Телефон <input type="tel" name="text" pattern="[7-8][0-9]{10}" value=""></label></p>
+				</div>
+				<div>
+					<p>О себе:</p>
+					<p><textarea name="about" maxlength="512"></textarea></p>
+				</div>
+				<br>
+				<div class="form-menu">
+					<input type="submit" value="Изменить" class="form-btn"> <!-- TODO: Добавить возможность изменять данные профиля -->
+					<a href="#" class="form-btn">Отмена</a> <!-- TODO: Добавить ссылку на профиль -->
+				</div>
+			</form>
+			
+			<form method="post" action="#" class="focus-block form-field">
+				<h2>ВХОД</h2>
+				<p>
+					<label>Пароль <input type="text" name="login_in" id="login_in"></label>
+				</p>
+				<p>
+					<label>Повторите пароль <input type="password" name="password_in" id="password_in"></label>
+				</p>
+
+				<div class="form-menu centered-box">
+					<input type="submit" value="Изменить" class="form-btn">
+				</div>
+			</form>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<div class="footer-info">
+			Проект был создан:
+			<ul>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			</ul>
+		</div>
+	</footer>
+
+</body>
+</html>
