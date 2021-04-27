@@ -1,8 +1,15 @@
 {% extends "pages/base.html" %}
 
+{% block links %}
+	<script src="{{ url_for("static", filename="static/codemirror/lib/codemirror.js") }}"></script>
+	<link rel="stylesheet" href="{{ url_for("static", filename="static/codemirror/lib/codemirror.css") }}">
+
+	<script src="{{ url_for("static", filename="static/codemirror/mode/python/python.js") }}"></script>
+{% endblock %}
+
 {% block content %}
 	<main class="main centered-box">
-		<form method="post" action="#" class="focus-block form-field">
+		<form method="post" action="#" class="focus-block form-field" id="game_form">
 			<h2>Введите код для игры</h2>
 			<p>Информация о будущей игре: <!-- Нужно как то передать информацию об аккаунте -->
 				<ul>
@@ -11,14 +18,48 @@
 					<li>Число игроков: 23</li>
 				</ul>
 			</p>
-			
-			<textarea name="game_code" cols="40" rows="20" required></textarea>
-			
+
+			<textarea name="game_code" cols="50" rows="10" id="code" class="textarea" required></textarea>
+
 			<div class="centered-box form-menu">
-				<input type="submit" value="Отправить" class="form-btn">
-				<input type="reset" value="Очистить" class="form-btn">
+				<input type="submit" value="Отправить" class="form-btn" id="submit">
+				<input type="reset" value="Очистить" class="form-btn" id="reset">
 			</div>
 			<!-- Форма ввода "кода для игры". Нужно изменить -->
 		</form>
+
+		<script type="text/javascript" language="javascript">
+			var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('code'), {
+				mode: {name: "python",
+					   version: 3,
+					   singleLineStringErrors: false},
+				lineNumbers: true, 					// показывать номера строк
+				matchBrackets: true, 				// подсвечивать парные скобки
+				indentUnit: 4 						// размер табуляции
+			});
+
+			document.getElementById('submit').addEventListener( 'click', function() {
+				console.log('Sending data');
+				myCodeMirror.save();
+				console.log(document.getElementById('code').value);
+			})
+
+			document.getElementById('reset').addEventListener( 'click', function() {
+				console.log('Clear data');
+				myCodeMirror.setValue("");
+				myCodeMirror.clearHistory()
+			})
+		</script>
+
+		<style>
+			.CodeMirror {
+			border: 1px solid cornflowerblue;
+
+			font-size: 14px;
+			width: 90vw;
+			min-height: 200px;
+			resize: vertical;
+			}
+		</style>
 	</main>
 {% endblock %}
