@@ -1,4 +1,5 @@
 import re
+import time
 import hashlib
 import pymongo
 
@@ -124,6 +125,119 @@ def db_update_info(token: str, **data) -> dict:
     return fields
 
 
+def db_get_game_data(game_hash: str) -> dict:
+    """
+    Получение данных об игре
+    :param game_hash: Хеш игры
+    :return: Информация об игре
+    """
+    result = db.get_collection('games').find_one({'_id': game_hash})
+    if result is None:
+        raise GameError(61, "Введен неверный хеш игры")
+    return result
+
+
+def db_create_game(owner_hash: str, add_self: bool, name: str, map_size: int, period: int,
+                   private: bool, view_distance: int) -> bool:
+    """
+    Создание игры
+    :param owner_hash: Хеш создателя игры
+    :param add_self: Будет ли создатель учавствовать?
+    :param name: Имя игры
+    :param map_size: Размер карты
+    :param period: Период в минутах
+    :param private: Приватная ли игра?
+    :param view_distance: Дальность видимости
+    :return: Создана ли игра?
+    """
+    unix_time = time.time()
+    db.get_collection("games").insert_one({
+        '_id': hashlib.md5(f"{owner_hash}{unix_time}".encode()).hexdigest(),
+        'owner_hash': owner_hash,
+        'name': name,
+        'map_size': map_size,
+        'period': period,
+        'private': private,
+        'view_distance': view_distance,
+        'players': ([owner_hash] if add_self else []),
+        'result': None,
+        'status': 0,
+
+    })
+    return True
+
+
+def db_close_game(game_hash: str) -> None:
+    """
+    Завершить игру принудительно
+    :param game_hash: Хеш игры
+    :return: Ни Ху Йа
+    """
+    result = db.get_collection("games").find_one_and_update(
+        {'_id': game_hash},
+        {'$set': {
+            'status': -1,
+        }},
+        projection={'_id': 1}
+    )
+    if result is None:
+        raise GameError(62, 'Игра не найдена')
+
+
+def db_end_game(game_hash: str, best_player: str, scores: dict) -> None:
+    """
+    Завершить игру с подведением итогов
+    :param game_hash: Хеш игры
+    :param best_player: Лучший игрок
+    :param scores: Счет игроков('хеш игрока' => счет)
+    :return:
+    """
+    for player_hash in scores.values():
+        data = db_get_user_data(player_hash)
+
+        wins = data['wins'] + (1 if best_player == player_hash else 0)
+        best_score = data['best_score'] if data['best_score'] > scores[player_hash] else scores[player_hash]
+        played_games = data['played_games'] + 1
+        db.get_collection("users").update_one(
+            {'_id': player_hash},
+            {'$set': {
+                'wins': wins,
+                'played_games': played_games,
+                'best_score': best_score,
+            }}
+        )
+
+    db.get_collection("games").update_one(
+        {"_id": game_hash},
+        {'$set': {
+            'result': {
+                'scores': scores,
+                'best_player': best_player,
+            }
+        }}
+    )
+
+
+def db_join_game(game_hash: str, user_id: str) -> bool:
+    """
+    Войти пользователю в игру
+    :param game_hash: Хеш игры
+    :param user_id: Хеш пользователя
+    :return: Успех
+    """
+    # TODO: Реализовать метод + добавить в модуль пакет methods
+    pass
+
+
+def db_get_games() -> dict:
+    """
+    Получает список игр
+    :return: Список с данными о играх
+    """
+    # TODO: Реализовать метод + добавить в модуль пакет methods
+    pass
+
+
 class BaseResponseError(Exception):
     def __init__(self, error_id: int, message: str):
         self.error_id = error_id
@@ -143,4 +257,8 @@ class ResetPasswordError(BaseResponseError):
 
 
 class UpdateInfoError(BaseResponseError):
+    pass
+
+
+class GameError(BaseResponseError):
     pass
