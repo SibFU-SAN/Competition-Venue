@@ -1,3 +1,6 @@
+import sys
+import logging
+
 import flask
 import yaml
 
@@ -138,12 +141,25 @@ def settings_data():
 
 
 if __name__ == '__main__':
+    logger = logging.getLogger("main")
+    logger.setLevel(logging.INFO)
+    logger_handler = logging.FileHandler('log.txt')
+    logger_handler.setLevel(logging.INFO)
+    logger_formatter = logging.Formatter('%(asctime)s | [%(levelname)s][%(name)s] %(message)s')
+    logger_handler.setFormatter(logger_formatter)
+    logger.addHandler(logger_handler)
+
+    sys.excepthook = lambda ex_type, ex_value, tb: \
+        logger.error("Logging an uncaught exception",
+                     exc_info=(ex_type, ex_value, tb))
+    logger.info("Запуск программы")
+
     db_options = {}
     try:
         with open("database.yml", 'r') as file:
             db_options = yaml.load(file.read(), Loader=yaml.FullLoader)
     except FileNotFoundError:
-        pass
+        logger.warning("Не найден файл с данными для подключения к базе данных. Создаю новый")
 
     with open("database.yml", 'w') as file:
         if 'host' not in db_options:
