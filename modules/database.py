@@ -138,7 +138,7 @@ def db_get_game_data(game_hash: str) -> dict:
 
 
 def db_create_game(owner_hash: str, add_self: bool, name: str, map_size: int, period: int,
-                   private: bool, view_distance: int) -> bool:
+                   private: bool, view_distance: int) -> str:
     """
     Создание игры
     :param owner_hash: Хеш создателя игры
@@ -148,11 +148,12 @@ def db_create_game(owner_hash: str, add_self: bool, name: str, map_size: int, pe
     :param period: Период в минутах
     :param private: Приватная ли игра?
     :param view_distance: Дальность видимости
-    :return: Создана ли игра?
+    :return: Хеш игры
     """
     unix_time = time.time()
+    game_hash = hashlib.md5(f"{owner_hash}{unix_time}".encode()).hexdigest()
     db.get_collection("games").insert_one({
-        '_id': hashlib.md5(f"{owner_hash}{unix_time}".encode()).hexdigest(),
+        '_id': game_hash,
         'owner_hash': owner_hash,
         'name': name,
         'map_size': map_size,
@@ -164,7 +165,7 @@ def db_create_game(owner_hash: str, add_self: bool, name: str, map_size: int, pe
         'status': 0,
 
     })
-    return True
+    return game_hash
 
 
 def db_close_game(game_hash: str) -> None:
