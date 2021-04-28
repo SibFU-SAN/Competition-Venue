@@ -136,3 +136,6 @@ dmypy.json
 
 # Logger
 log.txt
+
+# Other
+resources/

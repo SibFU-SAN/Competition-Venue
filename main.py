@@ -119,7 +119,7 @@ def register_page():
         response = flask.make_response(flask.redirect("/profile", 302))
         response.set_cookie("auth", value=data['object']['token'], max_age=60 * 60 * 24 * 7)
         return response
-    return flask.render_template("pages/profile/register.html", error=data['description'])
+    return flask.render_template("pages/profile/register.html", error=data['description'], data=response)
 
 
 @app.route("/profile/sign_out")
