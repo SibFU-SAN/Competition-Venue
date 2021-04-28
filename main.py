@@ -1,4 +1,5 @@
 import sys
+import os
 import logging
 
 import flask
@@ -181,6 +182,10 @@ if __name__ == '__main__':
     database.connect(**db_options)
 
     genders = ('Мужской', 'Женский')
+
+    for path in ("./resources", "./resources/scripts", "./resources/demos", "./resources/photos"):
+        if not os.path.exists(path):
+            os.mkdir(path)
 
     handler = GameHandler(logger.getChild("GameHandler"))
     handler.start()
