@@ -6,6 +6,7 @@ import yaml
 
 from json.encoder import JSONEncoder
 from modules import methods, account_methods, database
+from modules.game_handler import GameHandler
 
 json_encoder = JSONEncoder()
 app = flask.Flask(__name__,
@@ -180,5 +181,8 @@ if __name__ == '__main__':
     database.connect(**db_options)
 
     genders = ('Мужской', 'Женский')
+
+    handler = GameHandler(logger.getChild("GameHandler"))
+    handler.start()
 
     app.run()
