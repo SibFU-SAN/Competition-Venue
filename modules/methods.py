@@ -155,3 +155,32 @@ def update_data(**data) -> dict:
         return r_success(**result)
     except database.UpdateInfoError as ex:
         return r_error(ex.error_id, ex.message)
+
+
+def get_game_data(**data) -> dict:
+    """
+    :param data: Параметры. Обязательные: game_hash(String)
+    :return: Ошибка или результат в виде:
+    {'object': {
+        'players': list of String, // Список хешей игроков
+        'map_size': int, // Размер карты
+        'start': int, // unix-time создания игры
+        'period': int, // Длительность игры в минутах
+        'owner': str, // Хеш создателя игры
+        'status': int, // Статус игры(0 - Еще не начато; -1 - Завершено принудительно; 1 - Игра окончена)
+        'result': dict, // Результат игры
+        'private': bool, // Приватная ли игра?
+        'name': str, // Название игры
+        'view_distance': int, // Дальность видимости
+    }}
+    """
+    if 'game_hash' not in data:
+        return r_error(60, "Не заполнены все поля",
+                       game_hash=('game_hash' in data)
+                       )
+
+    try:
+        result = database.db_get_game_data(**dict(data))
+        return r_success(**result)
+    except database.GameError as ex:
+        return r_error(ex.error_id, ex.message)

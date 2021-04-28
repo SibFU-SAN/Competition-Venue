@@ -133,3 +133,9 @@ dmypy.json
 
 # Configuration
 *.yml
+
+# Logger
+log.txt
+
+# Other
+resources/
