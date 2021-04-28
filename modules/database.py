@@ -172,7 +172,7 @@ def db_close_game(game_hash: str) -> None:
     """
     Завершить игру принудительно
     :param game_hash: Хеш игры
-    :return: Ни Ху Йа
+    :return: Ни Че Го
     """
     result = db.get_collection("games").find_one_and_update(
         {'_id': game_hash},
@@ -185,14 +185,16 @@ def db_close_game(game_hash: str) -> None:
         raise GameError(62, 'Игра не найдена')
 
 
-def db_end_game(game_hash: str, best_player: str, scores: dict) -> None:
+def db_end_game(game_hash: str, scores: dict) -> None:
     """
     Завершить игру с подведением итогов
     :param game_hash: Хеш игры
-    :param best_player: Лучший игрок
     :param scores: Счет игроков('хеш игрока' => счет)
     :return:
     """
+    # TODO: Найти лучшего игрока по счету
+    best_player = ""
+
     for player_hash in scores.values():
         data = db_get_user_data(player_hash)
 
