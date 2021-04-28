@@ -185,4 +185,5 @@ if __name__ == '__main__':
     handler = GameHandler(logger.getChild("GameHandler"))
     handler.start()
 
+    logger.info("Запуск веб-сервера")
     app.run()
