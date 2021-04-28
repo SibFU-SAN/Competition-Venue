@@ -97,7 +97,8 @@ def login_page():
         response.set_cookie("auth", value=data['object']['token'], max_age=60 * 60 * 24 * 7)
         return response
 
-    return flask.render_template("pages/profile/login.html", error=data['description'])
+    return flask.render_template("pages/profile/login.html", error=data['description'],
+                                 passed_login=response['login'])
 
 
 @app.route("/register", methods=["POST", "GET"])
