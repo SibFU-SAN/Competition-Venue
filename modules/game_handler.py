@@ -20,8 +20,12 @@ class GameHandler(Thread):
             time.sleep(5)
 
     async def handle(self, game_id: str):
+        log = self.logger.getChild(game_id)
+        log.info("Запуск обработки игры")
         try:
             # TODO: Обработка игры
             pass
         except Exception as ex:
-            self.logger.exception(f"Произошла ошибка при обработке игры '{game_id}'.", exc_info=ex)
+            log.exception("Произошла ошибка при обработке игры", exc_info=ex)
+        else:
+            log.info("Обработка игры успешно завершена")
