@@ -137,7 +137,7 @@ def db_get_game_data(game_hash: str) -> dict:
     return result
 
 
-def db_create_game(owner_hash: str, add_self: bool, name: str, map_size: int, period: int,
+def db_create_game(owner_hash: str, add_self: bool, name: str, map_size: int, period: int, start_time: int,
                    private: bool, view_distance: int) -> str:
     """
     Создание игры
@@ -146,6 +146,7 @@ def db_create_game(owner_hash: str, add_self: bool, name: str, map_size: int, pe
     :param name: Имя игры
     :param map_size: Размер карты
     :param period: Период в минутах
+    :param start_time: Начало игры
     :param private: Приватная ли игра?
     :param view_distance: Дальность видимости
     :return: Хеш игры
@@ -158,6 +159,8 @@ def db_create_game(owner_hash: str, add_self: bool, name: str, map_size: int, pe
         'name': name,
         'map_size': map_size,
         'period': period,
+        'start_time': start_time,
+        'end_time': period * 60 + start_time,
         'private': private,
         'view_distance': view_distance,
         'players': ([owner_hash] if add_self else []),
@@ -239,6 +242,22 @@ def db_get_games() -> dict:
     """
     # TODO: Реализовать метод + добавить в модуль пакет methods
     pass
+
+
+def db_get_ended_games() -> list:
+    """
+    Получает все завершенные по времени игры, но не обработаны
+    :return: Список игр
+    """
+    now = time.time()
+    data = db.get_collection("games").find({
+        'end_time': {'$gte': now},
+        'status': 0
+    }, {'_id': 1})
+    result = list()
+    for game in data:
+        result.append(game['_id'])
+    return result
 
 
 class BaseResponseError(Exception):
