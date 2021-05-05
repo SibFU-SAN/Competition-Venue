@@ -15,9 +15,10 @@ class GameHandler(Thread):
         while True:
             games = db_get_ended_games()
 
-            asyncio.run(self.handle(games))
+            for game_id in games:
+                asyncio.run(self.handle(game_id))
             time.sleep(5)
 
-    async def handle(self, games: list):
+    async def handle(self, game_id: str):
         # TODO: Обработка игр
         pass
