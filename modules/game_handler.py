@@ -20,5 +20,8 @@ class GameHandler(Thread):
             time.sleep(5)
 
     async def handle(self, game_id: str):
-        # TODO: Обработка игр
-        pass
+        try:
+            # TODO: Обработка игры
+            pass
+        except Exception as ex:
+            self.logger.exception(f"Произошла ошибка при обработке игры '{game_id}'.", exc_info=ex)
