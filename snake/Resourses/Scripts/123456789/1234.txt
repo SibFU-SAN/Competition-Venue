@@ -1,0 +1,16 @@
+for i in range(10):
+    if food(3):
+        if not wall_is_left(1) and direction_right() != True:
+            move_left()
+        else:
+            if not wall_is_down(1):
+                move_down()
+            else:
+                if wall_is_down(1):
+                    move_right()
+    else:
+        if not enemy(3):
+            if not wall_is_up(1) and not wall_is_right(1):
+                move_up()
+                move_right()
+
