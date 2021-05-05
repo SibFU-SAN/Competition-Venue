@@ -1,8 +1,0 @@
-move_left()
-move_left()
-move_up()
-if food(2):
-    move_right()
-else:
-    move_right()
-    move_down()
