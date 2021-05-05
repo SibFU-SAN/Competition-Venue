@@ -1,45 +1,20 @@
-from snake.snake import Map
+from snake_folder.snake_game import Map
 import copy
 import json
 import uuid
 
-all_info = []
 
-with open("single_user.txt", "r", encoding="utf-8") as multi:
-    players = multi.read()
-players = players[0:-1]
-players = eval(players)
-for pl in range(len(players)):
-    all_info.append(players[pl])
+def start(map_height, map_weight):
 
-height = 10
-weight = 10
+    """with open("single_user.txt", "r", encoding="utf-8") as multi:
+        players = multi.read()
+    players = players[0:-1]
+    players = eval(players)
+    for pl in range(len(players)):
+        all_info.append(players[pl])"""
 
-"""server_info1 = [[[4, 3], [3, 3]], [[5, 3], [4, 3]], [[6, 3], [5, 3]],
-                [[7, 3], [6, 3]], [[7, 2], [7, 3]],
-                [[6, 2], [7, 2], [7, 3]], ['stop']]
-server_info2 = [[[4, 4], [4, 5]],
-                [[4, 3], [4, 4]], [[4, 2], [4, 3]], ['stop']]
-all_info.append(server_info1)
-all_info.append(server_info2)"""
-
-with open("single_user.txt", "r", encoding="utf-8") as open_file:
-    all_info = eval(open_file.read()[:-1])
-apples = [[7, 2], [2, 2], [2, 7], [7, 7]]
-map1 = Map(height, weight, apples).map()
-players_number = len(all_info)
-iteration_count = 6
-
-hash_ = 0
-ids = 0
-movements = []
-players_info = []
-list_for_sasha = {
-    "apples": [],
-    "snakes": {
-
-    }
-}
+    return map1, players_number, iteration_count, all_info, apples,\
+        map_height, map_weight
 
 
 def head_to_tail(info, pl_snake, num, ite, warn, except_list):
@@ -66,7 +41,6 @@ def head_to_head(info, pl_snake, num, ite, warn, except_list):
                 warn += 1
 
             if warn > 0:
-                """Исправить ошибку столкновения"""
                 info[pl_snake][ite] = ['stop']
                 info[non_pl_snake][ite] = ['stop']
                 except_list.append(info[non_pl_snake])
@@ -74,11 +48,19 @@ def head_to_head(info, pl_snake, num, ite, warn, except_list):
                 break
 
 
-def multi(info, map_1, num, it_count):
+def multi(info, map_1, num, it_count, _hash):
     user_id = []
     except_list = []
     warn = 0
     map_before = copy.deepcopy(map_1)
+    players_info = []
+    list_for_sasha = {
+        "apples": [],
+        "snakes": {
+
+        }
+    }
+
     first_scene = {
         'players': {
 
@@ -92,7 +74,7 @@ def multi(info, map_1, num, it_count):
     for pl_snake in range(num):
         _id = uuid.uuid4()
         user_id.append(int(str(int(_id))[0:8]))
-        first_scene['players'][f"{user_id[pl_snake]}"] = 0
+        first_scene['players'][f"{user_id[pl_snake]}"] = _hash[pl_snake]
         for ite in range(it_count):
             if info[pl_snake] not in except_list:
                 if 'stop' in info[pl_snake][ite]:
@@ -116,7 +98,8 @@ def multi(info, map_1, num, it_count):
                                 info[pl_snake][ite][segments][1]] = '◻'
                     else:
                         for i in range(len(info[pl_snake])):
-                            if i != len(info[pl_snake])-1 and info[pl_snake][i] != ['stop']:
+                            if i != len(info[pl_snake])-1 and info[pl_snake][
+                               i] != ['stop']:
                                 if segments == 0:
                                     map_1[info[pl_snake][i][segments][0]][
                                         info[pl_snake][i]
@@ -137,14 +120,14 @@ def multi(info, map_1, num, it_count):
         map_1 = copy.deepcopy(map_before)
 
     except_list.clear()
-    start = 0
+    start_ = 0
     new_players_info = []
 
     """Рвзделение на отдельные списки под каждого игрока"""
     for a in range(len(players_info)):
         if players_info[a] == ['stop']:
-            new_players_info.append(players_info[start:a+1])
-            start = a+1
+            new_players_info.append(players_info[start_:a+1])
+            start_ = a+1
 
     """Обрезание пути змейки"""
     for i in range(len(info)):
@@ -173,9 +156,17 @@ def multi(info, map_1, num, it_count):
             else:
                 except_list.append(new_players_info[us])
         first_scene['frame'].append(copy.deepcopy(list_for_sasha))
-    with open("output.txt", "a+", encoding="utf-8") as file:
+    with open(f"snake_folder/Resources\\Demos\\{game_hash}", "a+", encoding="utf-8") as file:
         json.dump(first_scene, file, indent=2)
 
 
 if __name__ == '__main__':
-    multi(all_info, map1, players_number, iteration_count)
+    game_hash = ''
+    hash_ = []
+    all_info = []
+    height = 0
+    weight = 0
+    apples = []
+    map1 = Map(height, weight, apples).map()
+    players_number = 0
+    iteration_count = 0
