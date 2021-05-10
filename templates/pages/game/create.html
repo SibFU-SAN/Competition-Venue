@@ -6,7 +6,7 @@
 			<h2>Создание Сессии Игры</h2>
 			<p>
 				<label>Время начала игры: <input type="time" name="start_time" id="start_time" required></label>
-				<input type="date" id="datemax" name="datemax" max="1979-12-31" required>
+				<input type="date" id="datefield" name="datemax" required>
 			</p>
 			<p>
 				<label>Длительность игры: <input type="number" name="d" id="d" min="5" max="60" step="5" value="5"> (min)</label>
@@ -16,4 +16,37 @@
 			</div>
 		</form>
 	</main>
+
+	<script>
+function setMinDate() {
+	let today = new Date();
+
+	let dd = today.getDate();
+	let mm = today.getMonth() + 1;
+	let yyyy = today.getFullYear();
+	if(dd<10){
+		dd = '0' + dd;
+	}
+	if(mm<10){
+		mm = '0' + mm;
+	}
+	let min_date = yyyy + '-' + mm + '-' + dd;
+	document.getElementById("datefield").setAttribute("min", min_date);
+
+  	today.setMonth(today.getMonth() + 1);
+  	dd = today.getDate();
+	mm = today.getMonth() + 1;
+	yyyy = today.getFullYear();
+	if(dd<10){
+		dd = '0' + dd;
+	}
+	if(mm<10){
+		mm = '0' + mm;
+	}
+  	let max_date = yyyy + '-' + mm + '-' + dd;
+  	document.getElementById("datefield").setAttribute("max", max_date);
+}
+
+setMinDate();
+	</script>
 {% endblock %}
