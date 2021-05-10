@@ -2,7 +2,7 @@ import time
 from threading import Thread
 import asyncio
 from logging import Logger
-from database import db_get_ended_games
+from modules.database import db_get_ended_games
 
 
 class GameHandler(Thread):
