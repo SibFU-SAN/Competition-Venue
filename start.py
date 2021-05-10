@@ -1,20 +1,23 @@
-from snake_folder import snake_controls, multiplayer
 import os
+from math import sqrt
+
+from snake import snake_controls, multiplayer
+from modules import database
 
 
 def start(game_hash: str):
     players_hash = []
     count = 0
     snake = [[[4, 3], [5, 3]], [[4, 8], [5, 8]]]
-    names = os.listdir("snake_folder/Resources\\Scripts")
+    names = os.listdir("./resources/scripts")
     game_info = database.db_get_game_data(game_hash)
     map_size = game_info['map_size']
     for i in names:
         if str(i) == game_hash:
-            players = os.listdir(f"snake_folder/Resources\\Scripts\\{i}")
+            players = os.listdir(f"./resources/scripts/{i}")
             for pl in players:
                 players_hash.append(players[count][0:-4])
-                with open(f"snake_folder/Resources\\Scripts\\{i}\\{pl}", "r", encoding="utf-8") as file:
+                with open(f"./resources/scripts/{i}/{pl}", "r", encoding="utf-8") as file:
                     code = file.read()
                 snake_controls.code = code
                 snake_controls.snake_position = snake[count]
