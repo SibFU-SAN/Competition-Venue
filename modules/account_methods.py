@@ -1,6 +1,7 @@
 import hashlib
 import flask
 import modules.database as db
+import os
 
 
 def is_authorized():
@@ -38,3 +39,12 @@ def get_token() -> str or None:
 
 def get_login_hash(login: str) -> str:
     return hashlib.md5(login.lower().encode()).hexdigest()
+
+
+def save_script(game_id: str, user_id: str, script: str):
+    if not os.path.exists(f"./resources/scripts/{game_id}"):
+        os.mkdir(f"./resources/scripts/{game_id}")
+
+    with open(f'./resources/scripts/{game_id}/{user_id}.py', 'w') as file:
+        file.write(script)
+    pass

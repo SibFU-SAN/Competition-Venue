@@ -1,8 +1,13 @@
+import sys
+import os
+import logging
+
 import flask
 import yaml
 
 from json.encoder import JSONEncoder
 from modules import methods, account_methods, database
+from modules.game_handler import GameHandler
 
 json_encoder = JSONEncoder()
 app = flask.Flask(__name__,
@@ -97,7 +102,8 @@ def login_page():
         response.set_cookie("auth", value=data['object']['token'], max_age=60 * 60 * 24 * 7)
         return response
 
-    return flask.render_template("pages/profile/login.html", error=data['description'])
+    return flask.render_template("pages/profile/login.html", error=data['description'],
+                                 passed_login=response['login'])
 
 
 @app.route("/register", methods=["POST", "GET"])
@@ -113,7 +119,7 @@ def register_page():
         response = flask.make_response(flask.redirect("/profile", 302))
         response.set_cookie("auth", value=data['object']['token'], max_age=60 * 60 * 24 * 7)
         return response
-    return flask.render_template("pages/profile/register.html", error=data['description'])
+    return flask.render_template("pages/profile/register.html", error=data['description'], data=response)
 
 
 @app.route("/profile/sign_out")
@@ -137,12 +143,25 @@ def settings_data():
 
 
 if __name__ == '__main__':
+    logger = logging.getLogger("main")
+    logger.setLevel(logging.INFO)
+    logger_handler = logging.FileHandler('log.txt')
+    logger_handler.setLevel(logging.INFO)
+    logger_formatter = logging.Formatter('%(asctime)s | [%(levelname)s][%(name)s] %(message)s')
+    logger_handler.setFormatter(logger_formatter)
+    logger.addHandler(logger_handler)
+
+    sys.excepthook = lambda ex_type, ex_value, tb: \
+        logger.error("Logging an uncaught exception",
+                     exc_info=(ex_type, ex_value, tb))
+    logger.info("Запуск программы")
+
     db_options = {}
     try:
         with open("database.yml", 'r') as file:
             db_options = yaml.load(file.read(), Loader=yaml.FullLoader)
     except FileNotFoundError:
-        pass
+        logger.warning("Не найден файл с данными для подключения к базе данных. Создаю новый")
 
     with open("database.yml", 'w') as file:
         if 'host' not in db_options:
@@ -164,4 +183,12 @@ if __name__ == '__main__':
 
     genders = ('Мужской', 'Женский')
 
+    for path in ("./resources", "./resources/scripts", "./resources/demos", "./resources/photos"):
+        if not os.path.exists(path):
+            os.mkdir(path)
+
+    handler = GameHandler(logger.getChild("GameHandler"))
+    handler.start()
+
+    logger.info("Запуск веб-сервера")
     app.run()
