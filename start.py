@@ -33,12 +33,12 @@ def start(game_hash: str):
                 snake_controls.final()
                 count += 1
 
-            with open(f"snake_folder\\Resources\\tmp\\{game_hash}.txt", "r", encoding="utf-8") as file:
+            with open(f"./resources/tmp/{game_hash}.txt", "r", encoding="utf-8") as file:
                 scripts = file.read()
                 scripts = scripts[0:-1]
                 scripts = eval(scripts)
 
-            os.remove(f"snake_folder\\Resources\\tmp\\{game_hash}.txt")
+            os.remove(f"./resources/tmp/{game_hash}.txt")
             
             """Вычисление длительности игры(тест и вообще не нужно)"""
             max_script = 0
