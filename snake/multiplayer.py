@@ -1,4 +1,4 @@
-from snake_folder.snake_game import Map
+from snake.snake import Map
 import copy
 import json
 import uuid
@@ -156,7 +156,7 @@ def multi(info, map_1, num, it_count, _hash):
             else:
                 except_list.append(new_players_info[us])
         first_scene['frame'].append(copy.deepcopy(list_for_sasha))
-    with open(f"snake_folder/Resources\\Demos\\{game_hash}", "a+", encoding="utf-8") as file:
+    with open(f"../resources/demos/{game_hash}", "a+", encoding="utf-8") as file:
         json.dump(first_scene, file, indent=2)
 
 
