@@ -195,8 +195,12 @@ def db_end_game(game_hash: str, scores: dict) -> None:
     :param scores: Счет игроков('хеш игрока' => счет)
     :return:
     """
-    # TODO: Найти лучшего игрока по счету
-    best_player = ""
+    best_score = 0
+    best_player = ''
+    for player in scores.keys():
+        if scores[player] >= best_score:
+            best_player = player
+            best_score = scores[player]
 
     for player_hash in scores.values():
         data = db_get_user_data(player_hash)
