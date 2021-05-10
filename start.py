@@ -30,6 +30,7 @@ def start(game_hash: str):
                 snake_controls.map_1 = snake_controls.start_options(
                     snake_controls.apples_arr)
                 snake_controls.wall = snake_controls.map_gen()
+                snake_controls.game_hash = game_hash
                 snake_controls.final()
                 count += 1
 
