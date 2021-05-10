@@ -23,12 +23,9 @@ def start(game_hash: str):
                 snake_controls.snake_position = snake[count]
                 snake_controls.apples_arr = [[7, 2], [2, 2], [2, 7], [7, 7]]
                 snake_controls.direction = 1
-                """snake_controls.height = int(sqrt(map_size))
+                snake_controls.height = int(sqrt(map_size))
                 snake_controls.weight = int(sqrt(map_size))
-                snake_controls.rad = game_info["view_distance"]"""
-                snake_controls.height = 10
-                snake_controls.weight = 10
-                snake_controls.rad = 3
+                snake_controls.rad = game_info["view_distance"]
                 snake_controls.server_info = []
                 snake_controls.map_1 = snake_controls.start_options(
                     snake_controls.apples_arr)
@@ -36,10 +33,13 @@ def start(game_hash: str):
                 snake_controls.final()
                 count += 1
 
-            with open("snake_folder\\single_user.txt", "r", encoding="utf-8") as file:
+            with open(f"snake_folder\\Resources\\tmp\\{game_hash}.txt", "r", encoding="utf-8") as file:
                 scripts = file.read()
                 scripts = scripts[0:-1]
                 scripts = eval(scripts)
+
+            os.remove(f"snake_folder\\Resources\\tmp\\{game_hash}.txt")
+            
             """Вычисление длительности игры(тест и вообще не нужно)"""
             max_script = 0
             info = []

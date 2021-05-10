@@ -5,15 +5,15 @@ from snake_folder.snake_game import SnakePlayer, Map
 def start_options(apples):
     """Входные данные
     Задаётся позиция змейки, позиции яблок, карта и направление"""
-    map_ = Map(10, 10, apples).map()
+    map_ = Map(height, weight, apples).map()
 
     return map_
 
 
 def map_gen():
     walls = []
-    for x in range(10):
-        for y in range(10):
+    for x in range(height):
+        for y in range(weight):
             if map_1[x][y] == '▖':
                 walls.append([x, y])
     return walls
@@ -228,12 +228,13 @@ def final():
     if ['stop'] not in server_info:
         server_info.append(['stop'])
 
-    with open("snake_folder\\single_user.txt", "+a", encoding="utf-8") as user:
+    with open(f"snake_folder\\Resources\\tmp\\{game_hash}.txt", "+a", encoding="utf-8") as user:
         user.write(str(server_info) + ',')
 
 
 if __name__ == '__main__':
     final()
+    game_hash = ''
     server_info = []
     snake_position = []
     apples_arr = []
