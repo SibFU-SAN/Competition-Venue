@@ -1,36 +1,26 @@
-function chooseGame(){
-	document.getElementById("game_id").value = "32";
-	console.log(sessionList);
-}
-
-//const game_id = document.getElementById("game_id");
-//game_id.addEventListener("click", reverseButtonClick);
-
-//let sessionList = JSON.parse(``);
-let sessionList = [
+//let elementsOfList = JSON.parse(json_str);
+let elementsOfList = [
 {
-	id: 131232,
-	map: [10, 100],
-	gamers: 5,
-	date: "this date",
+	game_id: 131232,
+	map: [70, 90],
+	players: 5,
+	datestart: "12321321",
 	duration: 34,
 },
 {
-	id: 243534,
-	map: [10, 100],
-	gamers: 20,
-	date: "this date",
+	game_id: 243534,
+	map: [100, 100],
+	players: 20,
+	datestart: "312312",
 	duration: 34,
-}
-];
+}];
 
-
-function createTemplate(game_id, NumberOfPlayers, mapSize, startDate, duration) {
+function createTemplate(game_id, mapSize, NumberOfPlayers, startDate, duration) {
 	let template = `
 		<div class="session">
 			<div class="session-head">
 				<h3>ID: <span>${game_id}</span></h3>
-				<input type="button" value="Выбор" class="btn" onclick="chooseGame()">
+				<input type="button" value="Выбор" class="btn" data-number="${game_id}">
 			</div>
 			<div class="session-info">
 				<ul>
@@ -53,13 +43,30 @@ function createTemplate(game_id, NumberOfPlayers, mapSize, startDate, duration) 
     return frag;
 }
 
-function main()
-{
-	for (i of sessionList)
-	{
-		var fragment = createTemplate(1111, 44, [50, 100], "13.23.22", 50);
-		document.getElementById("session_list").appendChild(fragment);
-	}
+function chooseGame(game_id){
+	document.getElementById("game_id").value = game_id;
+	let form = document.getElementById("form");
+	form.submit();
 }
 
-main();
+function addElements(list, listDOMId) {
+	// Добавление новых элементов
+	for (let i of list)
+	{
+		var fragment = createTemplate(i.game_id, i.map, i.players, i.datestart, i.duration);
+		document.getElementById(listDOMId).appendChild(fragment);
+	}
+
+	// Добавление событие по нажатию
+	const tabs = document.querySelectorAll(".btn");
+	tabs.forEach(function(item) { 
+		item.addEventListener("click", function() {
+			let currentBtn = item;
+			let game_id = currentBtn.getAttribute("data-number");
+			
+			chooseGame(game_id);
+		});
+	});
+}
+
+addElements(elementsOfList, "session_list");

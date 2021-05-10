@@ -30,21 +30,23 @@
 	
 	<main class="main centered-box">
 		<section class="focus-block">
-			<form method="post" action="" class="form-field">
+			<form method="post" action="" class="form-field" id="form">
 				<h2>Вход в игру</h2>
+				<div class="form-menu">
 					<label>Id Игры <input type="text" name="game_id" id="game_id" required></label>
 					<input type="submit" value="Подключится" class="form-btn">
+				</div>
 			</form>
 		
 			<div>
 				<h2>Список доступных комнат</h2>
 				<section class="session-list" id="session_list">
-					<div class="session">
-						<div class="session-head"> <!-- Загаловок -->
+					<!-- <div class="session">
+						<div class="session-head"> 
 							<h3>ID: <span>23112</span></h3>
 							<input type="button" value="Выбор" class="btn" onclick="chooseGame()">
 						</div>
-						<div class="session-info"> <!-- Информаця о игре -->
+						<div class="session-info">
 							<ul>
 								<li>Колво участников: <span>44</span></li>
 								<li>Размер карты: <span>44x44</span></li>
@@ -54,11 +56,14 @@
 								<li>Длительность: <span>45 min</span></li>
 							</ul>
 						</div>
-					</div>
-					
+					</div> -->
 				</section>
 			</div>
 		</section>
+		
+		<script src="choose.js">
+			let json_str = ``;
+		</script>
 	</main>
 	
 	<footer class="footer">
@@ -72,9 +77,7 @@
 		</div>
 	</footer>
 	
-	<script src="choose.js">
-
-	</script>
+	
 </body>
 </html>
 
