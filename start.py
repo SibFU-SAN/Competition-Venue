@@ -7,8 +7,8 @@ def start(game_hash: str):
     count = 0
     snake = [[[4, 3], [5, 3]], [[4, 8], [5, 8]]]
     names = os.listdir("snake_folder/Resources\\Scripts")
-    """game_info = database.db_get_game_data(game_hash)
-    map_size = game_info['map_size']"""
+    game_info = database.db_get_game_data(game_hash)
+    map_size = game_info['map_size']
     for i in names:
         if str(i) == game_hash:
             players = os.listdir(f"snake_folder/Resources\\Scripts\\{i}")
@@ -47,10 +47,8 @@ def start(game_hash: str):
             multiplayer.players_number = len(players)
             multiplayer.iteration_count = max_script
             multiplayer.game_hash = game_hash
-            """multiplayer.height = int(sqrt(map_size))
-            multiplayer.weight = int(sqrt(map_size))"""
-            multiplayer.height = 10
-            multiplayer.weight = 10
+            multiplayer.height = int(sqrt(map_size))
+            multiplayer.weight = int(sqrt(map_size))
             multiplayer.apples = snake_controls.apples_arr
             multiplayer.all_info = info
             multiplayer.hash_ = players_hash
