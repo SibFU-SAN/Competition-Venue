@@ -114,11 +114,14 @@ def move():
 def wall_is_left(rads=1):
     """Обнаружение стены слева"""
     global snake_position, wall
-    if ['stop'] != snake_position:
-        for step in range(len(wall)):
-            if [snake_position[0][0], snake_position[0][1] - rads]\
-                    == wall[step]:
-                return True
+    if 0 <= rads <= rad:
+        if ['stop'] != snake_position:
+            for step in range(len(wall)):
+                if [snake_position[0][0], snake_position[0][1] - rads]\
+                        == wall[step]:
+                    return True
+    else:
+        return False
 
     return False
 
@@ -126,11 +129,14 @@ def wall_is_left(rads=1):
 def wall_is_right(rads=1):
     """Обнаружение стены справа"""
     global snake_position, wall
-    if ['stop'] != snake_position:
-        for step in range(len(wall)):
-            if [snake_position[0][0], snake_position[0][1] + rads]\
-                    == wall[step]:
-                return True
+    if 0 <= rads <= rad:
+        if ['stop'] != snake_position:
+            for step in range(len(wall)):
+                if [snake_position[0][0], snake_position[0][1] + rads]\
+                        == wall[step]:
+                    return True
+    else:
+        return False
 
     return False
 
@@ -138,11 +144,14 @@ def wall_is_right(rads=1):
 def wall_is_up(rads=1):
     """Обнаружение стены сверху"""
     global snake_position, wall
-    if ['stop'] != snake_position:
-        for step in range(len(wall)):
-            if [snake_position[0][0] - rads, snake_position[0][1]]\
-                    == wall[step]:
-                return True
+    if 0 <= rads <= rad:
+        if ['stop'] != snake_position:
+            for step in range(len(wall)):
+                if [snake_position[0][0] - rads, snake_position[0][1]]\
+                        == wall[step]:
+                    return True
+    else:
+        return False
 
     return False
 
@@ -150,11 +159,14 @@ def wall_is_up(rads=1):
 def wall_is_down(rads=1):
     """Обнаружение стены снизу"""
     global snake_position, wall
-    if ['stop'] != snake_position:
-        for step in range(len(wall)):
-            if [snake_position[0][0] + rads, snake_position[0][1]]\
-                    == wall[step]:
-                return True
+    if 0 <= rads <= rad:
+        if ['stop'] != snake_position:
+            for step in range(len(wall)):
+                if [snake_position[0][0] + rads, snake_position[0][1]]\
+                        == wall[step]:
+                    return True
+    else:
+        return False
 
     return False
 
@@ -162,27 +174,17 @@ def wall_is_down(rads=1):
 def food(rads=1):
     """Функция для нахождения еды в поле зрения змейки"""
     global snake_position, map_1
-    if ['stop'] != snake_position:
-        for rows in range(-rads, rads):
-            for col in range(-rads, rads):
-                if 0 <= snake_position[0][0] + rows <= height-1 \
-                     and 0 <= snake_position[0][1] + col <= weight-1:
-                    if map_1[snake_position[0][0] + rows][
-                             snake_position[0][1] + col] == '◎':
-                        return True
-
-    return False
-
-
-def enemy(rads=1):
-    """Функция для нахождения противника в поле зрения змейки"""
-    global snake_position, map_1
-    if ['stop'] != snake_position:
-        for rows in range(-rads, rads):
-            for col in range(-rads, rads):
-                if map_1[snake_position[0][0] + rows][
-                         snake_position[0][1] + col] == '🐸':
-                    return True
+    if 0 <= rads <= rad:
+        if ['stop'] != snake_position:
+            for rows in range(-rads, rads):
+                for col in range(-rads, rads):
+                    if 0 <= snake_position[0][0] + rows <= height-1 \
+                         and 0 <= snake_position[0][1] + col <= weight-1:
+                        if map_1[snake_position[0][0] + rows][
+                                 snake_position[0][1] + col] == '◎':
+                            return True
+    else:
+        return False
 
     return False
 
