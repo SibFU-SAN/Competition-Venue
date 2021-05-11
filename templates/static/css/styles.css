@@ -163,7 +163,7 @@ body {
 	padding: 10px;
 	min-width: 70px;
 	border-radius:10px;
-	border: 1px solid #eee;
+	border: 1px solid #aaa;
 	transition: .3s border-color;
 	background: #ffffff;
 }
@@ -209,6 +209,94 @@ body {
     color: red;
 }
 /* Стили для Форм */
+
+/* Список сессий игр */
+.session-list {
+	border: 1px solid #000000;
+	background: #FFFFFF;
+	font-size: 18px;
+}
+.session {
+	min-width: 600px;
+	border-bottom: 1px solid #000000;
+	margin: 5px;
+}
+.session-head {
+	display: flex;
+	margin: 5px;
+}
+.session-head>h3 {
+	margin: 0;
+	align-self: center;
+	display: inline-block;
+}
+.session-head>input {
+	margin-left: auto;
+}
+.session-info {
+	display: flex;
+	margin: 0;
+	margin: 5px;
+}
+.session-info ul {
+	margin: 0 auto 10px 0;
+	padding: 0;
+}
+.session-info li {
+	list-style-type: none;
+	padding: 4px 0;
+}
+.session-list .btn, .btn {
+	background: #FFC898;
+    border-radius: 0;
+
+    color: #000000;
+	padding: 5px 25px;
+	font-size: 16px;
+}
+.session-list .btn:active{
+	background: #aaaaaa;
+	transition: background 0s;
+}
+/* Список сессий игр */
+
+/* Комната ожидания игры */
+.waiting-room {
+	width: 600px;
+	padding: 20px;
+}
+.waiting-room h2 {
+	text-align: center;
+	margin: 0 auto 3px auto;
+}
+.waiting-room h3 {
+	font-weight:normal;
+	text-align: center;
+	margin: 0 auto 25px auto;
+}
+.waiting-room .session-info {
+	margin-bottom: 25px;
+}
+.waiting-room table {
+	margin: 0 auto 10px 0;
+	padding: 0;
+}
+.waiting-room .dashboard {
+	display: flex;
+	height: 50px;
+	margin: 10px;
+}
+.dashboard-info {
+	padding: 12px;
+	margin: 0;
+	background: #FFC898;
+	border: 1px solid #000000;
+	border-radius: 20px;
+}
+.waiting-room .dashboard .btn {
+	margin-left: auto;
+	margin-right: auto;}
+/* Комната ожидания игры */
 
 /* Таблица */
 .table-section {
