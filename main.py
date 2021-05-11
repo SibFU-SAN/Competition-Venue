@@ -61,6 +61,16 @@ def game_create_page():
     return flask.redirect("/game/connect", 302)
 
 
+@app.route("/game/join/<game_id>")
+def join_to_game_page(game_id: str):
+    user_data = database.db_get_user_data(account_methods.get_token())
+    user_id = user_data['_id']
+    if database.db_get_user_game(user_id) is None:
+        database.db_join_game(game_id, user_id)
+        logger.info(f"Пользователь '{user_id}' зашел в комнату '{game_id}'")
+    return flask.redirect("/game/editor", 302)
+
+
 @app.route("/game/editor", methods=["POST", "GET"])
 @account_methods.authorize_require
 def game_editor_page():
