@@ -26,7 +26,7 @@ def index_page():
 @app.route("/game/connect", methods=["POST", "GET"])
 @account_methods.authorize_require
 def game_connect_page():
-    return flask.render_template("pages/game/connect.html", auth=True)
+    return flask.render_template("pages/game/connect.html", auth=True, games=database.db_get_games())
 
 
 @app.route("/game/create", methods=["POST", "GET"])
@@ -41,7 +41,6 @@ def game_create_page():
     data = flask.request.form
     if len(data) == 0:
         return flask.render_template("pages/game/create.html", auth=True)
-    logger.info(str(data))
     date = "{} {}".format(data['datemax'], data['start_time'])
     unix_time = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M')
     period = int(data['time'])

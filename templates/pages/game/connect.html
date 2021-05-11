@@ -2,14 +2,38 @@
 
 {% block content %}
 	<main class="main centered-box">
-		<form method="post" action="/game/editor" class="focus-block form-field">
-			<h2>Вход в игру</h2>
-			<p>
-				<label>Id Игры <input type="text" name="game_id" id="game_id" required maxlength="20"></label>
-			</p>
-			<div class="form-menu centered-box">
-				<input type="submit" value="Присоединится" class="form-btn">
-			</div> <!-- Добавить возможность перехода на страницу редактора с Id игры -->
-		</form>
+		<section class="focus-block">
+			<form method="post" action="" class="form-field" id="form">
+				<h2>Вход в игру</h2>
+				<div class="form-menu">
+					<label>Id Игры <input type="text" name="game_id" id="game_id" required></label>
+					<input type="submit" value="Подключится" class="form-btn">
+				</div>
+			</form>
+
+			<div>
+				<h2>Список доступных комнат</h2>
+				<section class="session-list" id="session_list">
+                    {% for game in games %}
+					<div class="session">
+						<div class="session-head">
+							<h3><span>{{ game['name'] }}</span></h3>
+                            <a href="/game/join/{{ game['_id'] }}" class="btn">Войти</a>
+						</div>
+						<div class="session-info">
+							<ul>
+                                <li>ID: <span>{{ game['_id'] }}</span></li>
+								<li>Кол-во участников: <span>{{ game['players'] }}</span></li>
+							</ul>
+							<ul>
+								<li>Дата начала: <span>{{ game['start_time'] }}</span></li>
+								<li>Длительность: <span>{{ game['period'] }} min</span></li>
+							</ul>
+						</div>
+					</div>
+                    {% endfor %}
+				</section>
+			</div>
+		</section>
 	</main>
 {% endblock %}
