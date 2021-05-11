@@ -47,4 +47,13 @@ def save_script(game_id: str, user_id: str, script: str):
 
     with open(f'./resources/scripts/{game_id}/{user_id}.py', 'w') as file:
         file.write(script)
-    pass
+
+
+def read_script(game_id: str, user_id: str) -> str:
+    if not os.path.exists(f"./resources/scripts/{game_id}"):
+        return ""
+    if not os.path.exists(f"./resources/scripts/{game_id}/{user_id}.py"):
+        return ""
+
+    with open(f'./resources/scripts/{game_id}/{user_id}.py', 'r') as file:
+        return file.read()
