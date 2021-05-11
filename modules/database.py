@@ -341,6 +341,15 @@ def db_get_top_players() -> list:
     return data
 
 
+def db_remove_game(game_hash: str):
+    """
+    Принудительно удаляет игру
+    :param game_hash: Хеш игры
+    :return:
+    """
+    db.get_collection("games").remove({'_id': game_hash})
+
+
 class BaseResponseError(Exception):
     def __init__(self, error_id: int, message: str):
         self.error_id = error_id
