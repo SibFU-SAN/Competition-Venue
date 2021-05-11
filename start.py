@@ -1,4 +1,6 @@
 from snake_folder import snake_controls, multiplayer
+from module import database
+from math import sqrt
 import os
 
 
@@ -23,6 +25,9 @@ def start(game_hash: str):
                 snake_controls.height = int(sqrt(map_size))
                 snake_controls.weight = int(sqrt(map_size))
                 snake_controls.rad = game_info["view_distance"]
+                snake_controls.height = 10
+                snake_controls.weight = 10
+                snake_controls.rad = 3
                 snake_controls.server_info = []
                 snake_controls.map_1 = snake_controls.start_options(
                     snake_controls.apples_arr)
@@ -37,7 +42,7 @@ def start(game_hash: str):
                 scripts = eval(scripts)
 
             os.remove(f"snake_folder\\Resources\\tmp\\{game_hash}.txt")
-            
+
             """Вычисление длительности игры(тест и вообще не нужно)"""
             max_script = 0
             info = []
@@ -50,9 +55,13 @@ def start(game_hash: str):
             multiplayer.game_hash = game_hash
             multiplayer.height = int(sqrt(map_size))
             multiplayer.weight = int(sqrt(map_size))
+            multiplayer.height = 10
+            multiplayer.weight = 10
             multiplayer.apples = snake_controls.apples_arr
             multiplayer.all_info = info
             multiplayer.hash_ = players_hash
-            multiplayer.multi(multiplayer.all_info, snake_controls.map_1,
-                              multiplayer.players_number,
-                              multiplayer.iteration_count, multiplayer.hash_)
+            multiplayer.players_hash = players_hash
+            score = multiplayer.multi(multiplayer.all_info, snake_controls.map_1,
+                                      multiplayer.players_number,
+                                      multiplayer.iteration_count, multiplayer.hash_)
+            database.db_end_game(game_hash, score)
