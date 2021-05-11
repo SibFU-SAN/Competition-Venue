@@ -1,4 +1,4 @@
-from snake.snake import Map
+from snake_folder.snake_game import Map
 import copy
 import json
 import uuid
@@ -75,6 +75,10 @@ def multi(info, map_1, num, it_count, _hash):
     score = {
 
     }
+
+    for pls in range(len(players_hash)):
+        score[f"{players_hash[pls]}"] = 0
+        
     for pl_snake in range(num):
         _id = uuid.uuid4()
         user_id.append(int(str(int(_id))[0:8]))
@@ -161,7 +165,7 @@ def multi(info, map_1, num, it_count, _hash):
             else:
                 except_list.append(new_players_info[us])
         first_scene['frame'].append(copy.deepcopy(list_for_sasha))
-    with open(f"./resources/demos/{game_hash}", "a+", encoding="utf-8") as file:
+    with open(f"snake_folder/Resources\\Demos\\{game_hash}", "a+", encoding="utf-8") as file:
         json.dump(first_scene, file, indent=2)
 
     return score
