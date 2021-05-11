@@ -280,6 +280,47 @@ def db_get_user_game(user_id: str) -> str or None:
     return result['_id'] if result is not None else None
 
 
+def db_get_name(key: str, by_login=False) -> str:
+    """
+    Получить полное имя пользователя
+    :return: Имя пользователя
+    """
+    data = db_get_user_data(key, by_login)
+    if data is None:
+        return "null"
+
+    if 'first_name' in data and 'second_name' in data:
+        return "{} {}".format(data['second_name'], data['first_name'])
+    return data['login']
+
+
+def db_get_top_players() -> list:
+    """
+    Получение топ 10 игроков
+    :return: Список с данными о игроках(логин, имя, выигрышей, игр)
+    """
+    result = db.get_collection("users").find(
+        projection={
+            '_id': 1,
+            'wins': 1,
+            'login': 1,
+            'played_games': 1
+        },
+        sort=[('wins', -1)],
+        limit=10
+    )
+    data = list()
+    for target in result:
+        data.append({
+            'login': target['login'],
+            'wins': target['wins'],
+            'played_games': target['played_games'],
+            'name': db_get_name(target['_id'])
+        })
+
+    return data
+
+
 class BaseResponseError(Exception):
     def __init__(self, error_id: int, message: str):
         self.error_id = error_id
