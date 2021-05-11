@@ -71,6 +71,10 @@ def multi(info, map_1, num, it_count, _hash):
         },
         "frame": []
     }
+
+    score = {
+
+    }
     for pl_snake in range(num):
         _id = uuid.uuid4()
         user_id.append(int(str(int(_id))[0:8]))
@@ -147,6 +151,7 @@ def multi(info, map_1, num, it_count, _hash):
                     del_apples = []
                     for app in range(len(apples)):
                         if new_players_info[us][it][0] == apples[app]:
+                            score[f"{players_hash[us]}"] += 1
                             del_apples.append(app)
                     for i in range(len(del_apples)):
                         del apples[i]
@@ -159,9 +164,12 @@ def multi(info, map_1, num, it_count, _hash):
     with open(f"snake_folder/Resources\\Demos\\{game_hash}", "a+", encoding="utf-8") as file:
         json.dump(first_scene, file, indent=2)
 
+    return score
+
 
 if __name__ == '__main__':
     game_hash = ''
+    players_hash = []
     hash_ = []
     all_info = []
     height = 0
