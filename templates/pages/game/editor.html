@@ -26,13 +26,13 @@
                 Информация о будущей игре:
 				<ul>
 					<li>Режим: Змейка</li>
-					<li>Число игроков: {{ len(game_data['players']) }}</li>
-                    <li>Дальность видимости: {{ len(game_data['view_distance']) }}</li>
+					<li>Число игроков: {{ game_data['players'] }}</li>
+                    <li>Дальность видимости: {{ game_data['view_distance'] }}</li>
                     <li>Окончание игры: {{ dt.datetime.utcfromtimestamp(game_data['end_time']).strftime('%H:%M:%S') }}</li>
 				</ul>
 			</p>
 
-			<textarea name="game_code" cols="50" rows="10" id="code" class="textarea" required>code</textarea>
+			<textarea name="game_code" cols="50" rows="10" id="code" class="textarea" required>{{ code }}</textarea>
 
 			<div class="centered-box form-menu">
 				<input type="submit" value="Отправить" class="form-btn" id="submit">

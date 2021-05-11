@@ -89,6 +89,7 @@ def game_editor_page():
     response = flask.request.form
     code = response['game_code'] if len(response) != 0 else account_methods.read_script(game_id, user_id)
     account_methods.save_script(game_id, user_id, code)
+    game_data['players'] = len(game_data['players'])
 
     return flask.render_template("pages/game/editor.html", auth=True, game_data=game_data, dt=datetime, code=code)
 
