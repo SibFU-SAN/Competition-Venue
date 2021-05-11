@@ -245,13 +245,25 @@ def db_join_game(game_hash: str, user_id: str) -> bool:
     return True
 
 
-def db_get_games() -> dict:
+def db_get_games() -> list:
     """
     Получает список игр
     :return: Список с данными о играх
     """
-    # TODO: Реализовать метод + добавить в модуль пакет methods
-    pass
+    result = db.get_collection("games").find(
+        filter={'private': False},
+        projection={
+            '_id': 1,
+            'players': 1,
+            'period': 1,
+            'start_time': 1,
+        }
+    )
+    games = list()
+    for game in result:
+        temp = dict(game)
+        temp['players'] = len(temp['players'])
+    return games
 
 
 def db_get_ended_games() -> list:
