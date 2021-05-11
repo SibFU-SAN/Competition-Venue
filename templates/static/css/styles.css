@@ -157,8 +157,8 @@ body {
 	margin: 0 auto;
 	margin-top: 5px;
 }
-.form-field input, .form-field a, .form-field select .btn{
-	display:inline-block;
+.form-field input, .form-field a, .form-field select{
+	display: inline-block;
 	margin: 10px;
 	padding: 10px;
 	min-width: 70px;
@@ -210,6 +210,56 @@ body {
 }
 /* Стили для Форм */
 
+/* Список сессий игр */
+.session-list {
+	border: 1px solid #000000;
+	background: #FFFFFF;
+	font-size: 18px;
+}
+.session {
+	min-width: 600px;
+	border-bottom: 1px solid #000000;
+	margin: 5px;
+}
+.session-head {
+	display: flex;
+	margin: 5px;
+}
+.session-head>h3 {
+	margin: 0;
+	align-self: center;
+	display: inline-block;
+}
+.session-head>input {
+	margin-left: auto;
+}
+.session-info {
+	display: flex;
+	margin: 0;
+	margin: 5px;
+}
+.session-info ul {
+	margin: 0 auto 10px 0;
+	padding: 0;
+}
+.session-info li {
+	list-style-type: none;
+	padding: 4px 0;
+}
+.session-list .btn {
+	background: #FFC898;
+    border-radius: 0;
+
+    color: #000000;
+	padding: 5px 25px;
+	font-size: 16px;
+}
+.session-list .btn:active{
+	background: #aaaaaa;
+	transition: background 0s;
+}
+/* Список сессий игр */
+
 /* Таблица */
 .table-section {
     margin-top: 10px;
@@ -248,11 +298,12 @@ body {
 /* Лента гайдов */
 .guide-nav {
     padding: 10px;
-    margin: 10px;
-    min-width: 10px; /* ? */
+    margin: 10px 0 0 0;
+    position: absolute;
+    left: 10px;
+    min-width: 10px;
     width: 180px;
     font-size: 16px;
-    align-self: flex-start;
 }
 .guide-nav h2 {
     text-align: center;
@@ -271,7 +322,7 @@ body {
 .guide-content {
     width: 60%;
     min-width: 470px;
-    margin-left: 10px;
+    margin-left: 230px;
     font-size: 18px;
 }
 .guide-content > header {
