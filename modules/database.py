@@ -235,8 +235,14 @@ def db_join_game(game_hash: str, user_id: str) -> bool:
     :param user_id: Хеш пользователя
     :return: Успех
     """
-    # TODO: Реализовать метод + добавить в модуль пакет methods
-    pass
+    if db_get_user_game(user_id) is not None:
+        return False
+    db.get_collection("games").insert_one({'_id': game_hash}, {
+        '$push': {
+            'players': user_id
+        }
+    })
+    return True
 
 
 def db_get_games() -> dict:
@@ -262,6 +268,16 @@ def db_get_ended_games() -> list:
     for game in data:
         result.append(game['_id'])
     return result
+
+
+def db_get_user_game(user_id: str) -> str or None:
+    """
+    Получение игры, в которой участвует игрок
+    :param user_id: Хеш пользователя
+    :return: Хеш игры, либо None
+    """
+    result = db.get_collection("games").find_one({'players': user_id, 'status': 0}, {'_id': 1})
+    return result['_id'] if result is not None else None
 
 
 class BaseResponseError(Exception):
