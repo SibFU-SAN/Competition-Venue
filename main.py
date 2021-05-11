@@ -2,6 +2,7 @@ import sys
 import os
 import logging
 import datetime
+import time
 
 import flask
 import yaml
@@ -64,6 +65,11 @@ def game_editor_page():
         return flask.redirect("/profile", 302)
 
     game_data = database.db_get_game_data(game_id)
+
+    if game_data['start_time'] > time.time():
+        # TODO: Сделать перенаправление пользователя, если игра еще не началась
+        return flask.redirect("", 302)
+
     response = flask.request.form
     code = response['game_code'] if len(response) != 0 else account_methods.read_script(game_id, user_id)
     account_methods.save_script(game_id, user_id, code)
