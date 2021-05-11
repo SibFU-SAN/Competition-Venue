@@ -5,17 +5,10 @@
 		<section class="table-section">
 			<table class="table">
 				<caption>Таблица лидеров</caption>
-				<tr><th>Имя</th><th>Лучший счет</th><th>Кол-во игр</th></tr>
-				<tr><td>Валера</td><td>41</td><td>300</td></tr>
-				<tr><td>Валера</td><td>22</td><td>300</td></tr>
-				<tr><td>Валера</td><td>34</td><td>300</td></tr>
-				<tr><td>Валера</td><td>42</td><td>300</td></tr>
-				<tr><td>Валера</td><td>41</td><td>300</td></tr>
-				<tr><td>Валера</td><td>22</td><td>300</td></tr>
-				<tr><td>Валера</td><td>34</td><td>300</td></tr>
-				<tr><td>Валера</td><td>42</td><td>300</td></tr>
-				<tr><td>Валера</td><td>41</td><td>300</td></tr>
-				<tr><td>Валера</td><td>22</td><td>300</td></tr>
+				<tr><th>Имя</th><th>Кол-во побед</th><th>Кол-во игр</th></tr>
+				{% for user in top %}
+                    <tr><td><a href="/target/{{ user['login'] }}">{{ user['name'] }}</a></td><td>{{ user['wins'] }}</td><td>{{ user['played_games'] }}</td></tr>
+                {% endfor %}
 			</table>
 		</section>
 	</main>

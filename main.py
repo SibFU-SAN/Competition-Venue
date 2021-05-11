@@ -61,7 +61,8 @@ def game_editor_page():
 
 @app.route("/game/top")
 def name_top_page():
-    return flask.render_template("pages/game/table.html", auth=account_methods.is_authorized())
+    return flask.render_template("pages/game/table.html", auth=account_methods.is_authorized(),
+                                 top=database.db_get_top_players())
 
 
 @app.route("/help/guide")
