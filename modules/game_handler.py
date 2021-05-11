@@ -3,7 +3,7 @@ from threading import Thread
 import asyncio
 from logging import Logger
 from modules.database import db_get_ended_games
-from start import start
+from modules.game_starter import start
 
 
 class GameHandler(Thread):
