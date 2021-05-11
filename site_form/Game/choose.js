@@ -1,19 +1,38 @@
-//let elementsOfList = JSON.parse(json_str);
-let elementsOfList = [
+let json_str = `[{
+	"gameID": 1432423,
+	"players": 46,
+	"gameSettings": {
+		"height": 100,
+		"weight": 100
+		},
+	"dateStart": 22464,
+	"duration": 45
+	},
+	{
+	"gameID": 243324,
+	"players": 10,
+	"gameSettings": {
+		"height": 70,
+		"weight": 70
+		},
+	"dateStart": 1132,
+	"duration": 60
+	}]`;
+
+let elementsOfList = JSON.parse(json_str);
+
+/* 
 {
-	game_id: 131232,
-	map: [70, 90],
-	players: 5,
-	datestart: "12321321",
-	duration: 34,
-},
-{
-	game_id: 243534,
-	map: [100, 100],
-	players: 20,
-	datestart: "312312",
-	duration: 34,
-}];
+"gameID": 1432423,
+"players": 10,
+"gameSettings": {
+	"height": 50,
+	"weight": 100
+	},
+"dateStart": 1132,
+"duration": 45
+}
+*/
 
 function createTemplate(game_id, mapSize, NumberOfPlayers, startDate, duration) {
 	let template = `
@@ -53,7 +72,7 @@ function addElements(list, listDOMId) {
 	// Добавление новых элементов
 	for (let i of list)
 	{
-		var fragment = createTemplate(i.game_id, i.map, i.players, i.datestart, i.duration);
+		var fragment = createTemplate(i.gameID, [i.gameSettings.weight, i.gameSettings.height], i.players, i.dateStart, i.duration);
 		document.getElementById(listDOMId).appendChild(fragment);
 	}
 
