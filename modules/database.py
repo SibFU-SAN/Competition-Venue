@@ -238,7 +238,7 @@ def db_join_game(game_hash: str, user_id: str) -> bool:
     """
     if db_get_user_game(user_id) is not None:
         return False
-    db.get_collection("games").insert_one({'_id': game_hash}, {
+    db.get_collection("games").update_one({'_id': game_hash}, {
         '$push': {
             'players': user_id
         }
