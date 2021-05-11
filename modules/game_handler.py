@@ -3,6 +3,7 @@ from threading import Thread
 import asyncio
 from logging import Logger
 from modules.database import db_get_ended_games
+from start import start
 
 
 class GameHandler(Thread):
@@ -23,8 +24,7 @@ class GameHandler(Thread):
         log = self.logger.getChild(game_id)
         log.info("Запуск обработки игры")
         try:
-            # TODO: Обработка игры
-            pass
+            start(game_id)
         except Exception as ex:
             log.exception("Произошла ошибка при обработке игры", exc_info=ex)
         else:
