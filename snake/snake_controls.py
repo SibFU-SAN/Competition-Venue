@@ -1,5 +1,5 @@
 import copy
-from snake.snake import SnakePlayer, Map
+from snake.snake_game import SnakePlayer, Map
 
 
 def start_options(apples):
@@ -230,7 +230,7 @@ def final():
     if ['stop'] not in server_info:
         server_info.append(['stop'])
 
-    with open(f"./resources/tmp/{game_hash}.txt", "+a", encoding="utf-8") as user:
+    with open(f"snake\\Resources\\tmp\\{game_hash}.txt", "+a", encoding="utf-8") as user:
         user.write(str(server_info) + ',')
 
 
