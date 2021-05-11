@@ -220,12 +220,14 @@ def db_end_game(game_hash: str, scores: dict) -> None:
 
     db.get_collection("games").update_one(
         {"_id": game_hash},
-        {'$set': {
-            'result': {
-                'scores': scores,
-                'best_player': best_player,
-            }
-        }}
+        {
+            'status': 1,
+            '$set': {
+                'result': {
+                    'scores': scores,
+                    'best_player': best_player,
+                }
+            }}
     )
 
 
