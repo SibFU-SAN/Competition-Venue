@@ -9,7 +9,7 @@ def start(game_hash: str):
     players_hash = []
     count = 0
     snake = [[[4, 3], [5, 3]], [[4, 8], [5, 8]]]
-    names = os.listdir("./resources/scripts")
+    names = os.listdir("./resources/scripts/")
     game_info = database.db_get_game_data(game_hash)
     map_size = game_info['map_size']
     for i in names:
@@ -26,6 +26,9 @@ def start(game_hash: str):
                 snake_controls.height = int(sqrt(map_size))
                 snake_controls.weight = int(sqrt(map_size))
                 snake_controls.rad = game_info["view_distance"]
+                snake_controls.height = 10
+                snake_controls.weight = 10
+                snake_controls.rad = 3
                 snake_controls.server_info = []
                 snake_controls.map_1 = snake_controls.start_options(
                     snake_controls.apples_arr)
@@ -40,7 +43,7 @@ def start(game_hash: str):
                 scripts = eval(scripts)
 
             os.remove(f"./resources/tmp/{game_hash}.txt")
-            
+
             """Вычисление длительности игры(тест и вообще не нужно)"""
             max_script = 0
             info = []
@@ -53,9 +56,13 @@ def start(game_hash: str):
             multiplayer.game_hash = game_hash
             multiplayer.height = int(sqrt(map_size))
             multiplayer.weight = int(sqrt(map_size))
+            multiplayer.height = 10
+            multiplayer.weight = 10
             multiplayer.apples = snake_controls.apples_arr
             multiplayer.all_info = info
             multiplayer.hash_ = players_hash
-            multiplayer.multi(multiplayer.all_info, snake_controls.map_1,
-                              multiplayer.players_number,
-                              multiplayer.iteration_count, multiplayer.hash_)
+            multiplayer.players_hash = players_hash
+            score = multiplayer.multi(multiplayer.all_info, snake_controls.map_1,
+                                      multiplayer.players_number,
+                                      multiplayer.iteration_count, multiplayer.hash_)
+            database.db_end_game(game_hash, score)
