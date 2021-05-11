@@ -1,3 +1,4 @@
+import datetime
 import re
 import time
 import hashlib
@@ -251,9 +252,13 @@ def db_get_games() -> list:
     :return: Список с данными о играх
     """
     result = db.get_collection("games").find(
-        filter={'private': False},
-        projection={
+        {
+            'private': False,
+            'status': 0,
+        },
+        {
             '_id': 1,
+            'name': 1,
             'players': 1,
             'period': 1,
             'start_time': 1,
@@ -263,6 +268,9 @@ def db_get_games() -> list:
     for game in result:
         temp = dict(game)
         temp['players'] = len(temp['players'])
+        # TODO: Писать время до начала, а не само начало
+        temp['start_time'] = datetime.datetime.utcfromtimestamp(temp['start_time']).strftime('%d.%m.%Y %H:%M')
+        games.append(temp)
     return games
 
 
@@ -273,7 +281,7 @@ def db_get_ended_games() -> list:
     """
     now = time.time()
     data = db.get_collection("games").find({
-        'end_time': {'$gte': now},
+        'end_time': {'$lte': now},
         'status': 0
     }, {'_id': 1})
     result = list()
