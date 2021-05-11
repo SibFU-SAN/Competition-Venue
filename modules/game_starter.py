@@ -9,7 +9,7 @@ def start(game_hash: str):
     players_hash = []
     count = 0
     snake = [[[4, 3], [5, 3]], [[4, 8], [5, 8]]]
-    names = os.listdir("../resources/scripts")
+    names = os.listdir("./resources/scripts")
     game_info = database.db_get_game_data(game_hash)
     map_size = game_info['map_size']
     for i in names:
