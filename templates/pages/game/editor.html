@@ -5,30 +5,42 @@
 	<link rel="stylesheet" href="{{ url_for("static", filename="static/codemirror/lib/codemirror.css") }}">
 
 	<script src="{{ url_for("static", filename="static/codemirror/mode/python/python.js") }}"></script>
+
+    <style>
+		.CodeMirror {
+			border: 1px solid cornflowerblue;
+
+			font-size: 14px;
+			width: 90vw;
+			min-height: 200px;
+			resize: vertical;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
 	<main class="main centered-box">
 		<form method="post" action="#" class="focus-block form-field" id="game_form">
 			<h2>Введите код для игры</h2>
-			<p>Информация о будущей игре: <!-- Нужно как то передать информацию об аккаунте -->
+			<p>
+                Информация о будущей игре:
 				<ul>
 					<li>Режим: Змейка</li>
-					<li>Карта: Река</li>
-					<li>Число игроков: 23</li>
+					<li>Число игроков: {{ len(game_data['players']) }}</li>
+                    <li>Дальность видимости: {{ len(game_data['view_distance']) }}</li>
+                    <li>Окончание игры: {{ dt.datetime.utcfromtimestamp(game_data['end_time']).strftime('%H:%M:%S') }}</li>
 				</ul>
 			</p>
 
-			<textarea name="game_code" cols="50" rows="10" id="code" class="textarea" required></textarea>
+			<textarea name="game_code" cols="50" rows="10" id="code" class="textarea" required>code</textarea>
 
 			<div class="centered-box form-menu">
 				<input type="submit" value="Отправить" class="form-btn" id="submit">
 				<input type="reset" value="Очистить" class="form-btn" id="reset">
 			</div>
-			<!-- Форма ввода "кода для игры". Нужно изменить -->
 		</form>
 
-		<script type="text/javascript" language="javascript">
+		<script type="text/javascript">
 			var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('code'), {
 				mode: {name: "python",
 					   version: 3,
@@ -50,16 +62,5 @@
 				myCodeMirror.clearHistory()
 			})
 		</script>
-
-		<style>
-			.CodeMirror {
-			border: 1px solid cornflowerblue;
-
-			font-size: 14px;
-			width: 90vw;
-			min-height: 200px;
-			resize: vertical;
-			}
-		</style>
 	</main>
 {% endblock %}

@@ -1,6 +1,7 @@
 import sys
 import os
 import logging
+import datetime
 
 import flask
 import yaml
@@ -56,7 +57,18 @@ def game_create_page():
 @app.route("/game/editor", methods=["POST", "GET"])
 @account_methods.authorize_require
 def game_editor_page():
-    return flask.render_template("pages/game/editor.html", auth=True)
+    user_data = database.db_get_user_data(account_methods.get_token())
+    user_id = user_data['_id']
+    game_id = database.db_get_user_game(user_id)
+    if game_id is None:
+        return flask.redirect("/profile", 302)
+
+    game_data = database.db_get_game_data(game_id)
+    response = flask.request.form
+    code = response['game_code'] if len(response) != 0 else account_methods.read_script(game_id, user_id)
+    account_methods.save_script(game_id, user_id, code)
+
+    return flask.render_template("pages/game/editor.html", auth=True, game_data=game_data, dt=datetime, code=code)
 
 
 @app.route("/game/top")
