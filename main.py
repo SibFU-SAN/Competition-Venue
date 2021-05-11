@@ -85,8 +85,8 @@ def other_profile_page(login):
                                      auth=account_methods.is_authorized(),
                                      data=target_data,
                                      genders=genders)
-    # TODO: Сделать страницу-заглушку
-    return flask.redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
+    return flask.redirect("/error/404")
 
 
 @app.route("/login", methods=["POST", "GET"])
@@ -142,6 +142,11 @@ def settings_data():
     data = methods.get_data(token=token)
 
     return flask.render_template("pages/profile/settings.html", auth=True, data=data['object'], genders=genders)
+
+
+@app.route("/error/404")
+def err404_page():
+    return flask.render_template("pages/404.html", auth=account_methods.is_authorized())
 
 
 if __name__ == '__main__':
