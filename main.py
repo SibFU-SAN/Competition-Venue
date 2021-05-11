@@ -52,7 +52,34 @@ def game_connect_page():
 @app.route("/game/create", methods=["POST", "GET"])
 @account_methods.authorize_require
 def game_create_page():
-    return flask.render_template("pages/game/create.html", auth=True)
+    user_data = database.db_get_user_data(account_methods.get_token())
+    user_id = user_data['_id']
+    game_id = database.db_get_user_game(user_id)
+    if game_id is not None:
+        return flask.redirect("/game/editor", 302)
+
+    data = flask.request.form
+    if len(data) == 0:
+        return flask.render_template("pages/game/create.html", auth=True)
+    logger.info(str(data))
+    date = "{} {}".format(data['datemax'], data['start_time'])
+    unix_time = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M')
+    period = int(data['time'])
+    add_self = ('join' in data and data['join'] == 'on')
+
+    database.db_create_game(
+        owner_hash=user_id,
+        add_self=add_self,
+        name=data['name'],
+        map_size=100,
+        start_time=int(unix_time.timestamp()),
+        private=('hide' in data and data['hide'] == 'on'),
+        view_distance=int(data['view']),
+        period=period
+    )
+    if add_self:
+        return flask.redirect("/game/editor", 302)
+    return flask.redirect("/game/connect", 302)
 
 
 @app.route("/game/editor", methods=["POST", "GET"])
