@@ -1,4 +1,4 @@
-from snake.snake_game import Map
+from snake.snake import Map
 import copy
 import json
 import uuid

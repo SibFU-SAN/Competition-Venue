@@ -1,5 +1,5 @@
 import copy
-from snake.snake_game import SnakePlayer, Map
+from snake.snake import SnakePlayer, Map
 
 
 def start_options(apples):
