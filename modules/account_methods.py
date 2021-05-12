@@ -57,3 +57,10 @@ def read_script(game_id: str, user_id: str) -> str:
 
     with open(f'./resources/scripts/{game_id}/{user_id}.py', 'r') as file:
         return file.read()
+
+
+def load_demo(game_id: str) -> str or None:
+    if not os.path.exists(f"./resources/demos/{game_id}"):
+        return None
+    with open(f'./resources/demos/{game_id}', 'r') as file:
+        return file.read()
