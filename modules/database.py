@@ -1,6 +1,7 @@
 import datetime
 import re
 import time
+import os
 import hashlib
 import pymongo
 
@@ -350,6 +351,37 @@ def db_remove_game(game_hash: str):
     :return:
     """
     db.get_collection("games").remove({'_id': game_hash})
+
+
+def db_get_demos_list() -> list:
+    """
+    Возвращает список с информацией о демках последних игр
+    :return: Список с информацией о играх(id, название, время окончания, победитель)
+    """
+    result = db.get_collection("games").find(
+        {'status': 1},
+        sort=[('end_time', -1)],
+        limit=10,
+        projection={
+            '_id': 1,
+            'name': 1,
+            'result': 1,
+            'end_time': 1
+        }
+    )
+    demos = list()
+    for game in result:
+        if not os.path.exists("./resources/demos/{}".format(game['_id'])):
+            continue
+
+        demos.append({
+            'id': game['_id'],
+            'name': game['name'],
+            'best_player': game['result']['best_player'],
+            'end_time': datetime.datetime.utcfromtimestamp(game['end_time']).strftime('%d.%m.%Y %H:%M')
+        })
+
+    return demos
 
 
 class BaseResponseError(Exception):
