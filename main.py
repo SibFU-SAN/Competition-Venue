@@ -26,6 +26,9 @@ def index_page():
 @app.route("/game/connect", methods=["POST", "GET"])
 @account_methods.authorize_require
 def game_connect_page():
+    data = flask.request.form
+    if len(data) != 0:
+        return flask.redirect("/game/join/{}".format(data['game_id']))
     return flask.render_template("pages/game/connect.html", auth=True, games=database.db_get_games())
 
 
@@ -65,6 +68,8 @@ def game_create_page():
 def join_to_game_page(game_id: str):
     user_data = database.db_get_user_data(account_methods.get_token())
     user_id = user_data['_id']
+    if database.db_get_game_data(game_id) is None:
+        return flask.redirect("/game/connect", 302)
     if database.db_get_user_game(user_id) is None:
         database.db_join_game(game_id, user_id)
         logger.info(f"Пользователь '{user_id}' зашел в комнату '{game_id}'")
