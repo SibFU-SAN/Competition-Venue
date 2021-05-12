@@ -99,6 +99,24 @@ def game_editor_page():
     return flask.render_template("pages/game/editor.html", auth=True, game_data=game_data, dt=datetime, code=code)
 
 
+@app.route("/game/demo")
+@account_methods.authorize_require
+def demos_list_page():
+    return flask.render_template("pages/game/demos.html", auth=True, games=database.db_get_demos_list())
+
+
+@app.route("/game/demo/<game_id>")
+@account_methods.authorize_require
+def watch_demo_page(game_id: str):
+    demo = account_methods.load_demo(game_id)
+    if demo is None:
+        return flask.redirect("/error/404", 302)
+    user_token = account_methods.get_token()
+    user_id = database.db_get_user_data(user_token)['_id']
+
+    return flask.render_template("pages/game/viewing.html", auth=True, demo=demo, user_id=user_id)
+
+
 @app.route("/game/top")
 def name_top_page():
     return flask.render_template("pages/game/table.html", auth=account_methods.is_authorized(),
