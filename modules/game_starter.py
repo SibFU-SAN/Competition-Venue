@@ -16,7 +16,7 @@ def start(game_hash: str):
         if str(i) == game_hash:
             players = os.listdir(f"./resources/scripts/{i}")
             for pl in players:
-                players_hash.append(players[count])
+                players_hash.append(players[count][0:-3])
                 with open(f"./resources/scripts/{i}/{pl}", "r", encoding="utf-8") as file:
                     code = file.read()
                 snake_controls.code = code
