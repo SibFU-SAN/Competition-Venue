@@ -204,8 +204,8 @@ def db_end_game(game_hash: str, scores: dict) -> None:
             best_player = player
             best_score = scores[player]
 
-    for player_hash in scores.values():
-        data = db_get_user_data(player_hash)
+    for player_hash in scores.keys():
+        data = db.get_collection("users").find_one({'_id': player_hash})
 
         wins = data['wins'] + (1 if best_player == player_hash else 0)
         best_score = data['best_score'] if data['best_score'] > scores[player_hash] else scores[player_hash]
