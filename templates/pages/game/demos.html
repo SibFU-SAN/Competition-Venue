@@ -1,0 +1,39 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+	<main class="main centered-box">
+		<section class="focus-block">
+			<form method="post" action="#" class="form-field" id="form">
+				<h2>Поиск демо по ID</h2>
+				<div class="form-menu">
+					<label>Id Игры <input type="text" name="game_id" id="game_id" required></label>
+					<input type="submit" value="Найти" class="form-btn">
+				</div>
+			</form>
+
+			<div>
+				<h2>Записи последних игр</h2>
+				<section class="session-list" id="session_list">
+                    {% for game in games %}
+					<div class="session">
+						<div class="session-head">
+							<h3><span>{{ game['name'] }}</span></h3>
+                            <a href="/game/join/{{ game['_id'] }}" class="btn">Смотреть</a>
+						</div>
+						<div class="session-info">
+							<ul>
+                                <li>ID: <span>{{ game['_id'] }}</span></li>
+								<li>Кол-во участников: <span>{{ game['players'] }}</span></li>
+							</ul>
+							<ul>
+								<li>Дата окончания: <span>{{ game['end_time'] }}</span></li>
+								<li>Победитель: <span>{{ game['best_player'] }} min</span></li>
+							</ul>
+						</div>
+					</div>
+                    {% endfor %}
+				</section>
+			</div>
+		</section>
+	</main>
+{% endblock %}
