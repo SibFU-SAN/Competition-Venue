@@ -16,7 +16,7 @@ def start(game_hash: str):
         if str(i) == game_hash:
             players = os.listdir(f"./resources/scripts/{i}")
             for pl in players:
-                players_hash.append(players[count][0:-4])
+                players_hash.append(players[count])
                 with open(f"./resources/scripts/{i}/{pl}", "r", encoding="utf-8") as file:
                     code = file.read()
                 snake_controls.code = code
@@ -66,3 +66,4 @@ def start(game_hash: str):
                                       multiplayer.players_number,
                                       multiplayer.iteration_count, multiplayer.hash_)
             database.db_end_game(game_hash, score)
+            break
