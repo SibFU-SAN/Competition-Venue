@@ -9,15 +9,15 @@ def start(game_hash: str):
     players_hash = []
     count = 0
     snake = [[[4, 3], [5, 3]], [[4, 8], [5, 8]]]
-    names = os.listdir("../resources/scripts/")
+    names = os.listdir("../snake/resources/scripts/")
     game_info = database.db_get_game_data(game_hash)
     map_size = game_info['map_size']
     for i in names:
         if str(i) == game_hash:
-            players = os.listdir(f"../resources/scripts/{i}")
+            players = os.listdir(f"../snake/resources/scripts/{i}")
             for pl in players:
                 players_hash.append(players[count][0:-3])
-                with open(f"../resources/scripts/{i}/{pl}", "r", encoding="utf-8") as file:
+                with open(f"../snake/resources/scripts/{i}/{pl}", "r", encoding="utf-8") as file:
                     code = file.read()
                 snake_controls.code = code
                 snake_controls.snake_position = snake[count]
@@ -37,12 +37,12 @@ def start(game_hash: str):
                 snake_controls.final()
                 count += 1
 
-            with open(f"../resources/tmp/{game_hash}.txt", "r", encoding="utf-8") as file:
+            with open(f"../snake/resources/tmp/{game_hash}.txt", "r", encoding="utf-8") as file:
                 scripts = file.read()
                 scripts = scripts[0:-1]
                 scripts = eval(scripts)
 
-            os.remove(f"../resources/tmp/{game_hash}.txt")
+            os.remove(f"../snake/resources/tmp/{game_hash}.txt")
 
             """Вычисление длительности игры(тест и вообще не нужно)"""
             max_script = 0
