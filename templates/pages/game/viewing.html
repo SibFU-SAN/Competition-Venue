@@ -52,7 +52,7 @@ let personalSnakeId = null;
 //const playersHesh = JSON.parse(``);
 
 // Карта Игры
-const gameReplay = {{ demo }};
+const gameReplay = JSON.parse(`{{ demo }}`.replaceAll("&#34;", '"'));
 
 // HTML лементы
 const canvas  = document.getElementById("game_screen");
