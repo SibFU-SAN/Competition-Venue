@@ -58,3 +58,9 @@
   
   Все команды находтся в модуле [``snake_controls``](https://github.com/SibFU-SAN/Competition-Venue/blob/main/snake/snake_controls.py)
   
+  ________________________________________
+  
+### Ссылки на сторонние ресурсы, использованные в проекте:
+
+- [CodeMirror](https://codemirror.net/)
+
