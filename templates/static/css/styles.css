@@ -333,10 +333,9 @@ body {
 
 /* Лента гайдов */
 .guide-nav {
+    align-items: flex-start;
     padding: 10px;
-    margin: 10px 0 0 0;
-    position: absolute;
-    left: 10px;
+    margin: 10px 10px auto 10px;
     min-width: 10px;
     width: 180px;
     font-size: 16px;
@@ -358,7 +357,7 @@ body {
 .guide-content {
     width: 60%;
     min-width: 470px;
-    margin-left: 230px;
+    margin-left: 0px;
     font-size: 18px;
 }
 .guide-content > header {
