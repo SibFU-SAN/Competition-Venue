@@ -212,6 +212,7 @@ body {
 
 /* Список сессий игр */
 .session-list {
+    width:610px;
 	border: 1px solid #000000;
 	background: #FFFFFF;
 	font-size: 18px;
