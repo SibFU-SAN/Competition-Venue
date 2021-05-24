@@ -214,18 +214,21 @@ def direction_down():
 
 
 def final():
-    exec(compile(code, "", "exec"),
-         {"__cached__": None, "__doc__": None, "__file__": None,
-          "__name__": None, "__loader__": None, "__package__": None,
-          "__spec__": None, "print": None, "exec": None,
-          "eval": None},
-         {"move_left": move_left, "move_up": move_up,
-          "move_down": move_down, "move_right": move_right,
-          "food": food, "move": move, "wall_is_up": wall_is_up,
-          "wall_is_down": wall_is_down, "wall_is_right": wall_is_right,
-          "wall_is_left": wall_is_left, "direction_right": direction_right,
-          "direction_left": direction_left, "direction_down": direction_down,
-          "direction_up": direction_up})
+    try:
+        exec(compile(code, "", "exec"),
+             {"__cached__": None, "__doc__": None, "__file__": None,
+              "__name__": None, "__loader__": None, "__package__": None,
+              "__spec__": None, "print": None, "exec": None,
+              "eval": None},
+             {"move_left": move_left, "move_up": move_up,
+              "move_down": move_down, "move_right": move_right,
+              "food": food, "move": move, "wall_is_up": wall_is_up,
+              "wall_is_down": wall_is_down, "wall_is_right": wall_is_right,
+              "wall_is_left": wall_is_left, "direction_right": direction_right,
+              "direction_left": direction_left, "direction_down": direction_down,
+              "direction_up": direction_up})
+    except Exception as ex:
+        pass
 
     if ['stop'] not in server_info:
         server_info.append(['stop'])
