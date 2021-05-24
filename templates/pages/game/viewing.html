@@ -1,3 +1,5 @@
+{% extends "pages/base.html" %}
+
 {% block content %}
 <main class="main centered-box">
 	<!-- Таблица будет реализована в дальнейшем -->
@@ -45,7 +47,7 @@
 
 <script>
 // Данные Зрителя
-const accountHesh = {{ user_id }};
+const accountHesh = '{{ user_id }}';
 let personalSnakeId = null;
 
 // Данные Игроков: Hesh <=> Name
@@ -78,7 +80,7 @@ let step_y = Math.floor(canvas.height / height);
 
 // Прокрутка видео
 let slider = document.getElementById("ReplayRange");
-slider.setAttribute("max", gameReplay.frames.length - 1);
+slider.setAttribute("max", gameReplay.frame.length - 1);
 slider.oninput = function() {
     frameCount = parseInt(this.value);
 	console.log("set value range", frameCount);
@@ -190,7 +192,7 @@ function drawGame() {
 
 	drawFrame(frameCount);
 
-	if ((frameCount === gameReplay.frames.length - 1 && frameStep === 1) ||
+	if ((frameCount === gameReplay.frame.length - 1 && frameStep === 1) ||
 		(frameCount === 0 && frameStep === -1))
 	{
 		stopButtonClick();
@@ -225,7 +227,7 @@ main();
 
 function drawFrame (numberFrame)
 {
-	let currentFrame = gameReplay.frames[numberFrame];
+	let currentFrame = gameReplay.frame[numberFrame];
 	document.getElementById("ReplayRange").value = numberFrame;
 
 	drawField();

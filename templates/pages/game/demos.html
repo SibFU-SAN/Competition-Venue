@@ -1,5 +1,9 @@
 {% extends "pages/base.html" %}
 
+{% block links %}
+
+{% endblock %}
+
 {% block content %}
 	<main class="main centered-box">
 		<section class="focus-block">
@@ -18,16 +22,16 @@
 					<div class="session">
 						<div class="session-head">
 							<h3><span>{{ game['name'] }}</span></h3>
-                            <a href="/game/join/{{ game['_id'] }}" class="btn">Смотреть</a>
+                            <a href="/game/demo/{{ game['id'] }}" class="btn">Смотреть</a>
 						</div>
 						<div class="session-info">
 							<ul>
-                                <li>ID: <span>{{ game['_id'] }}</span></li>
+                                <li>ID: <span>{{ game['id'] }}</span></li>
 								<li>Кол-во участников: <span>{{ game['players'] }}</span></li>
 							</ul>
 							<ul>
 								<li>Дата окончания: <span>{{ game['end_time'] }}</span></li>
-								<li>Победитель: <span>{{ game['best_player'] }} min</span></li>
+								<li>Победитель: <span>{{ game['best_player'] }}</span></li>
 							</ul>
 						</div>
 					</div>
