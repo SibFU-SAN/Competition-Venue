@@ -102,11 +102,11 @@ def game_editor_page():
 
 
 @app.route("/game/demo", methods=["POST", "GET"])
-@account_methods.authorize_require
 def demos_list_page():
     response = flask.request.form
     if len(response) == 0:
-        return flask.render_template("pages/game/demos.html", auth=True, games=database.db_get_demos_list())
+        return flask.render_template("pages/game/demos.html",
+                                     auth=account_methods.is_authorized(), games=database.db_get_demos_list())
     return flask.redirect(f"/game/demo/{response['game_id']}", 302)
 
 
@@ -116,7 +116,7 @@ def watch_demo_page(game_id: str):
     if demo is None:
         return flask.redirect("/error/404", 302)
     user_token = account_methods.get_token()
-    user_id = database.db_get_user_data(user_token)['_id']
+    user_id = 'null' if user_token is None else database.db_get_user_data(user_token)['_id']
 
     return flask.render_template(
         "pages/game/viewing.html",
