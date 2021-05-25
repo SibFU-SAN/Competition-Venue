@@ -70,4 +70,4 @@ def load_demo(game_id: str) -> str or None:
 
 def save_demo(game_id: str, demo: dict) -> None:
     with open(f'./resources/demos/{game_id}', 'w') as file:
-        file.write(json.JSONEncoder.encode(demo))
+        file.write(json.JSONEncoder().encode(demo))
