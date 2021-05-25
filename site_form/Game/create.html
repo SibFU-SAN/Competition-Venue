@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Создание</title>
+	<link rel="stylesheet" href="../style.css">
+	
+</head>
+<body>
+	<header class="header">
+		<div class="headline">
+			<p><img src="logo.png" >Соревновательная Площадка</p>
+		</div><!-- Лого / Название width=40pt-->
+		<nav>
+			<ul class="head-menu">
+				<li><a href="#">Главная</a></li>
+				<li><a href="#">Аккаунт</a></li>
+				<li><a href="#">Игра</a>
+					<ul class="submenu">
+						<li><a href="#">Редактор</a></li>
+                        <li><a href="#">Создать Сессию</a></li>
+						<li><a href="#">Лидеры</a></li>
+					</ul>
+				</li>
+				<li><a href="#">Справочник</a></li>
+			</ul>
+		</nav>
+		<!-- main-menu -->
+	</header>
+	
+	<main class="main centered-box">
+		<form method="post" action="" class="focus-block form-field">
+			<h2>Создание Сессии Игры</h2>
+			<p>
+				<label>Время начала игры: <input type="time" name="start_time" id="start_time" required></label>
+				<input type="date" id="datemax" name="datemax" max="1979-12-31" required>
+			</p>
+			<p>
+				<label>Длительность игры: <input type="number" name="d" id="d" min="5" max="60" step="5" value="5"> (min)</label>
+			</p>
+			<div>
+				<input type="submit" value="Отправить">
+			</div>
+		</form>
+	</main>
+	
+	<footer class="footer">
+		<div class="footer-info">
+			Проект был создан:
+			<ul>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			</ul>
+		</div>
+	</footer>
+	
+</body>
+</html>

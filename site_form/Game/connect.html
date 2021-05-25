@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Подключение</title>
+	<link rel="stylesheet" href="../style.css">
+	
+</head>
+<body>
+	<header class="header">
+		<div class="headline">
+			<p><img src="logo.png" >Соревновательная Площадка</p>
+		</div><!-- Лого / Название width=40pt-->
+		<nav>
+			<ul class="head-menu">
+				<li><a href="#">Главная</a></li>
+				<li><a href="#">Аккаунт</a></li>
+				<li><a href="#">Игра</a>
+					<ul class="submenu">
+						<li><a href="#">Играть</a></li>
+                        <li><a href="#">Создать Сессию</a></li>
+						<li><a href="#">Лидеры</a></li>
+					</ul>
+				</li>
+				<li><a href="#">Справочник</a></li>
+			</ul>
+		</nav>
+		<!-- main-menu -->
+	</header>
+	
+	<main class="main centered-box">
+		<form method="post" action="" class="focus-block form-field">
+			<h2>Вход в игру</h2>
+			<p>
+				<label>Id Игры <input type="text" name="game_id" id="game_id" required></label>
+			</p>
+			<p>
+				<input type="submit" value="Присоединится">
+			</p> <!-- Добавить возможность перехода на страницу редактора с Id игры -->
+		</form>
+	</main>
+	
+	<footer class="footer">
+		<div class="footer-info">
+			Проект был создан:
+			<ul>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			</ul>
+		</div>
+	</footer>
+	
+</body>
+</html>

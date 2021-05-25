@@ -1,0 +1,456 @@
+/* Main CSS
+Нужна правильна организация стилей 
+*/
+
+/*{padding: 0; margin: 0;}/**/
+
+body {
+	font-size: 14pt;
+	padding: 0;
+	margin: 0;
+	background: #ffefcf;
+	font-family: times new roman;
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	min-width: 800px;
+}
+
+/* Стили для шапки и подвала */
+.header{
+	background: #ffae18;
+	display: block;
+	border-bottom: 2px solid #000000;
+}
+
+.main {
+	margin: auto;
+	flex: 1; /* Для организации подвала */
+}
+
+.footer{
+	height: 100px;
+	min-width: 550px;
+	background: #C4C4C4;
+	border-top: 2px solid #000000;
+	font-size: 10pt;
+	padding: 10px;
+	padding-bottom: 0;
+}
+
+.headline{
+	margin: 10px;
+}
+.headline p {
+	font-size: 200%;
+	margin: 0;
+}
+.headline img{
+	width: 40pt;
+	border-radius: 20px;
+	vertical-align: middle;
+}
+
+.head-menu{
+	margin: 10px;
+	padding: 0 20px 0 20px;
+	background: #E79144;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 20px;
+	display: flex;
+	list-style: none;
+}
+.head-menu a {
+    border: 2px dashed #dc8334;
+	color: #000000;
+	padding: 10px;
+	text-decoration: none; /* Убираем подчёркивание */
+	display: inline-block; /* Блочная ссылка*/
+	white-space: nowrap;
+	text-align: center;
+	width:120px;
+	height:23px;
+}
+.head-menu a:hover {
+	color: #FFFFFF;
+    background: #2c3e50;
+}
+.head-menu .left-bottom {
+    margin-left: auto;
+}
+.small-profile_logo {
+    width: 22px;
+    height: 22px;
+    border-radius: 10px;
+    vertical-align: middle;
+}
+.head-menu li{
+	margin-left: 1px;
+	margin-right: 1px;
+	position: relative;
+	list-style: none;
+	display: inline-block; /* Пункты меню по горизонтали */
+}
+.head-menu > li .submenu{
+	display: none;
+	font-size: 12pt;
+}
+.head-menu > li:hover .submenu{
+	display: block;
+	padding: 0;
+    padding-bottom: 10px;
+	border-radius: 0 0 10px 10px;
+	position: absolute;
+    cursor: pointer;
+	color: red;
+	background: #dd9141;
+}
+.submenu a {
+    border: 0;
+    height: 16px;
+}
+
+.footer-info{
+	padding: 5px;
+	text-align: left;
+}
+.footer-info ul{
+    margin: 0;
+}
+
+.main-text{
+	font-size: 24px;
+	line-height: 28px;
+	font-family: times new roman;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+.focus-block{
+	border-radius: 20px;
+	background: #fffbf6;
+	border: 1px solid #000000;
+	padding: 10px;
+	margin: 10px auto 10px auto;
+	min-width: 30%;
+}
+
+.centered-box{
+	display: flex;
+	justify-content: center;
+    align-items: center;
+	height: 100%;
+}
+/* Стили для шапки и подвала */
+
+/* Стили для Форм */
+.form-field {
+}
+.form-field h2 {
+	text-align: center;
+	font-weight: normal;
+	margin: 0 0 32px 0;
+}
+.form-field p {
+	margin: 0 auto;
+	margin-top: 5px;
+}
+.form-field input, .form-field a, .form-field select{
+	display: inline-block;
+	margin: 10px;
+	padding: 10px;
+	min-width: 70px;
+	border-radius:10px;
+	border: 1px solid #aaa;
+	transition: .3s border-color;
+	background: #ffffff;
+}
+.form-field input:hover {
+	border: 1px solid #aaa;
+}
+.form-field textarea{
+	width: 500px;
+	min-height: 200px;
+	resize: vertical;
+}
+.form-menu {
+    width:100%;
+    display: flex;
+}
+.form-menu .form-btn {
+    background: #FFC898;
+    border-radius: 0;
+    color: #000000;
+    font-size: 14pt;
+}
+.form-menu a {
+    margin-left: auto;
+	text-decoration: none; /* Убираем подчёркивание */
+	display: inline-block;
+}
+
+.lost-access {
+    margin: 0 auto;
+    height: 40px;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lost-access .text-danger {
+    border-top: 1px dashed red;
+    border-bottom: 1px dashed red;
+    margin: 0;
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+    color: red;
+}
+/* Стили для Форм */
+
+/* Список сессий игр */
+.session-list {
+	border: 1px solid #000000;
+	background: #FFFFFF;
+	font-size: 18px;
+}
+.session {
+	min-width: 600px;
+	border-bottom: 1px solid #000000;
+	margin: 5px;
+}
+.session-head {
+	display: flex;
+	margin: 5px;
+}
+.session-head>h3 {
+	margin: 0;
+	align-self: center;
+	display: inline-block;
+}
+.session-head>input {
+	margin-left: auto;
+}
+.session-info {
+	display: flex;
+	margin: 0;
+	margin: 5px;
+}
+.session-info ul {
+	margin: 0 auto 10px 0;
+	padding: 0;
+}
+.session-info li {
+	list-style-type: none;
+	padding: 4px 0;
+}
+.session-list .btn, .btn {
+	background: #FFC898;
+    border-radius: 0;
+	
+    color: #000000;
+	padding: 5px 25px;
+	font-size: 16px;
+}
+.session-list .btn:active{
+	background: #aaaaaa;
+	transition: background 0s;
+}
+/* Список сессий игр */
+
+/* Комната ожидания игры */
+.waiting-room {
+	width: 600px;
+	padding: 20px;
+}
+.waiting-room h2 {
+	text-align: center;
+	margin: 0 auto 3px auto;
+}
+.waiting-room h3 {
+	font-weight:normal;
+	text-align: center;
+	margin: 0 auto 25px auto;
+}
+.waiting-room .session-info {
+	margin-bottom: 25px;
+}
+.waiting-room table {
+	margin: 0 auto 10px 0;
+	padding: 0;
+}
+.waiting-room .dashboard {
+	display: flex;
+	height: 50px;
+	margin: 10px;
+}
+.dashboard-info {
+	padding: 12px;
+	margin: 0;
+	background: #FFC898;
+	border: 1px solid #000000;
+	border-radius: 20px;
+}
+.waiting-room .dashboard .btn {
+	margin-left: auto;
+	margin-right: auto;}
+/* Комната ожидания игры */
+
+/* Таблица */
+.table-section {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 20px 20px 0 0;
+    background: #F1B178;
+    padding: 15px;
+    min-width: 500px;
+}
+.table {
+    border: 2px solid #000000;
+    background: #ffffff;
+    width: 100%;
+    font-size: 14pt;
+    text-align: center;
+    border-collapse: collapse;
+}
+.table caption{
+    font-size: 18pt;
+    text-align: center;
+
+}
+.table tr {
+    border-top: 1px solid #000000;
+    width: 100px;
+}
+.table td, th {
+    padding: 10px;
+    min-width: 200px;
+}
+.table th {
+    border: 1px solid #000000;
+}
+/* Таблица */
+
+/* Лента гайдов */
+.guide-nav {
+    padding: 10px;
+    margin: 10px 0 0 0;
+    position: absolute;
+    left: 10px;
+    min-width: 10px;
+    width: 180px;
+    font-size: 16px;
+}
+.guide-nav h2 {
+    text-align: center;
+    margin: 0 0 10px 0;
+}
+.guide-nav a {
+    text-decoration: none;
+}
+.guide-nav ul {
+    padding-left: 25px;
+    margin: 0;
+}
+.guide-nav li {
+    margin-bottom: 5px;
+}
+.guide-content {
+    width: 60%;
+    min-width: 470px;
+    margin-left: 230px;
+    font-size: 18px;
+}
+.guide-content > header {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.guide-content p {
+    margin-bottom: 10px;
+}
+.guide-content .listing {
+    font-style: italic;
+    font-size: 16px;
+}
+/* Лента гайдов */
+
+/* Игровое Поле */
+.game-section {
+    display: flex;
+}
+.game-screen-container{
+    padding: 0 10px;
+}
+.game-screen {
+    border: 3px solid black;
+    vertical-align:bottom;
+}
+.game-control {
+    margin: 0;
+    width: 100%;
+    background: #a0a0a0;
+}
+.control-btn {
+	background: #FFC898;
+    color: #000000;
+    outline: none;
+	min-width: 46px;
+	height: 25px;
+}
+.control-buttons {
+    padding: 0 10px 3px 10px;
+    display: flex;
+}
+.replay-setting {
+    display: inline-block;
+    margin-left: auto;
+}
+
+
+
+.slide-container{padding:0 5px;}
+ .slider {
+    margin:0;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+.slider:hover {opacity: 1;}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 15px;
+    background: #313131;
+    cursor: pointer;
+}
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 15px;
+    background: #313131;
+    cursor: pointer;
+}
+
+
+.game-info {
+    width:220px;
+    padding: 10px;
+    margin-bottom: auto;
+}
+.game-info dt:after {
+	content: ":";
+}
+.game-info p, .game-info h3, .game-info dl{
+    margin: 0;
+    margin-bottom: 20px;
+}
+/* Игровое Поле */

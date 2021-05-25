@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head> <!-- Этот файл шаблон -->
+	<meta charset="UTF-8">
+	<title>Соревновательная Площадка</title>
+	<link rel="stylesheet" href="../style.css">
+	<link rel="icon" href="logo.png" sizes="32x32">
+</head>
+<body>
+	<header class="header">
+		<div class="headline">
+			<p><img src="logo.png" >Соревновательная Площадка</p>
+		</div><!-- Лого / Название width=40pt-->
+		<nav>
+			<ul class="head-menu">
+				<li><a href="#">Главная</a></li>
+				<li><a href="#">Аккаунт</a></li>
+				<li><a href="#">Игра</a>
+					<ul class="submenu">
+						<li><a href="#">Играть</a></li>
+                        <li><a href="#">Создать Сессию</a></li>
+						<li><a href="#">Лидеры</a></li>
+					</ul>
+				</li>
+				<li><a href="#">Справочник</a></li>
+			</ul>
+		</nav>
+		<!-- main-menu -->
+	</header>
+	
+	<main class="main centered-box">
+		<section class="focus-block waiting-room">
+			<h2>Комната ожидания начал игры (id: <span>123132</span>)</h2>
+			<h3>Инормация о игре</h3>
+			<div class="session-info">
+				<table>
+					<tr><td>Колво участников:</td><td>1 / 44</td></tr>
+					<tr><td>Размер карты:</td><td>44x44</td></tr>
+				</table>
+				<table>
+					<tr><td>Длительность:</td><td>45 min</td></tr>
+					<tr><td>Дата начала:</td><td>12:00 - 10.10.2021</td></tr>
+					<tr><td>Дата начала:</td><td>12:45 - 10.10.2021</td></tr>
+				</table>
+			</div>
+			<div class="dashboard">
+				<p class="dashboard-info">Статус игры: <span id="game_status">Игра уже началась</span></p>
+				<input type="button" value="В Бой!" class="btn">
+			</div>
+		</section>
+		<!--
+		Статус игры:
+		Игра уже началась
+		Игра закончилась
+
+		В Бой!
+		Просмотр демо
+		-->
+	</main>
+	
+	<footer class="footer">
+		<div class="footer-info">
+			Проект был создан:
+			<ul>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			<li>sometext sometext</li>
+			</ul>
+		</div>
+	</footer>
+	
+	
+</body>
+</html>
+
+

@@ -1,0 +1,15 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+	<main class="main centered-box">
+		<section class="table-section">
+			<table class="table">
+				<caption>Таблица лидеров</caption>
+				<tr><th>Имя</th><th>Кол-во побед</th><th>Кол-во игр</th></tr>
+				{% for user in top %}
+                    <tr><td><a href="/target/{{ user['login'] }}">{{ user['name'] }}</a></td><td>{{ user['wins'] }}</td><td>{{ user['played_games'] }}</td></tr>
+                {% endfor %}
+			</table>
+		</section>
+	</main>
+{% endblock %}

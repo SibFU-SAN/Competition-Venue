@@ -1,0 +1,248 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+<main class="main centered-box">
+	<!-- Таблица будет реализована в дальнейшем -->
+	<section class="focus-block game-section">
+		<div class="game-screen-container">
+			<canvas height='400' width='600' id='game_screen' class="game-screen">#</canvas>
+			<div class="game-control">
+				<div class="slide-container">
+					<input type="range" min="0" max="100" value="0" class="slider" id="ReplayRange">
+				</div>
+				<div class="control-buttons">
+					<input type = "button" id="stop" value="Запуск" class="control-btn">
+
+					<div class="replay-setting">
+						<input type="button" id="reverse" value="reverse" class="control-btn">
+						<select id="speed_selection" class="control-btn">
+							<option value="0.5">x0.5</option>
+							<option selected value="1">x1</option>
+							<option value="2">x2</option>
+							<option value="4">x4</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="game-info">
+			<h3>Информация о игре:</h3>
+			<dl>
+				<dt>Кол-во игроков</dt>
+					<dd id="info_number">6</dd>
+				<dt>Размер карты</dt>
+					<dd id="info_map">32x48</dd>
+			</dl>
+			<!--<div>
+				<hr>
+				<h3>Список участиков</h3>
+				<ul>
+					<li>Валера 1</li>
+					<li>Валера 2</li>
+				</ul>
+			</div>-->
+		</div>
+	</section>
+</main>
+
+<script>
+// Данные Зрителя
+const accountHesh = '{{ user_id }}';
+let personalSnakeId = null;
+
+// Данные Игроков: Hesh <=> Name
+//const playersHesh = JSON.parse(``);
+
+// Карта Игры
+const gameReplay = JSON.parse(`{{ demo }}`.replaceAll("&#34;", '"'));
+
+// HTML лементы
+const canvas  = document.getElementById("game_screen");
+const ctx = canvas.getContext('2d');
+
+// Кнопка остановки - запуска
+let gameStopped = true;
+const btnStop  = document.getElementById("stop");
+btnStop.addEventListener("click", stopButtonClick);
+
+
+console.log(gameReplay);
+
+let frameCount = 0;
+let frameStep = 1;
+
+const height = gameReplay.gameSettings.height;
+const width = gameReplay.gameSettings.weight;
+let step_x = Math.floor(canvas.width / width);
+let step_y = Math.floor(canvas.height / height);
+	step_x = Math.min(step_x, step_y);
+	step_y = step_x;
+
+// Прокрутка видео
+let slider = document.getElementById("ReplayRange");
+slider.setAttribute("max", gameReplay.frame.length - 1);
+slider.oninput = function() {
+    frameCount = parseInt(this.value);
+	console.log("set value range", frameCount);
+	drawFrame(frameCount);
+}
+
+// Кнопка reverse
+const reverse = document.getElementById("reverse");
+reverse.addEventListener("click", reverseButtonClick);
+
+function reverseButtonClick() {
+	if (frameStep === 1)
+		reverse.value = "normal";
+	else
+	{
+		reverse.value = "reverse";
+	}
+	frameStep *= -1;
+}
+
+// Скорость
+let speedSelection = document.getElementById("speed_selection");
+
+function stopButtonClick() {
+	if (gameStopped) {
+		btnStop.value = "Остановить";
+	} else {
+		btnStop.value = "Запуск";
+	}
+	gameStopped = !gameStopped;
+}
+
+function drawField() {
+	/* Рисуем поле */
+	ctx.fillStyle = "#ffffff";
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+	// ?
+	ctx.strokeStyle = "#bee5ff";
+	for (let j = step_x; j < canvas.width; j += step_x) {
+		ctx.beginPath();
+		ctx.moveTo(j, 0);
+		ctx.lineTo(j, canvas.height);
+		ctx.closePath();
+		ctx.stroke();
+	}
+	for (let j = step_y; j < canvas.height; j += step_y) {
+		ctx.beginPath();
+		ctx.moveTo(0, j);
+		ctx.lineTo(canvas.width, j);
+		ctx.closePath();
+		ctx.stroke();
+	}
+}
+
+function drawFood(x, y) {
+	/* Рисуем еду */
+	let radius = Math.floor(Math.min(step_x, step_y) / 2);
+	ctx.fillStyle = '#00ff00';
+	ctx.beginPath();
+	ctx.arc((x + 0.5) * step_x, (y + 0.5) * step_y, radius, 0, 2*Math.PI, false);
+	ctx.closePath();
+	ctx.fill();
+}
+
+function drawSnakeElement(x, y) {
+	/* Рисуем элемент тела змейки */
+	ctx.fillRect(x * step_x, y * step_y, step_x, step_y);
+}
+
+function drawSnakeHead(x, y) {
+	/* Рисуем гогову змейки */
+	ctx.fillRect(x * step_x, y * step_y, step_x, step_y);
+
+	let tempColor = ctx.fillStyle;
+	ctx.fillStyle = "#000000";
+
+	ctx.beginPath();
+	let radius = Math.floor(Math.min(step_x, step_y) / 2);
+	ctx.arc((x + 0.5) * step_x, (y + 0.5) * step_y, radius/2, 0, 2*Math.PI, false);
+	ctx.closePath();
+	ctx.fill();
+
+	ctx.fillStyle = tempColor;
+}
+
+function drawSnake(coordinates, isFriend) {
+	/* Рисуем змейку */
+	const friendSnake = '#c7737d';
+	const enemySnake = '#4f4833';
+
+	if (typeof(coordinates[0]) == 'stop')
+		return;
+
+	if (isFriend)
+		ctx.fillStyle = friendSnake;
+	else
+		ctx.fillStyle = enemySnake;
+
+	drawSnakeHead(coordinates[0][0] - 1, coordinates[0][1] - 1)
+	for (let i = 1; i < coordinates.length; i++)
+		drawSnakeElement(coordinates[i][0] - 1, coordinates[i][1] - 1);
+}
+
+
+function drawGame() {
+	/* Отрисовка одного кадра игры */
+	if (gameStopped) return;
+
+	drawFrame(frameCount);
+
+	if ((frameCount === gameReplay.frame.length - 1 && frameStep === 1) ||
+		(frameCount === 0 && frameStep === -1))
+	{
+		stopButtonClick();
+		return;
+	}
+	frameCount += frameStep;
+}
+
+function main() {
+	canvas.width = width * step_x;
+	canvas.height = height * step_y;
+	document.getElementById("info_number").innerHTML = `${Object.keys(gameReplay.players).length}`;
+	document.getElementById("info_map").innerHTML = `${gameReplay.gameSettings.weight}x${gameReplay.gameSettings.height}`;
+
+	// Нахождение нужного id
+	for (let i in gameReplay.players) {
+		if (gameReplay.players[i] === accountHesh)
+			personalSnakeId = i;
+	}
+	console.log("personalSnakeId = ", personalSnakeId);
+
+	drawField();
+	drawFrame(0);
+
+	let timerId  = setTimeout(function timer() {
+		drawGame();
+		timerId  = setTimeout(timer, 500 / parseFloat(speedSelection.value));
+		}, 500 / parseFloat(speedSelection.value));
+}
+
+main();
+
+function drawFrame (numberFrame)
+{
+	let currentFrame = gameReplay.frame[numberFrame];
+	document.getElementById("ReplayRange").value = numberFrame;
+
+	drawField();
+
+	for (let apple of currentFrame.apples)
+		if (apple.length === 2)
+			drawFood(apple[0] - 1, apple[1] - 1);
+		else
+			console.log(`Ошибка. Корд яблока - ${apple}`);
+
+	let isFriend = null;
+	for (let snake in currentFrame.snakes) {
+		isFriend = snake === personalSnakeId;
+		drawSnake(currentFrame.snakes[snake], isFriend);
+	}
+}
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+	<main class="main centered-box">
+		<form method="post" action="#" class="focus-block form-field">
+			<h2>Создание Сессии Игры</h2>
+            <p>
+				<label>Название игры: <input type="text" name="name" id="name" minlength="5" maxlength="32" required></label>
+			</p>
+			<p>
+				<label>Время начала игры: <input type="time" name="start_time" id="start_time" required></label>
+				<input type="date" id="datefield" name="datemax" required>
+			</p>
+			<p>
+				<label>Длительность игры: <input type="number" name="time" id="d" min="5" max="130" step="5" value="5"> (min)</label>
+			</p>
+            <p>
+				<label>Дальность видимости: <input type="number" name="view" id="view" min="1" max="10" step="1" value="1"></label>
+			</p>
+            <p>
+				<label><input type="checkbox" name="hide" id="hide">Скрывать в общем списке комнат</label>
+			</p>
+            <p>
+				<label><input type="checkbox" name="join" id="join">Принять участие</label>
+			</p>
+			<div class="form-menu centered-box">
+				<input type="submit" value="Создать игру" class="form-btn" >
+			</div>
+		</form>
+	</main>
+
+	<script>
+function setMinDate() {
+	let today = new Date();
+
+	let dd = today.getDate();
+	let mm = today.getMonth() + 1;
+	let yyyy = today.getFullYear();
+	if(dd<10){
+		dd = '0' + dd;
+	}
+	if(mm<10){
+		mm = '0' + mm;
+	}
+	let min_date = yyyy + '-' + mm + '-' + dd;
+	document.getElementById("datefield").setAttribute("min", min_date);
+
+  	today.setMonth(today.getMonth() + 1);
+  	dd = today.getDate();
+	mm = today.getMonth() + 1;
+	yyyy = today.getFullYear();
+	if(dd<10){
+		dd = '0' + dd;
+	}
+	if(mm<10){
+		mm = '0' + mm;
+	}
+  	let max_date = yyyy + '-' + mm + '-' + dd;
+  	document.getElementById("datefield").setAttribute("max", max_date);
+}
+
+setMinDate();
+	</script>
+{% endblock %}

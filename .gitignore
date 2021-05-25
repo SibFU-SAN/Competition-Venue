@@ -130,3 +130,12 @@ dmypy.json
 
 # Idea
 .idea/
+
+# Configuration
+*.yml
+
+# Logger
+log.txt
+
+# Other
+resources/

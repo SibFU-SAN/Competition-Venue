@@ -1,0 +1,55 @@
+{% extends "pages/base.html" %}
+
+{% block links %}
+	<link rel="stylesheet" href="{{ url_for("static", filename="static/css/account.css") }}">
+{% endblock %}
+
+{% block content %}
+	<main class="main centered-box">
+		<section>
+			<form method="post" action="#" class="focus-block form-field">
+				<h2>Именение профиля</h2>
+				<div>
+					<!-- TODO: добавить поле для изменения иконки профиля -->
+					<p><label>Аватар <input type="file" name="logo" accept="image/*,image/jpeg"></label></p>
+				</div>
+				<div>
+					<p><label>Имя <input type="text" name="first_name" required value="{{ data['first_name'] }}"></label></p>
+					<p><label>Фамилия <input type="text" name="second_name" required value="{{ data['second_name'] }}"></label></p>
+					<p>
+						<label>Пол
+							<select name="gender">
+                                <option value="-1" {% if 'gender' not in data %} selected {% endif %}>Не выбран</option>
+                                {% for i in range(0, genders.__len__()) %}
+                                    <option value="{{ i }}" {% if 'gender' in data and data['gender'] == i %}selected{% endif %}>{{ genders[i] }}</option>
+                                {% endfor %}
+							</select>
+						</label>
+					</p>
+					<p><label>E-mail <input type="email" name="email" value="{{ data['email'] }}"></label></p>
+				</div>
+				<div>
+					<p>О себе:</p>
+					<p><textarea name="about" maxlength="512">{{ data['about'] }}</textarea></p>
+				</div>
+				<br>
+				<div class="form-menu">
+					<input type="submit" value="Изменить" class="form-btn">
+					<a href="/profile" class="form-btn">Отмена</a>
+				</div>
+			</form>
+
+			<form method="post" action="#" class="focus-block form-field">
+				<h2>Смена пароля</h2>
+
+				<p><label>Пароль <input type="password" name="password" minlength="6" maxlength="32"></label></p>
+				<p><label>Повторите пароль <input type="password" name="confirmation" minlength="6" maxlength="32"></label></p>
+
+				<div class="form-menu centered-box">
+					<input type="submit" value="Изменить" class="form-btn">
+				</div>
+			</form>
+
+		</section>
+	</main>
+{% endblock %}
