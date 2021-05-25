@@ -252,8 +252,7 @@ if __name__ == '__main__':
 
     genders = ('Мужской', 'Женский')
 
-    for path in ("./resources", "./resources/scripts", "./resources/demos",
-                 "./resources/photos", "./resources/tmp"):
+    for path in ("./resources", "./resources/scripts", "./resources/demos", "./resources/photos"):
         if not os.path.exists(path):
             os.mkdir(path)
 
