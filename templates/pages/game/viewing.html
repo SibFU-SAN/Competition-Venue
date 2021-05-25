@@ -80,7 +80,7 @@ let step_y = Math.floor(canvas.height / height);
 
 // Прокрутка видео
 let slider = document.getElementById("ReplayRange");
-slider.setAttribute("max", gameReplay.frame.length - 1);
+slider.setAttribute("max", gameReplay.frames.length - 1);
 slider.oninput = function() {
     frameCount = parseInt(this.value);
 	console.log("set value range", frameCount);
@@ -180,9 +180,26 @@ function drawSnake(coordinates, isFriend) {
 	else
 		ctx.fillStyle = enemySnake;
 
-	drawSnakeHead(coordinates[0][0] - 1, coordinates[0][1] - 1)
-	for (let i = 1; i < coordinates.length; i++)
-		drawSnakeElement(coordinates[i][0] - 1, coordinates[i][1] - 1);
+    // {"test1": [[8, 8], [3, 6]]}
+    let x_min = 0, x_max = 0
+    let y_min = 0, y_max = 0
+
+	for (let i = 0; i < coordinates.length - 1; i++)
+	{
+	    x_min = Math.min(coordinates[i][0], coordinates[i+1][0])
+	    x_max = Math.max(coordinates[i][0], coordinates[i+1][0])
+	    y_min = Math.min(coordinates[i][1], coordinates[i+1][1])
+	    y_max = Math.max(coordinates[i][1], coordinates[i+1][1])
+
+	    for (let x = x_min; x <= x_max; x++)
+            for (let y = y_min; y <= y_max; y++)
+            {
+		        drawSnakeElement(x , gameReplay.gameSettings.height - y - 1);
+		    }
+		//*/
+    }
+    drawSnakeHead(coordinates[0][0], gameReplay.gameSettings.height -  coordinates[0][1] - 1)
+
 }
 
 
@@ -192,9 +209,11 @@ function drawGame() {
 
 	drawFrame(frameCount);
 
-	if ((frameCount === gameReplay.frame.length - 1 && frameStep === 1) ||
+	if ((frameCount === gameReplay.frames.length - 1 && frameStep === 1) ||
 		(frameCount === 0 && frameStep === -1))
 	{
+		if (frameCount === gameReplay.frames.length - 1)
+			frameCount = 0;
 		stopButtonClick();
 		return;
 	}
@@ -227,14 +246,14 @@ main();
 
 function drawFrame (numberFrame)
 {
-	let currentFrame = gameReplay.frame[numberFrame];
+	let currentFrame = gameReplay.frames[numberFrame];
 	document.getElementById("ReplayRange").value = numberFrame;
 
 	drawField();
 
 	for (let apple of currentFrame.apples)
 		if (apple.length === 2)
-			drawFood(apple[0] - 1, apple[1] - 1);
+			drawFood(apple[0], gameReplay.gameSettings.height - apple[1] - 1);
 		else
 			console.log(`Ошибка. Корд яблока - ${apple}`);
 
