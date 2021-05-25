@@ -155,11 +155,11 @@ function drawSnake(coordinates, isFriend) {
 	    for (let x = x_min; x <= x_max; x++)
             for (let y = y_min; y <= y_max; y++)
             {
-		        drawSnakeElement(x , y);
+		        drawSnakeElement(x , gameReplay.gameSettings.height - y - 1);
 		    }
 		//*/
     }
-    drawSnakeHead(coordinates[0][0], coordinates[0][1])
+    drawSnakeHead(coordinates[0][0], gameReplay.gameSettings.height -  coordinates[0][1] - 1)
 
 }
 
@@ -214,7 +214,7 @@ function drawFrame (numberFrame)
 
 	for (let apple of currentFrame.apples)
 		if (apple.length === 2)
-			drawFood(apple[0] - 1, apple[1] - 1);
+			drawFood(apple[0], gameReplay.gameSettings.height - apple[1] - 1);
 		else
 			console.log(`Ошибка. Корд яблока - ${apple}`);
 
