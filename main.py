@@ -87,9 +87,11 @@ def game_editor_page():
 
     game_data = database.db_get_game_data(game_id)
 
+    # TODO: Сделать перенаправление пользователя, если игра еще не началась
+    """
     if game_data['start_time'] > time.time():
-        # TODO: Сделать перенаправление пользователя, если игра еще не началась
         return flask.redirect("", 302)
+    """
 
     response = flask.request.form
     code = response['game_code'] if len(response) != 0 else account_methods.read_script(game_id, user_id)
@@ -99,10 +101,13 @@ def game_editor_page():
     return flask.render_template("pages/game/editor.html", auth=True, game_data=game_data, dt=datetime, code=code)
 
 
-@app.route("/game/demo")
+@app.route("/game/demo", methods=["POST", "GET"])
 @account_methods.authorize_require
 def demos_list_page():
-    return flask.render_template("pages/game/demos.html", auth=True, games=database.db_get_demos_list())
+    response = flask.request.form
+    if len(response) == 0:
+        return flask.render_template("pages/game/demos.html", auth=True, games=database.db_get_demos_list())
+    return flask.redirect(f"/game/demo/{response['game_id']}", 302)
 
 
 @app.route("/game/demo/<game_id>", methods=["POST", "GET"])
