@@ -1,4 +1,6 @@
 import hashlib
+import json
+
 import flask
 import modules.database as db
 import os
@@ -64,3 +66,8 @@ def load_demo(game_id: str) -> str or None:
         return None
     with open(f'./resources/demos/{game_id}', 'r') as file:
         return file.read()
+
+
+def save_demo(game_id: str, demo: dict) -> None:
+    with open(f'./resources/demos/{game_id}', 'w') as file:
+        file.write(json.JSONEncoder.encode(demo))
