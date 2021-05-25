@@ -53,7 +53,7 @@ def game_create_page():
         owner_hash=user_id,
         add_self=add_self,
         name=data['name'],
-        map_size=100,
+        map_size=50,
         start_time=int(unix_time.timestamp()),
         private=('hide' in data and data['hide'] == 'on'),
         view_distance=int(data['view']),
