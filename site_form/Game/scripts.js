@@ -1,31 +1,21 @@
 // Данные Зрителя
-const accountHesh = 1;
+const accountHesh = '{{ user_id }}';
 let personalSnakeId = null;
 
 // Данные Игроков: Hesh <=> Name
 //const playersHesh = JSON.parse(``);
 
 // Карта Игры
-const gameReplay = JSON.parse(`
-	{
-		"players": {
-			"29437191": 1,
-			"77539713": 0
-			},
-		"gameSettings": {
-			"height": 50,
-			"weight": 100
-			},
-		"frames": [
-			{ "apples": [ [ 7, 2 ], [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 4, 3 ], [ 3, 3 ] ], "77539713": [ [ 4, 4 ], [ 4, 5 ] ] } },
-			{ "apples": [ [ 7, 2 ], [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 5, 3 ], [ 4, 3 ] ], "77539713": [ "stop" ] } },
-			{ "apples": [ [ 7, 2 ], [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 6, 3 ], [ 5, 3 ] ], "77539713": [ "stop" ] } },
-			{ "apples": [ [ 7, 2 ], [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 7, 3 ], [ 6, 3 ] ], "77539713": [ "stop" ] } },
-			{ "apples": [ [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 7, 2 ], [ 7, 3 ] ], "77539713": [ "stop" ] } },
-			{ "apples": [ [ 2, 2 ], [ 2, 7 ], [ 7, 7 ] ], "snakes": { "29437191": [ [ 6, 2 ], [ 7, 2 ], [ 7, 3 ] ], "77539713": [ "stop" ] } }
-			]
-	}
-`);
+const gameReplay = JSON.parse(`{"players": [],
+"gameSettings": {"height": 10, "weight": 10},
+"frames":
+    [{"snakes": {"test1": [[8, 7], [2, 5]]},"apples": []},
+    {"snakes": {"test1": [[8, 8], [3, 6]]}, "apples": [[0, 2], [9, 6], [0, 6]]},
+    {"snakes": {"test1": [[7, 8], [4, 7]]}, "apples": [[0, 2], [9, 6], [0, 6]]},
+    {"snakes": {"test1": [[7, 7], [5, 7]]}, "apples": [[0, 2], [9, 6], [0, 6]]},
+    {"snakes": {"test1": [[8, 7], [6, 7]]}, "apples": [[0, 2], [9, 6], [0, 6]]},
+    {"snakes": {"test1": [[8, 8], [7, 8]]}, "apples": [[0, 2], [9, 6], [0, 6]]},
+    {"snakes": {}, "apples": [[0, 2], [9, 6], [0, 6]]}]}`.replaceAll("&#34;", '"'));
 
 // HTML лементы
 const canvas  = document.getElementById("game_screen");
@@ -63,7 +53,7 @@ const reverse = document.getElementById("reverse");
 reverse.addEventListener("click", reverseButtonClick);
 
 function reverseButtonClick() {
-	if (frameStep == 1)
+	if (frameStep === 1)
 		reverse.value = "normal";
 	else
 	{
@@ -151,21 +141,40 @@ function drawSnake(coordinates, isFriend) {
 	else
 		ctx.fillStyle = enemySnake;
 
-	drawSnakeHead(coordinates[0][0] - 1, coordinates[0][1] - 1)
-	for (let i = 1; i < coordinates.length; i++)
-		drawSnakeElement(coordinates[i][0] - 1, coordinates[i][1] - 1);
+    // {"test1": [[8, 8], [3, 6]]}
+    let x_min = 0, x_max = 0
+    let y_min = 0, y_max = 0
+
+	for (let i = 0; i < coordinates.length - 1; i++)
+	{
+	    x_min = Math.min(coordinates[i][0], coordinates[i+1][0])
+	    x_max = Math.max(coordinates[i][0], coordinates[i+1][0])
+	    y_min = Math.min(coordinates[i][1], coordinates[i+1][1])
+	    y_max = Math.max(coordinates[i][1], coordinates[i+1][1])
+	 
+	    for (let x = x_min; x <= x_max; x++)
+            for (let y = y_min; y <= y_max; y++)
+            {
+		        drawSnakeElement(x , y);
+		    }
+		//*/
+    }
+    drawSnakeHead(coordinates[0][0], coordinates[0][1])
+
 }
 
 
 function drawGame() {
 	/* Отрисовка одного кадра игры */
 	if (gameStopped) return;
-	
+
 	drawFrame(frameCount);
-	
-	if ((frameCount == gameReplay.frames.length - 1 && frameStep == 1) || 
-		(frameCount == 0 && frameStep == -1))
+
+	if ((frameCount === gameReplay.frames.length - 1 && frameStep === 1) ||
+		(frameCount === 0 && frameStep === -1))
 	{
+		if (frameCount === gameReplay.frames.length - 1)
+			frameCount = 0;
 		stopButtonClick();
 		return;
 	}
@@ -180,14 +189,14 @@ function main() {
 
 	// Нахождение нужного id
 	for (let i in gameReplay.players) {
-		if (gameReplay.players[i] == accountHesh)
+		if (gameReplay.players[i] === accountHesh)
 			personalSnakeId = i;
 	}
 	console.log("personalSnakeId = ", personalSnakeId);
 
 	drawField();
 	drawFrame(0);
-	
+
 	let timerId  = setTimeout(function timer() {
 		drawGame();
 		timerId  = setTimeout(timer, 500 / parseFloat(speedSelection.value));
@@ -204,17 +213,14 @@ function drawFrame (numberFrame)
 	drawField();
 
 	for (let apple of currentFrame.apples)
-		if (apple.length = 2)
+		if (apple.length === 2)
 			drawFood(apple[0] - 1, apple[1] - 1);
 		else
 			console.log(`Ошибка. Корд яблока - ${apple}`);
 
 	let isFriend = null;
 	for (let snake in currentFrame.snakes) {
-		if (snake == personalSnakeId)
-			isFriend = true;
-		else
-			isFriend = false;
+		isFriend = snake === personalSnakeId;
 		drawSnake(currentFrame.snakes[snake], isFriend);
 	}
 }
