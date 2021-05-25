@@ -10,8 +10,8 @@
 			<form method="post" action="#" class="form-field" id="form">
 				<h2>Поиск демо по ID</h2>
 				<div class="form-menu">
-					<label>Id Игры <input type="text" name="game_id" id="game_id" required></label>
-					<input type="submit" value="Найти" class="form-btn">
+					<label>Id Игры <input type="text" name="game_id" id="game_id" required style="width: 240px;"></label>
+					<input type="submit" value="Найти" class="form-btn" style="margin-left: auto;">
 				</div>
 			</form>
 
@@ -22,7 +22,7 @@
 					<div class="session">
 						<div class="session-head">
 							<h3><span>{{ game['name'] }}</span></h3>
-                            <a href="/game/demo/{{ game['id'] }}" class="btn">Смотреть</a>
+                            <a href="/game/demo/{{ game['id'] }}" class="btn" style="margin-left: auto;">Смотреть</a>
 						</div>
 						<div class="session-info">
 							<ul>
