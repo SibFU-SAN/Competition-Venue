@@ -1,12 +1,12 @@
 // Данные Зрителя
-const accountHesh = '{{ user_id }}';
-let personalSnakeId = null;
+const accountHesh = 'test1';
+let personalSnakeId = accountHesh;
 
 // Данные Игроков: Hesh <=> Name
 //const playersHesh = JSON.parse(``);
 
 // Карта Игры
-const gameReplay = JSON.parse(`{"players": [],
+const gameReplay = JSON.parse(`{"players": ["test1", "das"],
 "gameSettings": {"height": 10, "weight": 10},
 "frames":
     [{"snakes": {"test1": [[8, 7], [2, 5]]},"apples": []},
@@ -187,11 +187,6 @@ function main() {
 	document.getElementById("info_number").innerHTML = `${Object.keys(gameReplay.players).length}`;
 	document.getElementById("info_map").innerHTML = `${gameReplay.gameSettings.weight}x${gameReplay.gameSettings.height}`;
 
-	// Нахождение нужного id
-	for (let i in gameReplay.players) {
-		if (gameReplay.players[i] === accountHesh)
-			personalSnakeId = i;
-	}
 	console.log("personalSnakeId = ", personalSnakeId);
 
 	drawField();
