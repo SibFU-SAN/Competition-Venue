@@ -377,7 +377,7 @@ def db_get_demos_list() -> list:
         demos.append({
             'id': game['_id'],
             'name': game['name'],
-            'best_player': game['result']['best_player'],
+            'best_player': db_get_name(game['result']['best_player']),
             'end_time': datetime.datetime.utcfromtimestamp(game['end_time']).strftime('%d.%m.%Y %H:%M')
         })
 

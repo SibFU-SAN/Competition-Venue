@@ -1,4 +1,3 @@
-import json
 from json import encoder
 from modules import game_starter, database
 from random import randint, choice
@@ -220,6 +219,7 @@ class Snake:
         self.alive = True
         self.world = world
         self.score = 0
+        self.memory = dict()
 
         vector = get_direction_vector(direction)
         self.head.next = Point(x_spawn + vector[0] * 2, y_spawn + vector[1] * 2)
@@ -232,7 +232,27 @@ class Snake:
             'check_forward': lambda: self.check_forward(),
             'check_right': lambda: self.check_right(),
             'check_left': lambda: self.check_left(),
+            'put_memory': lambda address, value: self.put_memory(address, value),
+            'get_memory': lambda address: self.get_memory(address),
+            'contains_memory': lambda address: self.get_memory(address),
         }
+
+    def put_memory(self, address: str, value: int) -> bool:
+        if len(self.memory.values()) > 3:
+            return False
+        if type(value) != int:
+            return False
+
+        self.memory[address] = value
+        return True
+
+    def get_memory(self, address: str) -> int or None:
+        if address in self.memory:
+            return self.memory[address]
+        return False
+
+    def contains_memory(self, address: str) -> bool:
+        return address in self.memory
 
     def check_forward(self) -> int:
         direction = get_direction_vector(self.head.direction)
