@@ -127,11 +127,6 @@ def name_top_page():
                                  top=database.db_get_top_players())
 
 
-@app.route("/help/guide")
-def info_guide_page():
-    return flask.render_template("pages/info/guide.html", auth=account_methods.is_authorized())
-
-
 @app.route("/profile", methods=["POST", "GET"])
 @account_methods.authorize_require
 def profile_page():
