@@ -165,7 +165,7 @@ def multi(info, map_1, num, it_count, _hash):
             else:
                 except_list.append(new_players_info[us])
         first_scene['frame'].append(copy.deepcopy(list_for_sasha))
-    with open(f"../snake/resources/demos/{game_hash}", "w", encoding="utf-8") as file:
+    with open(f"./resources/demos/{game_hash}", "w", encoding="utf-8") as file:
         json.dump(first_scene, file, indent=2)
 
     return score

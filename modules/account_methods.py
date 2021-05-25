@@ -45,7 +45,7 @@ def save_script(game_id: str, user_id: str, script: str):
     if not os.path.exists(f"./resources/scripts/{game_id}"):
         os.mkdir(f"./resources/scripts/{game_id}")
 
-    with open(f'./resources/scripts/{game_id}/{user_id}.py', 'w') as file:
+    with open(f'./resources/scripts/{game_id}/{user_id}.py', 'w', encoding="utf-8") as file:
         file.write(script)
 
 
@@ -55,7 +55,7 @@ def read_script(game_id: str, user_id: str) -> str:
     if not os.path.exists(f"./resources/scripts/{game_id}/{user_id}.py"):
         return ""
 
-    with open(f'./resources/scripts/{game_id}/{user_id}.py', 'r') as file:
+    with open(f'./resources/scripts/{game_id}/{user_id}.py', 'r', encoding="utf-8") as file:
         return file.read()
 
 
