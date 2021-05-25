@@ -56,6 +56,8 @@ let personalSnakeId = accountHesh;
 // Карта Игры
 const gameReplay = JSON.parse(`{{ demo }}`.replaceAll("&#34;", '"'));
 
+let PlayersColors = new Map();;
+
 // HTML лементы
 const canvas  = document.getElementById("game_screen");
 const ctx = canvas.getContext('2d');
@@ -70,6 +72,9 @@ console.log(gameReplay);
 
 let frameCount = 0;
 let frameStep = 1;
+let friendSnake = '#c7737d';
+let enemySnake = '#4f4833';
+
 
 const height = gameReplay.gameSettings.height;
 const width = gameReplay.gameSettings.weight;
@@ -167,18 +172,10 @@ function drawSnakeHead(x, y) {
 	ctx.fillStyle = tempColor;
 }
 
-function drawSnake(coordinates, isFriend) {
+function drawSnake(coordinates) {
 	/* Рисуем змейку */
-	const friendSnake = '#c7737d';
-	const enemySnake = '#4f4833';
-
 	if (typeof(coordinates[0]) == 'stop')
 		return;
-
-	if (isFriend)
-		ctx.fillStyle = friendSnake;
-	else
-		ctx.fillStyle = enemySnake;
 
     // {"test1": [[8, 8], [3, 6]]}
     let x_min = 0, x_max = 0
@@ -196,7 +193,6 @@ function drawSnake(coordinates, isFriend) {
             {
 		        drawSnakeElement(x , gameReplay.gameSettings.height - y - 1);
 		    }
-		//*/
     }
     drawSnakeHead(coordinates[0][0], gameReplay.gameSettings.height -  coordinates[0][1] - 1)
 
@@ -209,14 +205,16 @@ function drawGame() {
 
 	drawFrame(frameCount);
 
-	if ((frameCount === gameReplay.frames.length - 1 && frameStep === 1) ||
-		(frameCount === 0 && frameStep === -1))
+	if ((frameCount == gameReplay.frames.length - 1 && frameStep == 1) ||
+		(frameCount == 0 && frameStep == -1))
 	{
-		if (frameCount === gameReplay.frames.length - 1)
+		if (gameStopped == false && (frameCount == gameReplay.frames.length - 1 && frameStep == 1))
 			frameCount = 0;
+		console.log("end");
 		stopButtonClick();
 		return;
 	}
+
 	frameCount += frameStep;
 }
 
@@ -226,7 +224,11 @@ function main() {
 	document.getElementById("info_number").innerHTML = `${Object.keys(gameReplay.players).length}`;
 	document.getElementById("info_map").innerHTML = `${gameReplay.gameSettings.weight}x${gameReplay.gameSettings.height}`;
 
-	console.log("personalSnakeId = ", personalSnakeId);
+	for (let i of gameReplay.players)
+	{
+		if (i != personalSnakeId)
+			PlayersColors.set(i, randColor());
+	}
 
 	drawField();
 	drawFrame(0);
@@ -253,10 +255,26 @@ function drawFrame (numberFrame)
 			console.log(`Ошибка. Корд яблока - ${apple}`);
 
 	let isFriend = null;
-	for (let snake in currentFrame.snakes) {
+	for (let snake in currentFrame.snakes)
+	{
 		isFriend = snake === personalSnakeId;
-		drawSnake(currentFrame.snakes[snake], isFriend);
+
+		if (isFriend)
+			ctx.fillStyle = friendSnake;
+		else
+			ctx.fillStyle = PlayersColors.get(snake);
+		drawSnake(currentFrame.snakes[snake]);
 	}
+}
+
+function randColor() {
+	const max = 256,
+		  min = 128;
+
+    var r = Math.floor(Math.random() * (max - min - 10) + min),
+        g = Math.floor(Math.random() * (max - min - 10) + min),
+        b = Math.floor(Math.random() * (max - min - 10) + min);
+    return '#' + r.toString(16) + g.toString(16) + b.toString(16);
 }
 </script>
 {% endblock %}
