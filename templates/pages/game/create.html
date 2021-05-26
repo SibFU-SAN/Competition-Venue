@@ -2,7 +2,7 @@
 
 {% block content %}
 	<main class="main centered-box">
-		<form method="post" action="#" class="focus-block form-field">
+		<form method="post" action="#" class="focus-block form-field" id="form">
 			<h2>Создание Сессии Игры</h2>
             <p>
 				<label>Название игры: <input type="text" name="name" id="name" minlength="5" maxlength="32" required></label>
@@ -24,12 +24,32 @@
 				<label><input type="checkbox" name="join" id="join">Принять участие</label>
 			</p>
 			<div class="form-menu centered-box">
-				<input type="submit" value="Создать игру" class="form-btn" >
+				<input type="button" value="Создать игру" class="form-btn" id="submit_form">
 			</div>
+			<input name="server_time" id="server_time" type="text" style="display: none;">
+			<input name="local_time" id="local_time" type="text" style="display: none;">
+			<input name="delta_time" id="delta_time" type="text" style="display: none;">
 		</form>
 	</main>
 
 	<script>
+const serverTime = 123321;
+
+const btn  = document.getElementById("submit_form");
+btn.addEventListener("click", submitTimeField);
+
+function submitTimeField()
+{
+	let today = new Date();
+	document.getElementById("server_time").innerHTML  = String(serverTime);
+	document.getElementById("local_time").innerHTML  = String(today.getTime());
+	document.getElementById("delta_time").innerHTML  = String(today.getTime() - serverTime);
+	let form = document.getElementById("form");
+	form.submit();
+}
+
+
+
 function setMinDate() {
 	let today = new Date();
 
