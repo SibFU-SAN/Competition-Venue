@@ -28,7 +28,7 @@
 					<li>Режим: Змейка</li>
 					<li>Число игроков: {{ game_data['players'] }}</li>
                     <li>Дальность видимости: {{ game_data['view_distance'] }}</li>
-                    <li>Окончание игры: {{ dt.datetime.utcfromtimestamp(game_data['end_time']).strftime('%H:%M:%S') }}</li>
+                    <li>Окончание игры: <span id="my_timer" style="color: #f00; font-weight: bold;">01:00:00</span></li>
 				</ul>
 			</p>
 
@@ -42,6 +42,11 @@
 		</form>
 
 		<script type="text/javascript">
+
+const timer_id_ = "my_timer";
+setTime(timer_id_, 1000); // TODO: Вставь сюда!!!
+
+
 			var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('code'), {
 				mode: {name: "python",
 					   version: 3,
@@ -62,6 +67,59 @@
 				myCodeMirror.setValue("");
 				myCodeMirror.clearHistory()
 			})
+
+
+// <p><span id="my_timer" style="color: #f00; font-weight: bold;">01:00:00</span></p>
+
+function setTime(timer_id, timerContent) {
+	var my_timer = document.getElementById(timer_id);
+	var some_time = new Date(timerContent);
+
+	var h = String(some_time.getHours());
+	var m = String(some_time.getMinutes());
+	var s = String(some_time.getSeconds());
+
+	if (h.length == 1)
+		h = '0' + h;
+
+	if (m.length == 1)
+		m = '0' + m;
+
+	if (s.length == 1)
+		s = '0' + s;
+
+	var str_date = String(h + ":" + m + ":" + s);
+    document.getElementById(timer_id).innerHTML = str_date;
+	startTimer();
+}
+
+function startTimer() {
+    var my_timer = document.getElementById(timer_id_);
+    var time = my_timer.innerHTML;
+    var arr = time.split(":");
+    var h = arr[0];
+    var m = arr[1];
+    var s = arr[2];
+    if (s == 0) {
+      if (m == 0) {
+        if (h == 0) {
+          alert("Время вышло");
+          window.location.reload();
+          return;
+        }
+        h--;
+        m = 60;
+        if (h < 10) h = "0" + h;
+      }
+      m--;
+      if (m < 10) m = "0" + m;
+      s = 59;
+    }
+    else s--;
+    if (s < 10) s = "0" + s;
+    document.getElementById(timer_id_).innerHTML = h+":"+m+":"+s;
+    setTimeout(startTimer, 1000);
+}
 		</script>
 	</main>
 {% endblock %}
