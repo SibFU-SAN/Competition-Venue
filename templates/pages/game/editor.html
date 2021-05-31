@@ -42,8 +42,10 @@
 
 		<script type="text/javascript">
 
-const timer_id_ = "my_timer";
-setTime(timer_id_, 1000); // TODO: Вставь сюда!!!
+const timerTimeS = 36000; // Это 36 секунд TODO: Вставь сюда!!!
+let timerId = "my_timer";
+
+setTimer(timerTimeS, timerId);
 
 
 			var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('code'), {
@@ -68,13 +70,30 @@ setTime(timer_id_, 1000); // TODO: Вставь сюда!!!
 			})
 
 
-// <p><span id="my_timer" style="color: #f00; font-weight: bold;">01:00:00</span></p>
+// <p><span id="my_timer" style="color: #f00; font-weight: bold;">00:00:00</span></p>
 
-function setTime(timer_id, timerContent) {
-	var my_timer = document.getElementById(timer_id);
+function setTimer(timerTime, timerName)
+{
+	i = timerTime;
+
+	let timer = setTimeout(function tick() {
+		i -= 1000;
+
+		updateTimerText(i, timerName);
+		if (i != 0)
+			timer = setTimeout(tick, 1000);
+		else
+		{
+			console.log("end");
+			window.location.reload();
+		}
+	}, 1000);
+}
+
+function updateTimerText(timerContent, html_id) {
 	var some_time = new Date(timerContent);
 
-	var h = String(some_time.getHours());
+	var h = String(some_time.getHours() - 7);
 	var m = String(some_time.getMinutes());
 	var s = String(some_time.getSeconds());
 
@@ -88,36 +107,9 @@ function setTime(timer_id, timerContent) {
 		s = '0' + s;
 
 	var str_date = String(h + ":" + m + ":" + s);
-    document.getElementById(timer_id).innerHTML = str_date;
-	startTimer();
-}
+    document.getElementById(html_id).innerHTML = str_date;
 
-function startTimer() {
-    var my_timer = document.getElementById(timer_id_);
-    var time = my_timer.innerHTML;
-    var arr = time.split(":");
-    var h = arr[0];
-    var m = arr[1];
-    var s = arr[2];
-    if (s == 0) {
-      if (m == 0) {
-        if (h == 0) {
-          alert("Время вышло");
-          window.location.reload();
-          return;
-        }
-        h--;
-        m = 60;
-        if (h < 10) h = "0" + h;
-      }
-      m--;
-      if (m < 10) m = "0" + m;
-      s = 59;
-    }
-    else s--;
-    if (s < 10) s = "0" + s;
-    document.getElementById(timer_id_).innerHTML = h+":"+m+":"+s;
-    setTimeout(startTimer, 1000);
+	console.log(timerContent, html_id, some_time, str_date);
 }
 		</script>
 	</main>
