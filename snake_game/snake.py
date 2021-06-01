@@ -359,33 +359,56 @@ class Game:
         scores = dict()
         for snake in self.world.snakes:
             scores[snake.id] = snake.score
-        database.db_end_game(self.game_id, scores)
+        # database.db_end_game(self.game_id, scores)
 
 
 if __name__ == '__main__':
-    game = Game("123", ['test1', 'test2'], 50, 40, 5)
-    game.start({
-        "test1": """
-if check_forward() == 1:
-    if check_right() != 1:
-        turn_right()
-    else:
-        turn_left()
+    players = [f"test{i}" for i in range(100)]
+    game = Game("123", players, 120, 100, 5)
+    codes = ["""
+if not contains_memory('right'):
+    put_memory('right', 0)
 
-        """,
-        "test2": """
 if check_forward() == 1:
-    if check_right() != 1:
+    if get_memory('right') == 1 and check_right() != 1:
         turn_right()
-    else:
+    elif check_left() != 1: 
         turn_left()
+    else:
+        turn_right()
 
-if check_left() == 2:
+if get_memory('right') == 1 and check_left() == 2 or check_right() == 1 and check_left() == 2:
+    put_memory('right', 0)
     turn_left()
 elif check_right() == 2:
+    put_memory('right', 1)
     turn_right()
-            """
-    })
+            """,
+             """
+if check_forward() == 1:
+    if check_right() != 1:
+        turn_right()
+    else: 
+        turn_left()
+             """,
+             """
+if check_forward() == 1:
+    if check_right() != 1:
+        turn_right()
+    else: 
+        turn_left() 
+
+if check_left() == 2:
+    turn_left() 
+elif check_right() == 2:
+    turn_right()
+             """]
+
+    scripts = dict()
+    for player in players:
+        scripts[player] = codes[randint(0, len(codes) - 1)]
+
+    game.start(scripts)
     print(game.world.tick)
     with open(f"./test/demo.json", 'w') as file:
         file.write(encoder.JSONEncoder().encode(game.world.demo))
