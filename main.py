@@ -17,6 +17,57 @@ app = flask.Flask(__name__,
                   template_folder="./templates/"
                   )
 
+# Логгер
+logger = logging.getLogger("main")
+logger.setLevel(logging.INFO)
+logger_handler = logging.FileHandler('log.txt')
+logger_handler.setLevel(logging.INFO)
+logger_formatter = logging.Formatter('%(asctime)s | [%(levelname)s][%(name)s] %(message)s')
+logger_handler.setFormatter(logger_formatter)
+logger.addHandler(logger_handler)
+sys.excepthook = lambda ex_type, ex_value, tb: \
+    logger.error("Logging an uncaught exception",
+                 exc_info=(ex_type, ex_value, tb))
+logger.info("Запуск программы")
+
+# Подключение к базе данных
+db_options = {}
+try:
+    with open("database.yml", 'r') as file:
+        db_options = yaml.load(file.read(), Loader=yaml.FullLoader)
+except FileNotFoundError:
+    logger.warning("Не найден файл с данными для подключения к базе данных. Создаю новый")
+with open("database.yml", 'w') as file:
+    if 'host' not in db_options:
+        db_options['host'] = "localhost"
+    if 'port' not in db_options:
+        db_options['port'] = "27017"
+    if 'base' not in db_options:
+        db_options['base'] = "test"
+    if 'auth' not in db_options:
+        db_options['auth'] = False
+    if 'user' not in db_options:
+        db_options['user'] = "userName"
+    if 'password' not in db_options:
+        db_options['password'] = "1234567890"
+    if 'auth_base' not in db_options:
+        db_options['auth_base'] = "admin"
+    file.write(yaml.dump(db_options))
+database.connect(**db_options)
+
+genders = ('Мужской', 'Женский')
+
+# Создание папок с контентом
+for path in ("./resources", "./resources/scripts", "./resources/demos", "./resources/photos"):
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+# Старт обработчика игр
+handler = GameHandler(logger.getChild("GameHandler"))
+handler.start()
+
+logger.info("Запуск веб-сервера")
+
 
 @app.route("/")
 def index_page():
@@ -212,52 +263,4 @@ def err404_page():
 
 
 if __name__ == '__main__':
-    logger = logging.getLogger("main")
-    logger.setLevel(logging.INFO)
-    logger_handler = logging.FileHandler('log.txt')
-    logger_handler.setLevel(logging.INFO)
-    logger_formatter = logging.Formatter('%(asctime)s | [%(levelname)s][%(name)s] %(message)s')
-    logger_handler.setFormatter(logger_formatter)
-    logger.addHandler(logger_handler)
-
-    sys.excepthook = lambda ex_type, ex_value, tb: \
-        logger.error("Logging an uncaught exception",
-                     exc_info=(ex_type, ex_value, tb))
-    logger.info("Запуск программы")
-
-    db_options = {}
-    try:
-        with open("database.yml", 'r') as file:
-            db_options = yaml.load(file.read(), Loader=yaml.FullLoader)
-    except FileNotFoundError:
-        logger.warning("Не найден файл с данными для подключения к базе данных. Создаю новый")
-
-    with open("database.yml", 'w') as file:
-        if 'host' not in db_options:
-            db_options['host'] = "localhost"
-        if 'port' not in db_options:
-            db_options['port'] = "27017"
-        if 'base' not in db_options:
-            db_options['base'] = "test"
-        if 'auth' not in db_options:
-            db_options['auth'] = False
-        if 'user' not in db_options:
-            db_options['user'] = "userName"
-        if 'password' not in db_options:
-            db_options['password'] = "1234567890"
-        if 'auth_base' not in db_options:
-            db_options['auth_base'] = "admin"
-        file.write(yaml.dump(db_options))
-    database.connect(**db_options)
-
-    genders = ('Мужской', 'Женский')
-
-    for path in ("./resources", "./resources/scripts", "./resources/demos", "./resources/photos"):
-        if not os.path.exists(path):
-            os.mkdir(path)
-
-    handler = GameHandler(logger.getChild("GameHandler"))
-    handler.start()
-
-    logger.info("Запуск веб-сервера")
     app.run()
