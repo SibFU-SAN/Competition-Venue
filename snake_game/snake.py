@@ -1,6 +1,7 @@
 from json import encoder
 from modules import game_starter, database
 from random import randint, choice
+from copy import deepcopy
 
 VECTOR_UP = (0, 1)
 VECTOR_DOWN = (0, -1)
@@ -121,6 +122,10 @@ class World:
 
         # Обработка движений
         damaged = self.tick % 20 == 19
+        # Сделать, если не нужен голод
+        "--------------------------------------------------"
+        damaged = 1
+        "--------------------------------------------------"
         for snake in self.snakes:
             if not snake.alive:
                 continue
@@ -139,10 +144,26 @@ class World:
             while el is not None:
                 temp.append((el.x, el.y))
                 el = el.next
-
+            # Переспавн в яблоки
+            #---------------------------------------
             if snake.is_collided():
-                snake.alive = False
-
+                for snaky in self.snakes:
+                    el = snaky.head
+                    while el.next is not None:
+                        tmp = deepcopy(el)
+                        while (tmp.x != el.next.x) or (tmp.y != el.next.y):
+                            if el.x > el.next.x:
+                                tmp.x -= 1
+                            elif el.x < el.next.x:
+                                tmp.x += 1
+                            elif el.y > el.next.y:
+                                tmp.y -= 1
+                            elif el.y < el.next.y:
+                                tmp.y += 1
+                            self.apples.add((tmp.x, tmp.y))
+                        el = el.next
+                    snake.alive = False
+        #---------------------------------------------
         # Запись демки
         for snake in self.snakes:
             if not snake.alive:
@@ -324,8 +345,11 @@ class Snake:
                 if eaten and i == 0:
                     continue
                 direction = pre_last.get_next_el_vector()
+                #Убрать это при режиме без уменьшения хвоста
+                #-------------------------------------------
                 last.x -= direction[0]
                 last.y -= direction[1]
+                #-------------------------------------------
 
         if self.head.next is None or get_distance(self.head, self.head.next) == 0:
             self.alive = False
@@ -363,7 +387,7 @@ class Game:
 
 
 if __name__ == '__main__':
-    players = [f"test{i}" for i in range(100)]
+    players = [f"test{i}" for i in range(10)]
     game = Game("123", players, 120, 100, 5)
     codes = ["""
 if not contains_memory('right'):
@@ -410,5 +434,5 @@ elif check_right() == 2:
 
     game.start(scripts)
     print(game.world.tick)
-    with open(f"./test/demo.json", 'w') as file:
+    with open(f"demo.json", 'w') as file:
         file.write(encoder.JSONEncoder().encode(game.world.demo))
