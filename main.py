@@ -2,14 +2,14 @@ import sys
 import os
 import logging
 import datetime
-import time
 
 import flask
+from flaskext.mysql import MySQL
 import yaml
 
 from json.encoder import JSONEncoder
 from modules import methods, account_methods, database
-from modules.game_handler import GameHandler
+from snake.handler import GameHandler
 
 json_encoder = JSONEncoder()
 app = flask.Flask(__name__,
@@ -40,19 +40,21 @@ except FileNotFoundError:
 with open("database.yml", 'w') as file:
     if 'host' not in db_options:
         db_options['host'] = "localhost"
-    if 'port' not in db_options:
-        db_options['port'] = "27017"
     if 'base' not in db_options:
         db_options['base'] = "test"
-    if 'auth' not in db_options:
-        db_options['auth'] = False
     if 'user' not in db_options:
-        db_options['user'] = "userName"
+        db_options['user'] = "root"
     if 'password' not in db_options:
         db_options['password'] = "1234567890"
-    if 'auth_base' not in db_options:
-        db_options['auth_base'] = "admin"
     file.write(yaml.dump(db_options))
+
+mysql = MySQL()
+app.config['MYSQL_DATABASE_USER'] = db_options['user']
+app.config['MYSQL_DATABASE_PASSWORD'] = db_options['password']
+app.config['MYSQL_DATABASE_DB'] = db_options['base']
+app.config['MYSQL_DATABASE_HOST'] = db_options['host']
+mysql.init_app(app)
+
 database.connect(**db_options)
 
 genders = ('Мужской', 'Женский')
