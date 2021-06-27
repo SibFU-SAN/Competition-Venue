@@ -3,16 +3,9 @@ import re
 import time
 import os
 import hashlib
-import pymongo
+from main import mysql
 
-
-def connect(host: str, port: str, base: str, auth: bool, user: str, password: str, auth_base: str):
-    global db
-
-    db = pymongo.MongoClient(f"{host}:{port}")[base]
-    if auth:
-        db.authenticate(user, password, auth_base)
-
+# TODO: Переписать все
 
 def generate_token(login: str, password: str) -> str:
     return hashlib.md5("{}{}".format(login.lower(), password).encode()).hexdigest()
