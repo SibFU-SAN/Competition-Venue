@@ -2,7 +2,7 @@
 <html lang="ru">
 <head> <!-- Этот файл шаблон -->
 	<meta charset="UTF-8">
-	<title>Соревновательная Площадка</title>
+	<title>PySnake</title>
 	<link rel="stylesheet" href="{{ url_for("static", filename="static/css/styles.css") }}">
 	<link rel="icon" href="{{ url_for("static", filename="static/images/logo.png") }}" sizes="32x32">
 	{% block links %}
@@ -26,7 +26,6 @@
 				</li>
                 {% endif %}
 				<li><a href="/game/demo">Записи Игр</a></li>
-				<li><a href="/help/guide">Справочник</a></li>
 
 				<li class="left-bottom">
 					{% if auth %}
@@ -55,6 +54,7 @@
                 <li><a href="https://github.com/qpexlegendary">Терентьев Андрей</a> - Занимался backend разработкой</li>
                 <li><a href="https://github.com/AlexandarViWE">Бочкарев Александр</a> - Занимался frontend разработкой</li>
 			</ul>
+			<a href="https://github.com/SibFU-SAN/pySnake">GitHub репозиторий проекта</a>
 		</div>
 	</footer>
 

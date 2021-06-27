@@ -1,6 +1,7 @@
 from json import encoder
 from modules import game_starter, database
 from random import randint, choice
+from copy import deepcopy
 
 VECTOR_UP = (0, 1)
 VECTOR_DOWN = (0, -1)
@@ -121,6 +122,10 @@ class World:
 
         # Обработка движений
         damaged = self.tick % 20 == 19
+        # Сделать, если не нужен голод
+        "--------------------------------------------------"
+        damaged = 1
+        "--------------------------------------------------"
         for snake in self.snakes:
             if not snake.alive:
                 continue
@@ -139,10 +144,26 @@ class World:
             while el is not None:
                 temp.append((el.x, el.y))
                 el = el.next
-
+            # Переспавн в яблоки
+            #---------------------------------------
             if snake.is_collided():
-                snake.alive = False
-
+                for snaky in self.snakes:
+                    el = snaky.head
+                    while el.next is not None:
+                        tmp = deepcopy(el)
+                        while (tmp.x != el.next.x) or (tmp.y != el.next.y):
+                            if el.x > el.next.x:
+                                tmp.x -= 1
+                            elif el.x < el.next.x:
+                                tmp.x += 1
+                            elif el.y > el.next.y:
+                                tmp.y -= 1
+                            elif el.y < el.next.y:
+                                tmp.y += 1
+                            self.apples.add((tmp.x, tmp.y))
+                        el = el.next
+                    snake.alive = False
+        #---------------------------------------------
         # Запись демки
         for snake in self.snakes:
             if not snake.alive:
@@ -324,8 +345,11 @@ class Snake:
                 if eaten and i == 0:
                     continue
                 direction = pre_last.get_next_el_vector()
+                #Убрать это при режиме без уменьшения хвоста
+                #-------------------------------------------
                 last.x -= direction[0]
                 last.y -= direction[1]
+                #-------------------------------------------
 
         if self.head.next is None or get_distance(self.head, self.head.next) == 0:
             self.alive = False
@@ -359,33 +383,56 @@ class Game:
         scores = dict()
         for snake in self.world.snakes:
             scores[snake.id] = snake.score
-        database.db_end_game(self.game_id, scores)
+        # database.db_end_game(self.game_id, scores)
 
 
 if __name__ == '__main__':
-    game = Game("123", ['test1', 'test2'], 50, 40, 5)
-    game.start({
-        "test1": """
-if check_forward() == 1:
-    if check_right() != 1:
-        turn_right()
-    else:
-        turn_left()
+    players = [f"test{i}" for i in range(10)]
+    game = Game("123", players, 120, 100, 5)
+    codes = ["""
+if not contains_memory('right'):
+    put_memory('right', 0)
 
-        """,
-        "test2": """
 if check_forward() == 1:
-    if check_right() != 1:
+    if get_memory('right') == 1 and check_right() != 1:
         turn_right()
-    else:
+    elif check_left() != 1: 
         turn_left()
+    else:
+        turn_right()
 
-if check_left() == 2:
+if get_memory('right') == 1 and check_left() == 2 or check_right() == 1 and check_left() == 2:
+    put_memory('right', 0)
     turn_left()
 elif check_right() == 2:
+    put_memory('right', 1)
     turn_right()
-            """
-    })
+            """,
+             """
+if check_forward() == 1:
+    if check_right() != 1:
+        turn_right()
+    else: 
+        turn_left()
+             """,
+             """
+if check_forward() == 1:
+    if check_right() != 1:
+        turn_right()
+    else: 
+        turn_left() 
+
+if check_left() == 2:
+    turn_left() 
+elif check_right() == 2:
+    turn_right()
+             """]
+
+    scripts = dict()
+    for player in players:
+        scripts[player] = codes[randint(0, len(codes) - 1)]
+
+    game.start(scripts)
     print(game.world.tick)
-    with open(f"./test/demo.json", 'w') as file:
+    with open(f"demo.json", 'w') as file:
         file.write(encoder.JSONEncoder().encode(game.world.demo))

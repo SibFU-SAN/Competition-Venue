@@ -17,6 +17,57 @@ app = flask.Flask(__name__,
                   template_folder="./templates/"
                   )
 
+# Логгер
+logger = logging.getLogger("main")
+logger.setLevel(logging.INFO)
+logger_handler = logging.FileHandler('log.txt')
+logger_handler.setLevel(logging.INFO)
+logger_formatter = logging.Formatter('%(asctime)s | [%(levelname)s][%(name)s] %(message)s')
+logger_handler.setFormatter(logger_formatter)
+logger.addHandler(logger_handler)
+sys.excepthook = lambda ex_type, ex_value, tb: \
+    logger.error("Logging an uncaught exception",
+                 exc_info=(ex_type, ex_value, tb))
+logger.info("Запуск программы")
+
+# Подключение к базе данных
+db_options = {}
+try:
+    with open("database.yml", 'r') as file:
+        db_options = yaml.load(file.read(), Loader=yaml.FullLoader)
+except FileNotFoundError:
+    logger.warning("Не найден файл с данными для подключения к базе данных. Создаю новый")
+with open("database.yml", 'w') as file:
+    if 'host' not in db_options:
+        db_options['host'] = "localhost"
+    if 'port' not in db_options:
+        db_options['port'] = "27017"
+    if 'base' not in db_options:
+        db_options['base'] = "test"
+    if 'auth' not in db_options:
+        db_options['auth'] = False
+    if 'user' not in db_options:
+        db_options['user'] = "userName"
+    if 'password' not in db_options:
+        db_options['password'] = "1234567890"
+    if 'auth_base' not in db_options:
+        db_options['auth_base'] = "admin"
+    file.write(yaml.dump(db_options))
+database.connect(**db_options)
+
+genders = ('Мужской', 'Женский')
+
+# Создание папок с контентом
+for path in ("./resources", "./resources/scripts", "./resources/demos", "./resources/photos"):
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+# Старт обработчика игр
+handler = GameHandler(logger.getChild("GameHandler"))
+handler.start()
+
+logger.info("Запуск веб-сервера")
+
 
 @app.route("/")
 def index_page():
@@ -87,9 +138,11 @@ def game_editor_page():
 
     game_data = database.db_get_game_data(game_id)
 
+    # TODO: Сделать перенаправление пользователя, если игра еще не началась
+    """
     if game_data['start_time'] > time.time():
-        # TODO: Сделать перенаправление пользователя, если игра еще не началась
         return flask.redirect("", 302)
+    """
 
     response = flask.request.form
     code = response['game_code'] if len(response) != 0 else account_methods.read_script(game_id, user_id)
@@ -99,10 +152,13 @@ def game_editor_page():
     return flask.render_template("pages/game/editor.html", auth=True, game_data=game_data, dt=datetime, code=code)
 
 
-@app.route("/game/demo")
-@account_methods.authorize_require
+@app.route("/game/demo", methods=["POST", "GET"])
 def demos_list_page():
-    return flask.render_template("pages/game/demos.html", auth=True, games=database.db_get_demos_list())
+    response = flask.request.form
+    if len(response) == 0:
+        return flask.render_template("pages/game/demos.html",
+                                     auth=account_methods.is_authorized(), games=database.db_get_demos_list())
+    return flask.redirect(f"/game/demo/{response['game_id']}", 302)
 
 
 @app.route("/game/demo/<game_id>", methods=["POST", "GET"])
@@ -111,7 +167,7 @@ def watch_demo_page(game_id: str):
     if demo is None:
         return flask.redirect("/error/404", 302)
     user_token = account_methods.get_token()
-    user_id = database.db_get_user_data(user_token)['_id']
+    user_id = 'null' if user_token is None else database.db_get_user_data(user_token)['_id']
 
     return flask.render_template(
         "pages/game/viewing.html",
@@ -125,11 +181,6 @@ def watch_demo_page(game_id: str):
 def name_top_page():
     return flask.render_template("pages/game/table.html", auth=account_methods.is_authorized(),
                                  top=database.db_get_top_players())
-
-
-@app.route("/help/guide")
-def info_guide_page():
-    return flask.render_template("pages/info/guide.html", auth=account_methods.is_authorized())
 
 
 @app.route("/profile", methods=["POST", "GET"])
@@ -212,52 +263,4 @@ def err404_page():
 
 
 if __name__ == '__main__':
-    logger = logging.getLogger("main")
-    logger.setLevel(logging.INFO)
-    logger_handler = logging.FileHandler('log.txt')
-    logger_handler.setLevel(logging.INFO)
-    logger_formatter = logging.Formatter('%(asctime)s | [%(levelname)s][%(name)s] %(message)s')
-    logger_handler.setFormatter(logger_formatter)
-    logger.addHandler(logger_handler)
-
-    sys.excepthook = lambda ex_type, ex_value, tb: \
-        logger.error("Logging an uncaught exception",
-                     exc_info=(ex_type, ex_value, tb))
-    logger.info("Запуск программы")
-
-    db_options = {}
-    try:
-        with open("database.yml", 'r') as file:
-            db_options = yaml.load(file.read(), Loader=yaml.FullLoader)
-    except FileNotFoundError:
-        logger.warning("Не найден файл с данными для подключения к базе данных. Создаю новый")
-
-    with open("database.yml", 'w') as file:
-        if 'host' not in db_options:
-            db_options['host'] = "localhost"
-        if 'port' not in db_options:
-            db_options['port'] = "27017"
-        if 'base' not in db_options:
-            db_options['base'] = "test"
-        if 'auth' not in db_options:
-            db_options['auth'] = False
-        if 'user' not in db_options:
-            db_options['user'] = "userName"
-        if 'password' not in db_options:
-            db_options['password'] = "1234567890"
-        if 'auth_base' not in db_options:
-            db_options['auth_base'] = "admin"
-        file.write(yaml.dump(db_options))
-    database.connect(**db_options)
-
-    genders = ('Мужской', 'Женский')
-
-    for path in ("./resources", "./resources/scripts", "./resources/demos", "./resources/photos"):
-        if not os.path.exists(path):
-            os.mkdir(path)
-
-    handler = GameHandler(logger.getChild("GameHandler"))
-    handler.start()
-
-    logger.info("Запуск веб-сервера")
     app.run()

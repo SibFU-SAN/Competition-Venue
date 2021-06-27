@@ -28,19 +28,27 @@
 					<li>Режим: Змейка</li>
 					<li>Число игроков: {{ game_data['players'] }}</li>
                     <li>Дальность видимости: {{ game_data['view_distance'] }}</li>
-                    <li>Окончание игры: {{ dt.datetime.utcfromtimestamp(game_data['end_time']).strftime('%H:%M:%S') }}</li>
+                    <li>Окончание игры: <span id="my_timer" style="color: #f00; font-weight: bold;">01:00:00</span></li>
 				</ul>
 			</p>
 
-			<textarea name="game_code" cols="50" rows="10" id="code" class="textarea" required>{{ code }}</textarea>
+			<textarea name="game_code" cols="50" rows="10" id="code" class="textarea">{{ code }}</textarea>
 
 			<div class="centered-box form-menu">
-				<input type="submit" value="Отправить" class="form-btn" id="submit">
+				<input type="submit" value="Сохранить код" class="form-btn" id="submit">
 				<input type="reset" value="Очистить" class="form-btn" id="reset">
+				<a target="_blank" rel="noopener noreferrer" href="https://github.com/SibFU-SAN/pySnake/wiki/%D0%9D%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B7%D0%BC%D0%B5%D0%B9%D0%BA%D0%B8" class="form-btn">Документация</a>
 			</div>
 		</form>
 
 		<script type="text/javascript">
+
+const timerTimeS = 36000; // Это 36 секунд TODO: Вставь сюда!!!
+let timerId = "my_timer";
+
+setTimer(timerTimeS, timerId);
+
+
 			var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('code'), {
 				mode: {name: "python",
 					   version: 3,
@@ -61,6 +69,49 @@
 				myCodeMirror.setValue("");
 				myCodeMirror.clearHistory()
 			})
+
+
+// <p><span id="my_timer" style="color: #f00; font-weight: bold;">00:00:00</span></p>
+
+function setTimer(timerTime, timerName)
+{
+	i = timerTime;
+
+	let timer = setTimeout(function tick() {
+		i -= 1000;
+
+		updateTimerText(i, timerName);
+		if (i != 0)
+			timer = setTimeout(tick, 1000);
+		else
+		{
+			console.log("end");
+			window.location.reload();
+		}
+	}, 1000);
+}
+
+function updateTimerText(timerContent, html_id) {
+	var some_time = new Date(timerContent);
+
+	var h = String(some_time.getHours() - 7);
+	var m = String(some_time.getMinutes());
+	var s = String(some_time.getSeconds());
+
+	if (h.length == 1)
+		h = '0' + h;
+
+	if (m.length == 1)
+		m = '0' + m;
+
+	if (s.length == 1)
+		s = '0' + s;
+
+	var str_date = String(h + ":" + m + ":" + s);
+    document.getElementById(html_id).innerHTML = str_date;
+
+	console.log(timerContent, html_id, some_time, str_date);
+}
 		</script>
 	</main>
 {% endblock %}
