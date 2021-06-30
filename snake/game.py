@@ -43,13 +43,14 @@ def get_distance(el, target) -> int:
 
 
 class World:
-    def __init__(self, x_max: int, y_max: int, view_distance: int):
+    def __init__(self, x_max: int, y_max: int, view_distance: int, mode_id: int):
         self.x_max = x_max
         self.y_max = y_max
         self.snakes = list()
         self.apples = set()
         self.view_distance = view_distance
         self.emtpy_tick = 0
+        self.mode_id = mode_id
         self.demo = {
             'players': list(),
             'gameSettings': {
@@ -90,7 +91,7 @@ class World:
                 if snake.head.x == loc[0] and snake.head.y == loc[1]:
                     continue
 
-            snake = Snake(uid, loc[0], loc[1], loc[2], self)
+            snake = Snake(uid, loc[0], loc[1], loc[2], self. mode_id)
             self.snakes.append(snake)
             self.demo['players'].append(snake.id)
             break
@@ -120,12 +121,13 @@ class World:
             except Exception:
                 pass
 
+        # Отключение голода
+        if self.mode_id == 1:
+            damaged = self.tick % 20 == 19
+        else:
+            damaged = 1
+
         # Обработка движений
-        damaged = self.tick % 20 == 19
-        # Сделать, если не нужен голод
-        "--------------------------------------------------"
-        damaged = 1
-        "--------------------------------------------------"
         for snake in self.snakes:
             if not snake.alive:
                 continue
@@ -144,8 +146,8 @@ class World:
             while el is not None:
                 temp.append((el.x, el.y))
                 el = el.next
+
             # Переспавн в яблоки
-            #---------------------------------------
             if snake.is_collided():
                 for snaky in self.snakes:
                     el = snaky.head
@@ -163,7 +165,7 @@ class World:
                             self.apples.add((tmp.x, tmp.y))
                         el = el.next
                     snake.alive = False
-        #---------------------------------------------
+
         # Запись демки
         for snake in self.snakes:
             if not snake.alive:
@@ -234,12 +236,14 @@ class Head(Point):
 
 
 class Snake:
-    def __init__(self, uid: str, x_spawn: int, y_spawn: int, direction: int, world: World):
+    def __init__(self, uid: str, x_spawn: int, y_spawn: int, direction: int, world: World,
+                 mode_id: int):
         self.id = uid
         self.head = Head(x_spawn, y_spawn, direction + 2)
         self.alive = True
         self.world = world
         self.score = 0
+        self.mode_id = mode_id
         self.memory = dict()
 
         vector = get_direction_vector(direction)
@@ -345,21 +349,23 @@ class Snake:
                 if eaten and i == 0:
                     continue
                 direction = pre_last.get_next_el_vector()
+
                 #Убрать это при режиме без уменьшения хвоста
-                #-------------------------------------------
-                last.x -= direction[0]
-                last.y -= direction[1]
-                #-------------------------------------------
+                if self.mode_id != 3:
+                    last.x -= direction[0]
+                    last.y -= direction[1]
 
         if self.head.next is None or get_distance(self.head, self.head.next) == 0:
             self.alive = False
 
 
 class Game:
-    def __init__(self, game_id: str, players: list, x_max: int, y_max: int, view_distance: int):
+    def __init__(self, game_id: str, players: list, x_max: int, y_max: int, view_distance: int,
+                 mode_id: int):
         self.game_id = game_id
         self.players = players
-        self.world = World(x_max, y_max, view_distance)
+        self.mode_id = mode_id
+        self.world = World(x_max, y_max, view_distance, mode_id)
 
     def start(self, scripts: dict):
         # Компилирование скриптов
@@ -387,8 +393,9 @@ class Game:
 
 
 if __name__ == '__main__':
+    mode_id = 0
     players = [f"test{i}" for i in range(10)]
-    game = Game("123", players, 120, 100, 5)
+    game = Game("123", players, 120, 100, 5, mode_id)
     codes = ["""
 if not contains_memory('right'):
     put_memory('right', 0)
@@ -407,26 +414,7 @@ if get_memory('right') == 1 and check_left() == 2 or check_right() == 1 and chec
 elif check_right() == 2:
     put_memory('right', 1)
     turn_right()
-            """,
-             """
-if check_forward() == 1:
-    if check_right() != 1:
-        turn_right()
-    else: 
-        turn_left()
-             """,
-             """
-if check_forward() == 1:
-    if check_right() != 1:
-        turn_right()
-    else: 
-        turn_left() 
-
-if check_left() == 2:
-    turn_left() 
-elif check_right() == 2:
-    turn_right()
-             """]
+            """]
 
     scripts = dict()
     for player in players:
