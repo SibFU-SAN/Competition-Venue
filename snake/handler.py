@@ -38,17 +38,22 @@ class GameHandler(Thread):
             return
 
         try:
-            start(game_id)
+            mode_id = 0
+            start(game_id, mode_id)
         except Exception as ex:
             log.exception("Произошла ошибка при обработке игры", exc_info=ex)
         else:
             log.info("Обработка игры успешно завершена")
 
 
-def start(game_hash: str):
+def start(game_hash: str, mode_id: int):
+    """Памятка тестовых режимов:
+    1 - обычная игра с голодом,
+    2 - обычная игра без голода
+    3 - игра с хвостом на одном месте"""
     game_data = database.db_get_game_data(game_hash)
     game = s.Game(game_hash, game_data['players'], game_data['map_size'] * 2,
-                  game_data['map_size'], game_data['view_distance'])
+                  game_data['map_size'], game_data['view_distance'], mode_id)
 
     scripts = dict()
     for player in game.players:
