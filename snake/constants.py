@@ -1,0 +1,9 @@
+# Статусы игры
+ENDED_WITH_ERRORS = -2
+CANCELLED_BY_OWNER = -1
+NOT_STARTED = 0
+HANDLING = 1
+HANDLED = 2
+
+# Режимы игры
+CLASSIC = 0
