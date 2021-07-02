@@ -2,6 +2,7 @@ import hashlib
 import pymysql
 
 from main import mysql as db
+from snake import models as gm
 
 
 class User:
@@ -32,6 +33,20 @@ class User:
             cursor.execute(f"""
                 UPDATE users SET played = played + 1, wins = wins + {int(winner)} WHERE id = {self.id} LIMIT 1;
             """)
+
+    @property
+    def active_game(self) -> gm.GameModel or None:
+        with db.connect() as conn, conn.cursor() as cursor:
+            cursor.execute(f"""
+                SELECT game FROM players WHERE user = {self.id} ORDER BY id DESC LIMIT 1;
+            """)
+            result = cursor.fetchone()
+            if result is None:
+                return None
+            game = gm.get_by_id(result['game'])
+            if game is None:
+                return None
+            return game if game.can_play else None
 
 
 class UserError(Exception):
