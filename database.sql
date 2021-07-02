@@ -27,3 +27,10 @@ CREATE TABLE IF NOT EXISTS `players` (
     `user` int(5) NOT NULL,
     PRIMARY KEY(id)
 );
+
+CREATE TABLE IF NOT EXISTS `winners` (
+    `id` int(5) UNIQUE NOT NULL AUTO_INCREMENT,
+    `game` int(5) NOT NULL,
+    `user` int(5) NOT NULL,
+    PRIMARY KEY(id)
+);
