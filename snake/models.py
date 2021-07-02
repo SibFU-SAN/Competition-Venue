@@ -39,7 +39,7 @@ class GameModel:
 
     @property
     def can_play(self):
-        return time.time() < self.end_time or self.status == uc.NOT_STARTED
+        return (self.start_time < time.time() < self.end_time) or self.status == uc.NOT_STARTED
 
     @property
     def left_time(self) -> int:
