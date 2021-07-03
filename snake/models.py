@@ -111,3 +111,37 @@ def get_by_id(game_id: int) -> GameModel or None:
         """)
         result = cursor.fetchone()
         return None if result is None else GameModel(result)
+
+
+def create(owner: um.User, add_self: bool, name: str, map_size: int, period: int, start_time: int,
+           private: bool, mode: int, view_distance: int, **kwargs) -> GameModel:
+
+    end_time = start_time + period * 60
+    settings = kwargs
+    settings['view_distance'] = view_distance
+    serialized_settings = json.JSONEncoder().encode(settings)
+
+    with db.connect() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(f"""
+                INSERT INTO games (name, start_time, end_time, period, owner, private, mode, settings) 
+                VALUES (%s, {start_time}, {end_time}, {period}, {owner.id}, {private}, {mode}, %s)
+            """, [name, serialized_settings])
+
+        with conn.cursor() as cursor:
+            cursor.execute(f"""
+                SELECT * FROM games WHERE
+                 name = %s AND
+                  start_time = {start_time} AND
+                  owner = {owner.id}
+                  ORDER BY id DESC LIMIT 1;
+            """)
+            game_data = cursor.fetchone()
+
+            if game_data is None:
+                raise GameError('Произошла неизвестная ошибка при создании и игры')
+
+            game = GameModel(game_data)
+            if add_self:
+                game.add_player(owner)
+            return game
