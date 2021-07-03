@@ -4,7 +4,7 @@ import time
 
 from main import mysql as db
 from user import models as um
-from snake import constants as uc
+from snake import constants as gc
 
 
 class GameModel:
@@ -39,7 +39,7 @@ class GameModel:
 
     @property
     def can_play(self):
-        return (self.start_time < time.time() < self.end_time) or self.status == uc.NOT_STARTED
+        return (self.start_time < time.time() < self.end_time) or self.status == gc.NOT_STARTED
 
     @property
     def left_time(self) -> int:
@@ -74,15 +74,34 @@ class GameModel:
             return file.read()
 
     def end(self, best_player: um.User):
-        with db.connect() as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(f"""
-                    INSERT INTO winners (game, user) VALUES ({self.id}, {best_player.id});
-                """)
+        with db.connect() as conn, conn.cursor() as cursor:
+            cursor.execute(f"""
+                INSERT INTO winners (game, user) VALUES ({self.id}, {best_player.id});
+            """)
 
             players = self.players
             for player in players:
                 player.end_game(best_player.id == player.id)
+
+    def contains_player(self, user: um.User) -> bool:
+        game = user.active_game
+        return False if game is None else (game.id == self.id)
+
+    def add_player(self, user: um.User):
+        if user.active_game is not None:
+            raise GameError('Вы уже участвуете в другой игре')
+        if self.status != gc.NOT_STARTED:
+            raise GameError('Игра уже окончена')
+
+        with db.connect() as conn, conn.cursor() as cursor:
+            cursor.execute(f"""
+                INSERT INTO players (game, user) VALUES ({self.id}, {user.id});
+            """)
+
+
+class GameError(Exception):
+    def __init__(self, message: str):
+        self.message = message
 
 
 def get_by_id(game_id: int) -> GameModel or None:
