@@ -12,6 +12,7 @@ class User:
         self.wins = data['wins']
         self.hashed_password = data['password']
         self.played = data['played']
+        self.__cached_game = None
 
     def change_password(self, new_password: str) -> str:
         self.hashed_password = hash_password(new_password)
@@ -36,6 +37,9 @@ class User:
 
     @property
     def active_game(self) -> gm.GameModel or None:
+        if self.__cached_game is not None:
+            return self.__cached_game
+
         with db.connect() as conn, conn.cursor() as cursor:
             cursor.execute(f"""
                 SELECT game FROM players WHERE user = {self.id} ORDER BY id DESC LIMIT 1;
@@ -46,7 +50,8 @@ class User:
             game = gm.get_by_id(result['game'])
             if game is None:
                 return None
-            return game if game.can_play else None
+            self.__cached_game = game if game.can_play else None
+            return self.__cached_game
 
 
 class UserError(Exception):
