@@ -113,7 +113,7 @@ def get_by_id(game_id: int) -> GameModel or None:
         return None if result is None else GameModel(result)
 
 
-def create(owner: um.User, add_self: bool, name: str, map_size: int, period: int, start_time: int,
+def create(owner: um.User, add_self: bool, name: str, period: int, start_time: int,
            private: bool, mode: int, view_distance: int, **kwargs) -> GameModel:
 
     end_time = start_time + period * 60
