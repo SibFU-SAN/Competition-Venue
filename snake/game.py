@@ -1,7 +1,12 @@
 from json import encoder
-from modules import game_starter, database
+#from modules import game_starter, database
 from random import randint, choice
 from copy import deepcopy
+
+exec_options = {"__cached__": None, "__doc__": None, "__file__": None,
+                "__name__": None, "__loader__": None, "__package__": None,
+                "__spec__": None, "print": None, "exec": None,
+                "eval": None}
 
 VECTOR_UP = (0, 1)
 VECTOR_DOWN = (0, -1)
@@ -91,7 +96,7 @@ class World:
                 if snake.head.x == loc[0] and snake.head.y == loc[1]:
                     continue
 
-            snake = Snake(uid, loc[0], loc[1], loc[2], self. mode_id)
+            snake = Snake(uid, loc[0], loc[1], loc[2], self, self. mode_id)
             self.snakes.append(snake)
             self.demo['players'].append(snake.id)
             break
@@ -117,15 +122,15 @@ class World:
         # Выполнение пользовательских скриптов
         for snake in self.snakes:
             try:
-                exec(compiled_scripts[snake.id], game_starter.exec_options, snake.get_controls())
+                exec(compiled_scripts[snake.id], exec_options, snake.get_controls())
             except Exception:
-                pass
+                print("Oops...")
 
         # Отключение голода
-        if self.mode_id == 1:
+        if self.mode_id == 0 or self.mode_id == 2:
             damaged = self.tick % 20 == 19
         else:
-            damaged = 1
+            damaged = False
 
         # Обработка движений
         for snake in self.snakes:
@@ -351,7 +356,7 @@ class Snake:
                 direction = pre_last.get_next_el_vector()
 
                 #Убрать это при режиме без уменьшения хвоста
-                if self.mode_id != 3:
+                if self.mode_id != 2:
                     last.x -= direction[0]
                     last.y -= direction[1]
 
@@ -371,10 +376,7 @@ class Game:
         # Компилирование скриптов
         compiled_scripts = dict()
         for player in scripts.keys():
-            try:
-                compiled_scripts[player] = compile(scripts[player], "", "exec")
-            except Exception:
-                compiled_scripts[player] = compile("", "", "exec")
+            compiled_scripts[player] = compile(str(scripts[player]), "", "exec")
 
         # Спавн игроков
         for player in self.players:
@@ -393,26 +395,28 @@ class Game:
 
 
 if __name__ == '__main__':
-    mode_id = 0
-    players = [f"test{i}" for i in range(10)]
-    game = Game("123", players, 120, 100, 5, mode_id)
+    players = [f"test{i}" for i in range(20)]
+    game = Game("123", players, 120, 100, 5, 2)
     codes = ["""
-if not contains_memory('right'):
-    put_memory('right', 0)
-
 if check_forward() == 1:
-    if get_memory('right') == 1 and check_right() != 1:
+    if check_right() != 1:
         turn_right()
-    elif check_left() != 1: 
-        turn_left()
     else:
-        turn_right()
-
-if get_memory('right') == 1 and check_left() == 2 or check_right() == 1 and check_left() == 2:
-    put_memory('right', 0)
+        turn_left()
+if check_left() == 2:
     turn_left()
 elif check_right() == 2:
-    put_memory('right', 1)
+    turn_right()
+        """,
+        """
+if check_forward() == 1:
+    if check_right() != 1:
+        turn_right()
+    else:
+        turn_left()
+if check_left() == 2:
+    turn_left()
+elif check_right() == 2:
     turn_right()
             """]
 
