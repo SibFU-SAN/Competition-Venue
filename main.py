@@ -264,7 +264,7 @@ def join_page(game_id: int):
         if game != g.constants.STARTED:
             return flask.redirect(flask.url_for("editor_page"))
         else:
-            return flask.redirect(flask.url_for("game_page", game_id=game_id))
+            return flask.redirect(flask.url_for("game_page", game_id=game.id))
 
     game = g.get_by_id(game_id)
     if game is None:
