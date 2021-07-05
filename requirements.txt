@@ -5,3 +5,4 @@ pyyaml~=5.4.1
 PyMySQL~=1.0.2
 flask-wtf
 WTForms~=2.3.3
+flask_login
