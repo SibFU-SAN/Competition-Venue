@@ -8,55 +8,31 @@
 	<main class="main centered-box">
 		<section class="InfoBlog">
 			<div class="top-info">
-				<img src="{{ url_for("static", filename="static/images/profile_stub.png") }}" class="profile_logo">
+				<img src="{{ url_for("static", filename="static/images/profile_stub.png") }}" class="profile_logo" alt="Аватарка">
 				<div class="short info-field">
-                    {% if data['first_name'] and data['second_name'] %}
-					    <p>{{ data['first_name'] }} {{ data['second_name'] }}</p>
-                    {% else %}
-                        <p>{{ data['login'] }}</p>
-                    {% endif %}
+                    <p>{{ user.login }}</p>
 				</div>
 			</div>
 			
 			<div class="middle-info info-field">
-				<div>
-					<dl class="attrs">
-                        {% if 'gender' in data %}
-						    <dt>Пол</dt>
-							    <dd>{{ genders[data['gender']] if data['gender'] != -1 else "Не указан"}}</dd>
-                        {% endif %}
-					</dl>
-				</div>
-				<br>
-                {% if data['about'] %}
+                {% if user.about != '' %}
 				    <div>
 					    <dl class="about">
 						    <dt>О себе</dt>
-							    <dd>{{ data['about'] }}</dd>
+							    <dd>{{ user.about }}</dd>
 					    </dl>
 				</div>
+                <br>
                 {% endif %}
-				<br>
 				<div>
 					<dl class="attrs">
 						<dt>Побед</dt>
-							<dd>{{ data['wins'] }}</dd>
+							<dd>{{ user.wins }}</dd>
 						<dt>Всего игр</dt>
-							<dd>{{ data['played_games'] }}</dd>
-						<dt>Лучший счет</dt>
-							<dd>{{ data['best_score'] }}</dd>
+							<dd>{{ user.played }}</dd>
 					</dl>
 				</div>
 			</div>
-
-        {% if data['email'] %}
-			<div class="bottom-info info-field">
-				<dl class="attrs">
-					<dt>E-mail</dt>
-						<dd>{{ data['email'] }}</dd>
-				</dl>
-			</div>
-        {% endif %}
 		
 		</section>
 	</main>

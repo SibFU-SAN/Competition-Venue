@@ -5,7 +5,7 @@ import re
 import logging
 
 import flask
-from flask_login import LoginManager, current_user, login_user, logout_user
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 import yaml
 
 import app.form as forms
@@ -88,12 +88,12 @@ def load_user(uid) -> u.User or None:
 @app.route("/404")
 @app.errorhandler(404)
 def err404_page(_=None):
-    return flask.render_template("pages/404.html")
+    return flask.render_template("pages/404.html", user=current_user)
 
 
 @app.errorhandler(500)
 def err500(_):
-    return flask.render_template("pages/500.html"), 500
+    return flask.render_template("pages/500.html", user=current_user), 500
 
 
 @app.route("/login", methods=["post", "get"])
@@ -158,6 +158,12 @@ def logout_page():
 @app.route("/index")
 def index_page():
     return flask.render_template("pages/index.html", user=current_user)
+
+
+@app.route("/profile")
+@login_required
+def profile_page():
+    return flask.render_template("pages/profile/index.html", user=current_user)
 
 
 if __name__ == '__main__':
