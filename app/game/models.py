@@ -18,18 +18,18 @@ class GameModel:
         self.status = data['status']
         self.private = data['private']
         self.settings = json.JSONEncoder().encode(data['settings'])
-        self.cached_players = None
+        self.__cached_players = None
 
     @property
     def players(self) -> list:
-        if self.cached_players is None:
+        if self.__cached_players is None:
             with db.connect() as conn, conn.cursor() as cursor:
                 cursor.execute(f"""
                     SELECT game, user FROM players WHERE game = {self.id};
                 """)
                 data = cursor.fetchall()
-            self.cached_players = [um.get_by_id(obj['user']) for obj in data]
-        return self.cached_players
+            self.__cached_players = [um.get_by_id(obj['user']) for obj in data]
+        return self.__cached_players
 
     @property
     def winner(self) -> um.User or None:
