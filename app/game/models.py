@@ -82,6 +82,7 @@ class GameModel:
                 cursor.execute(f"""
                     INSERT INTO winners (game, user) VALUES ({self.id}, {best_player.id});
                 """)
+                conn.commit()
 
             players = self.players
             for player in players:
@@ -90,14 +91,16 @@ class GameModel:
             with conn.cursor() as cursor:
                 cursor.execute(f"""
                     UPDATE games SET status = {g.HANDLED}
-                    WHERE id = {self.id} LIMIT 1;;
+                    WHERE id = {self.id} LIMIT 1;
                 """)
+                conn.commit()
 
     def close(self):
         with db.connect() as conn, conn.cursor() as cursor:
             cursor.execute(f"""
                 UPDATE games SET status = {g.CANCELLED_BY_OWNER} WHERE id = {self.id} LIMIT 1;
             """)
+            conn.commit()
 
     def contains_player(self, user: u.User) -> bool:
         game = get_active_game(user)
@@ -113,18 +116,21 @@ class GameModel:
             cursor.execute(f"""
                 INSERT INTO players (game, user) VALUES ({self.id}, {user.id});
             """)
+            conn.commit()
 
     def remove(self):
         with db.connect() as conn, conn.cursor() as cursor:
             cursor.execute(f"""
                 DELETE FROM games WHERE id = {self.id} LIMIT 1;
             """)
+            conn.commit()
 
     def handled_with_errors(self):
         with db.connect() as conn, conn.cursor() as cursor:
             cursor.execute(f"""
                 UPDATE games SET status = {g.ENDED_WITH_ERRORS} WHERE id = {self.id} LIMIT 1;
             """)
+            conn.commit()
 
 
 class GameError(Exception):
@@ -174,6 +180,7 @@ def get_ended_games(time_now: int, mark_as_handling: bool = True) -> list:
                     UPDATE games SET status = {g.HANDLING}
                     WHERE status = {g.NOT_STARTED} AND end_time <= {time_now};
                 """)
+                conn.commit()
         return result
 
 
@@ -209,6 +216,7 @@ def create(owner: u.User, add_self: bool, name: str, period: int, start_time: in
                 INSERT INTO games (name, start_time, end_time, period, owner, private, mode, settings) 
                 VALUES (%s, {start_time}, {end_time}, {period}, {owner.id}, {private}, {mode}, %s)
             """, [name, serialized_settings])
+            conn.commit()
 
         with conn.cursor() as cursor:
             cursor.execute(f"""

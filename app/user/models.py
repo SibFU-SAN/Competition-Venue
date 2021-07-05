@@ -1,10 +1,11 @@
 import hashlib
 import pymysql
+from flask_login import UserMixin
 
 from app.database import db
 
 
-class User:
+class User(UserMixin):
     def __init__(self, data):
         self.id = data['id']
         self.login = data['login']
@@ -23,6 +24,7 @@ class User:
             cursor.execute(f"""
                 UPDATE users SET password = %s WHERE id = {self.id} LIMIT 1;
             """, new_password)
+            conn.commit()
             return self.token
 
     def __str__(self):
@@ -37,6 +39,7 @@ class User:
             cursor.execute(f"""
                 UPDATE users SET played = played + 1, wins = wins + {int(winner)} WHERE id = {self.id} LIMIT 1;
             """)
+            conn.commit()
 
 
 class UserError(Exception):
@@ -72,12 +75,12 @@ def get_by_token(token: str) -> User or None:
 
 
 def register(login: str, password: str) -> User:
-    password = hash_password(password)
     try:
         with db.connect() as conn, conn.cursor() as cursor:
             cursor.execute("""
-                INSERT INTO users (login, password) VALUES (%s, %s);
-            """, [login, password])
+                INSERT INTO users (login, password) VALUES (%s, MD5(%s));
+            """, (login, password))
+            conn.commit()
             return get_by_login(login)
     except pymysql.IntegrityError:
         raise UserError("Пользователь с данным логином уже существует")
