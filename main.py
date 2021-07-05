@@ -174,5 +174,11 @@ def other_profile_page(login):
     return flask.render_template("pages/profile/index.html", user=current_user, target=target)
 
 
+@app.route("/top")
+def top_page():
+    top = u.get_top10()
+    return flask.render_template("pages/top.html", user=current_user, top=top)
+
+
 if __name__ == '__main__':
     app.run()
