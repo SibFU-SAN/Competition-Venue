@@ -15,11 +15,17 @@ class GameModel:
         self.end_time = data[3]
         self.period = data[4]
         self.owner = u.get_by_id(data[5])
-        self.status = data[6]
+        self.__status = data[6]
         self.private = data[7]
         self.mode = data[8]
         self.settings = json.JSONEncoder().encode(data[9])
         self.__cached_players = None
+
+    @property
+    def status(self) -> int:
+        if self.__status == g.NOT_STARTED and time.time() > self.start_time:
+            return g.STARTED
+        return self.__status
 
     @property
     def players(self) -> list:
@@ -43,7 +49,7 @@ class GameModel:
 
     @property
     def can_play(self):
-        return (self.start_time < time.time() < self.end_time) or self.status == g.NOT_STARTED
+        return (self.start_time < time.time() < self.end_time) or self.__status == g.NOT_STARTED
 
     @property
     def left_time(self) -> int:
@@ -110,7 +116,7 @@ class GameModel:
     def add_player(self, user: u.User):
         if get_active_game(user) is not None:
             raise GameError('Вы уже участвуете в другой игре')
-        if self.status != g.NOT_STARTED:
+        if self.__status != g.NOT_STARTED:
             raise GameError('Игра уже окончена')
 
         with db.connect() as conn, conn.cursor() as cursor:
