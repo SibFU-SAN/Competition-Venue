@@ -3,8 +3,8 @@ import json
 import time
 
 from main import mysql as db
-from user import models as um
-from snake import constants as gc
+from app.user import models as um
+from app.game import constants as gc
 
 
 class GameModel:

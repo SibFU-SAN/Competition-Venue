@@ -2,7 +2,7 @@ import hashlib
 import pymysql
 
 from main import mysql as db
-from snake import models as gm
+from app.game import models as gm
 
 
 class User:
