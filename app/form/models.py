@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Regexp, Length
 from app.user.constants import LOGIN_REGEX
 
@@ -15,3 +15,15 @@ class RegisterForm(FlaskForm):
     password = PasswordField("Пароль", validators=[DataRequired(), Length(5)])
     confirmation = PasswordField("Подтверждение пароля", validators=[DataRequired(), Length(5)])
     submit = SubmitField("Зарегистрироваться")
+
+
+class SettingsForm(FlaskForm):
+    about = TextAreaField("О себе", [Length(max=256)])
+    submit = SubmitField("Сохранить")
+
+
+class ChangePasswordForm(FlaskForm):
+    password = PasswordField("Пароль", validators=[DataRequired()])
+    new_password = PasswordField("Новый пароль", validators=[DataRequired(), Length(5)])
+    confirmation = PasswordField("Подтверждение пароля", validators=[DataRequired(), Length(5)])
+    submit = SubmitField("Изменить")
