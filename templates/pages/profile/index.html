@@ -10,16 +10,16 @@
 			<div class="top-info">
 				<img src="{{ url_for("static", filename="static/images/profile_stub.png") }}" class="profile_logo" alt="Аватарка">
 				<div class="short info-field">
-                    <p>{{ user.login }}</p>
+                    <p>{{ target.login }}</p>
 				</div>
 			</div>
 			
 			<div class="middle-info info-field">
-                {% if user.about != '' %}
+                {% if target.about != '' %}
 				    <div>
 					    <dl class="about">
 						    <dt>О себе</dt>
-							    <dd>{{ user.about }}</dd>
+							    <dd>{{ target.about }}</dd>
 					    </dl>
 				</div>
                 <br>
@@ -27,9 +27,9 @@
 				<div>
 					<dl class="attrs">
 						<dt>Побед</dt>
-							<dd>{{ user.wins }}</dd>
+							<dd>{{ target.wins }}</dd>
 						<dt>Всего игр</dt>
-							<dd>{{ user.played }}</dd>
+							<dd>{{ target.played }}</dd>
 					</dl>
 				</div>
 			</div>

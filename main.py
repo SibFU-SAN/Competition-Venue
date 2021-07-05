@@ -87,7 +87,7 @@ def load_user(uid) -> u.User or None:
 
 @app.route("/404")
 @app.errorhandler(404)
-def err404_page(_=None):
+def err404(_=None):
     return flask.render_template("pages/404.html", user=current_user)
 
 
@@ -163,7 +163,15 @@ def index_page():
 @app.route("/profile")
 @login_required
 def profile_page():
-    return flask.render_template("pages/profile/index.html", user=current_user)
+    return flask.render_template("pages/profile/index.html", user=current_user, target=current_user)
+
+
+@app.route("/target/<login>")
+def other_profile_page(login):
+    target = u.get_by_login(login)
+    if target is None:
+        return err404()
+    return flask.render_template("pages/profile/index.html", user=current_user, target=target)
 
 
 if __name__ == '__main__':
