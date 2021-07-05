@@ -150,13 +150,12 @@ def get_user_games(user: um.User, count: int = 7) -> list:
         return [GameModel(data) for data in cursor.fetchall()]
 
 
-def get_ended_games(mark_as_handling: bool = True) -> list:
-    now = int(time.time())
+def get_ended_games(time_now: int, mark_as_handling: bool = True) -> list:
     with db.connect() as conn:
         with conn.cursor() as cursor:
             cursor.execute(f"""
                         SELECT * FROM games 
-                        WHERE status = {gc.NOT_STARTED} AND end_time <= {now};
+                        WHERE status = {gc.NOT_STARTED} AND end_time <= {time_now};
                     """)
             result = [GameModel(data) for data in cursor.fetchall()]
 
@@ -164,7 +163,7 @@ def get_ended_games(mark_as_handling: bool = True) -> list:
             with conn.cursor() as cursor:
                 cursor.execute(f"""
                     UPDATE games SET status = {gc.HANDLING}
-                    WHERE status = {gc.NOT_STARTED} AND end_time <= {now};
+                    WHERE status = {gc.NOT_STARTED} AND end_time <= {time_now};
                 """)
         return result
 
