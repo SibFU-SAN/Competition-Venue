@@ -119,7 +119,7 @@ def get_by_id(game_id: int) -> GameModel or None:
         return None if result is None else GameModel(result)
 
 
-def get_games(count: int = 7) -> list:
+def get_games(count: int = 7, status: int = gc.NOT_STARTED) -> list:
     with db.connect() as conn, conn.cursor() as cursor:
         cursor.execute(f"""
             SELECT * FROM games WHERE private = false ORDER BY id DESC LIMIT {count};
