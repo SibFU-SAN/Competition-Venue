@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `password` varchar(32) NOT NULL,
     `wins` int NOT NULL DEFAULT 0,
     `played` int NOT NULL DEFAULT 0,
+    `about` text NOT NULL DEFAULT '',
     PRIMARY KEY(id)
 );
 

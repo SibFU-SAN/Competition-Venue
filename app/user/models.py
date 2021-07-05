@@ -12,6 +12,7 @@ class User:
         self.wins = data['wins']
         self.hashed_password = data['password']
         self.played = data['played']
+        self.about = data['about']
         self.__cached_game = None
 
     def change_password(self, new_password: str) -> str:
