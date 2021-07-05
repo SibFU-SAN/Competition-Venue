@@ -9,15 +9,16 @@ import app.user as u
 
 class GameModel:
     def __init__(self, data):
-        self.id = data['id']
-        self.name = data['name']
-        self.start_time = data['start_time']
-        self.end_time = data['end_time']
-        self.period = data['period']
-        self.owner = u.get_by_id(data['owner'])
-        self.status = data['status']
-        self.private = data['private']
-        self.settings = json.JSONEncoder().encode(data['settings'])
+        self.id = data[0]
+        self.name = data[1]
+        self.start_time = data[2]
+        self.end_time = data[3]
+        self.period = data[4]
+        self.owner = u.get_by_id(data[5])
+        self.status = data[6]
+        self.private = data[7]
+        self.node = data[8]
+        self.settings = json.JSONEncoder().encode(data[9])
         self.__cached_players = None
 
     @property
@@ -28,7 +29,7 @@ class GameModel:
                     SELECT game, user FROM players WHERE game = {self.id};
                 """)
                 data = cursor.fetchall()
-            self.__cached_players = [u.get_by_id(obj['user']) for obj in data]
+            self.__cached_players = [u.get_by_id(obj[1]) for obj in data]
         return self.__cached_players
 
     @property
@@ -38,7 +39,7 @@ class GameModel:
                 SELECT game, user FROM winners WHERE game = {self.id} LIMIT 1;
             """)
             result = cursor.fetchone()
-            return None if result is None else u.get_by_id(result['user'])
+            return None if result is None else u.get_by_id(result[1])
 
     @property
     def can_play(self):
@@ -195,7 +196,7 @@ def get_active_game(user: u.User) -> GameModel or None:
         result = cursor.fetchone()
         if result is None:
             return None
-        game = get_by_id(result['game'])
+        game = get_by_id(result[0])
         if game is None:
             return None
         user.cached_game = game if game.can_play else None

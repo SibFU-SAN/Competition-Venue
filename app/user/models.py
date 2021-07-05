@@ -7,12 +7,12 @@ from app.database import db
 
 class User(UserMixin):
     def __init__(self, data):
-        self.id = data['id']
-        self.login = data['login']
-        self.wins = data['wins']
-        self.hashed_password = data['password']
-        self.played = data['played']
-        self.about = data['about']
+        self.id = data[0]
+        self.login = data[1]
+        self.hashed_password = data[2]
+        self.wins = data[3]
+        self.played = data[4]
+        self.about = data[5]
         self.cached_game = None
 
     def get_id(self):
@@ -68,7 +68,7 @@ def get_by_login(login: str) -> User or None:
 def get_by_token(token: str) -> User or None:
     with db.connect() as conn, conn.cursor() as cursor:
         cursor.execute("""
-            SELECT * FROM users WHERE MD5(CONCAT(login, password)) = %s LIMIT 1;
+            SELECT * FROM users WHERE MD5(CONCAT(LOWER(login), password)) = %s LIMIT 1;
         """, [token])
         data = cursor.fetchone()
         return None if data is None else User(data)
