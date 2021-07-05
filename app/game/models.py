@@ -119,6 +119,24 @@ def get_by_id(game_id: int) -> GameModel or None:
         return None if result is None else GameModel(result)
 
 
+def get_games(count: int = 7) -> list:
+    with db.connect() as conn, conn.cursor() as cursor:
+        cursor.execute(f"""
+            SELECT * FROM games ORDER BY id DESC LIMIT {count};
+        """)
+        return [GameModel(data) for data in cursor.fetchall()]
+
+
+def get_user_games(user: um.User, count: int = 7) -> list:
+    with db.connect() as conn, conn.cursor() as cursor:
+        cursor.execute(f"""
+            SELECT games.* FROM games JOIN players 
+            WHERE players.game = games.id AND players.user = {user.id}
+            ORDER BY games.id DESC LIMIT {count};
+        """)
+        return [GameModel(data) for data in cursor.fetchall()]
+
+
 def create(owner: um.User, add_self: bool, name: str, period: int, start_time: int,
            private: bool, mode: int, view_distance: int, **kwargs) -> GameModel:
 
