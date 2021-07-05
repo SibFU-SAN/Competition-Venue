@@ -180,5 +180,35 @@ def top_page():
     return flask.render_template("pages/top.html", user=current_user, top=top)
 
 
+@app.route("/settings", methods=["post", "get"])
+@login_required
+def settings_page():
+    settings = forms.SettingsForm()
+    settings.about.data = current_user.about
+    if settings.is_submitted():
+        about = settings.about.data
+
+        current_user.edit_settings(about)
+
+    error = None
+    password_form = forms.ChangePasswordForm()
+    if password_form.is_submitted():
+        password = u.hash_password(password_form.password.data)
+        new_password = password_form.new_password.data
+        confirmation = password_form.confirmation.data
+
+        if password != current_user.hashed_password:
+            error = "Введен неверный пароль"
+        if new_password != confirmation:
+            error = "Пароль не совпадают"
+        if len(new_password) < 5:
+            error = "Новый пароль слишком короткий"
+        if error is None:
+            current_user.change_password(new_password)
+
+    return flask.render_template("pages/profile/settings.html",
+                                 user=current_user, settings=settings, password_form=password_form, error=error)
+
+
 if __name__ == '__main__':
     app.run()
