@@ -1,8 +1,7 @@
 import hashlib
 import pymysql
 
-from main import mysql as db
-from app.game import models as gm
+from app.database import db
 
 
 class User:
@@ -13,7 +12,10 @@ class User:
         self.hashed_password = data['password']
         self.played = data['played']
         self.about = data['about']
-        self.__cached_game = None
+        self.cached_game = None
+
+    def get_id(self):
+        return self.id
 
     def change_password(self, new_password: str) -> str:
         self.hashed_password = hash_password(new_password)
@@ -35,24 +37,6 @@ class User:
             cursor.execute(f"""
                 UPDATE users SET played = played + 1, wins = wins + {int(winner)} WHERE id = {self.id} LIMIT 1;
             """)
-
-    @property
-    def active_game(self) -> gm.GameModel or None:
-        if self.__cached_game is not None:
-            return self.__cached_game
-
-        with db.connect() as conn, conn.cursor() as cursor:
-            cursor.execute(f"""
-                SELECT game FROM players WHERE user = {self.id} ORDER BY id DESC LIMIT 1;
-            """)
-            result = cursor.fetchone()
-            if result is None:
-                return None
-            game = gm.get_by_id(result['game'])
-            if game is None:
-                return None
-            self.__cached_game = game if game.can_play else None
-            return self.__cached_game
 
 
 class UserError(Exception):

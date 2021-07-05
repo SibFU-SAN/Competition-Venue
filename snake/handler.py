@@ -2,7 +2,7 @@ import time
 from threading import Thread
 import asyncio
 from logging import Logger
-from app.game import models as gm, constants as gc
+import app.game as g
 from snake import game as s
 
 
@@ -21,13 +21,13 @@ class GameHandler(Thread):
         self.logger.info("Запуск обработчика игр")
         while True:
             time_end = int(time.time())
-            games = gm.get_ended_games(time_end)
+            games = g.get_ended_games(time_end)
 
             for game in games:
                 asyncio.run(self.handle(game))
             time.sleep(5)
 
-    async def handle(self, game: gm.GameModel):
+    async def handle(self, game: g.GameModel):
         log = self.logger.getChild(game.id)
         log.info("Запуск обработки игры")
 
@@ -45,7 +45,7 @@ class GameHandler(Thread):
             log.info("Обработка игры успешно завершена")
 
 
-def start(game_data: gm.GameModel):
+def start(game_data: g.GameModel):
     game = s.Game(game_data, 50 * 2, 50)
 
     scripts = dict()

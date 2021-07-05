@@ -2,9 +2,9 @@ import os
 import json
 import time
 
-from main import mysql as db
-from app.user import models as um
-from app.game import constants as gc
+from . import constants as g
+from app.database import db
+import app.user as u
 
 
 class GameModel:
@@ -14,7 +14,7 @@ class GameModel:
         self.start_time = data['start_time']
         self.end_time = data['end_time']
         self.period = data['period']
-        self.owner = um.get_by_id(data['owner'])
+        self.owner = u.get_by_id(data['owner'])
         self.status = data['status']
         self.private = data['private']
         self.settings = json.JSONEncoder().encode(data['settings'])
@@ -28,21 +28,21 @@ class GameModel:
                     SELECT game, user FROM players WHERE game = {self.id};
                 """)
                 data = cursor.fetchall()
-            self.__cached_players = [um.get_by_id(obj['user']) for obj in data]
+            self.__cached_players = [u.get_by_id(obj['user']) for obj in data]
         return self.__cached_players
 
     @property
-    def winner(self) -> um.User or None:
+    def winner(self) -> u.User or None:
         with db.connect() as conn, conn.cursor() as cursor:
             cursor.execute(f"""
                 SELECT game, user FROM winners WHERE game = {self.id} LIMIT 1;
             """)
             result = cursor.fetchone()
-            return None if result is None else um.get_by_id(result['user'])
+            return None if result is None else u.get_by_id(result['user'])
 
     @property
     def can_play(self):
-        return (self.start_time < time.time() < self.end_time) or self.status == gc.NOT_STARTED
+        return (self.start_time < time.time() < self.end_time) or self.status == g.NOT_STARTED
 
     @property
     def left_time(self) -> int:
@@ -60,14 +60,14 @@ class GameModel:
         with open(f'./resources/demos/{self.id}', 'w') as file:
             file.write(json.JSONEncoder().encode(demo))
 
-    def save_script(self, user: um.User, script: str):
+    def save_script(self, user: u.User, script: str):
         if not os.path.exists(f"./resources/scripts/{self.id}"):
             os.mkdir(f"./resources/scripts/{self.id}")
 
         with open(f'./resources/scripts/{self.id}/{user.id}.py', 'w', encoding="utf-8") as file:
             file.write(script)
 
-    def read_script(self, user: um.User) -> str:
+    def read_script(self, user: u.User) -> str:
         if not os.path.exists(f"./resources/scripts/{self.id}"):
             return ""
         if not os.path.exists(f"./resources/scripts/{self.id}/{user.id}.py"):
@@ -76,7 +76,7 @@ class GameModel:
         with open(f'./resources/scripts/{self.id}/{user.id}.py', 'r', encoding="utf-8") as file:
             return file.read()
 
-    def end(self, best_player: um.User):
+    def end(self, best_player: u.User):
         with db.connect() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"""
@@ -89,24 +89,24 @@ class GameModel:
 
             with conn.cursor() as cursor:
                 cursor.execute(f"""
-                    UPDATE games SET status = {gc.HANDLED}
+                    UPDATE games SET status = {g.HANDLED}
                     WHERE id = {self.id} LIMIT 1;;
                 """)
 
     def close(self):
         with db.connect() as conn, conn.cursor() as cursor:
             cursor.execute(f"""
-                UPDATE games SET status = {gc.CANCELLED_BY_OWNER} WHERE id = {self.id} LIMIT 1;
+                UPDATE games SET status = {g.CANCELLED_BY_OWNER} WHERE id = {self.id} LIMIT 1;
             """)
 
-    def contains_player(self, user: um.User) -> bool:
-        game = user.active_game
+    def contains_player(self, user: u.User) -> bool:
+        game = get_active_game(user)
         return False if game is None else (game.id == self.id)
 
-    def add_player(self, user: um.User):
-        if user.active_game is not None:
+    def add_player(self, user: u.User):
+        if get_active_game(user) is not None:
             raise GameError('Вы уже участвуете в другой игре')
-        if self.status != gc.NOT_STARTED:
+        if self.status != g.NOT_STARTED:
             raise GameError('Игра уже окончена')
 
         with db.connect() as conn, conn.cursor() as cursor:
@@ -123,7 +123,7 @@ class GameModel:
     def handled_with_errors(self):
         with db.connect() as conn, conn.cursor() as cursor:
             cursor.execute(f"""
-                UPDATE games SET status = {gc.ENDED_WITH_ERRORS} WHERE id = {self.id} LIMIT 1;
+                UPDATE games SET status = {g.ENDED_WITH_ERRORS} WHERE id = {self.id} LIMIT 1;
             """)
 
 
@@ -141,7 +141,7 @@ def get_by_id(game_id: int) -> GameModel or None:
         return None if result is None else GameModel(result)
 
 
-def get_games(count: int = 7, status: int = gc.NOT_STARTED) -> list:
+def get_games(count: int = 7, status: int = g.NOT_STARTED) -> list:
     with db.connect() as conn, conn.cursor() as cursor:
         cursor.execute(f"""
             SELECT * FROM games WHERE private = false AND status = {status} ORDER BY id DESC;
@@ -149,7 +149,7 @@ def get_games(count: int = 7, status: int = gc.NOT_STARTED) -> list:
         return [GameModel(data) for data in cursor.fetchall()]
 
 
-def get_user_games(user: um.User, count: int = 7) -> list:
+def get_user_games(user: u.User, count: int = 7) -> list:
     with db.connect() as conn, conn.cursor() as cursor:
         cursor.execute(f"""
             SELECT games.* FROM games JOIN players 
@@ -164,20 +164,38 @@ def get_ended_games(time_now: int, mark_as_handling: bool = True) -> list:
         with conn.cursor() as cursor:
             cursor.execute(f"""
                         SELECT * FROM games 
-                        WHERE status = {gc.NOT_STARTED} AND end_time <= {time_now};
+                        WHERE status = {g.NOT_STARTED} AND end_time <= {time_now};
                     """)
             result = [GameModel(data) for data in cursor.fetchall()]
 
         if mark_as_handling:
             with conn.cursor() as cursor:
                 cursor.execute(f"""
-                    UPDATE games SET status = {gc.HANDLING}
-                    WHERE status = {gc.NOT_STARTED} AND end_time <= {time_now};
+                    UPDATE games SET status = {g.HANDLING}
+                    WHERE status = {g.NOT_STARTED} AND end_time <= {time_now};
                 """)
         return result
 
 
-def create(owner: um.User, add_self: bool, name: str, period: int, start_time: int,
+def get_active_game(user: u.User) -> GameModel or None:
+    if user.cached_game is not None:
+        return user.cached_game
+
+    with db.connect() as conn, conn.cursor() as cursor:
+        cursor.execute(f"""
+            SELECT game FROM players WHERE user = {user.id} ORDER BY id DESC LIMIT 1;
+        """)
+        result = cursor.fetchone()
+        if result is None:
+            return None
+        game = get_by_id(result['game'])
+        if game is None:
+            return None
+        user.cached_game = game if game.can_play else None
+        return user.cached_game
+
+
+def create(owner: u.User, add_self: bool, name: str, period: int, start_time: int,
            private: bool, mode: int, view_distance: int, **kwargs) -> GameModel:
 
     end_time = start_time + period * 60

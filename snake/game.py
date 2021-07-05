@@ -2,7 +2,7 @@ from random import randint, choice
 from copy import deepcopy
 
 from snake import handler
-from app.game import models as gm
+from app import game as g
 
 VECTOR_UP = (0, 1)
 VECTOR_DOWN = (0, -1)
@@ -357,7 +357,7 @@ class Snake:
 
 
 class Game:
-    def __init__(self, game_data: gm.GameModel, x_max: int, y_max: int):
+    def __init__(self, game_data: g.GameModel, x_max: int, y_max: int):
         self.game_data = game_data
         self.players = [str(player.id) for player in game_data.players]
         self.world = World(x_max, y_max, **game_data.settings)
