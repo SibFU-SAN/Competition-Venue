@@ -1,12 +1,8 @@
-from json import encoder
-#from modules import game_starter, database
 from random import randint, choice
 from copy import deepcopy
 
-exec_options = {"__cached__": None, "__doc__": None, "__file__": None,
-                "__name__": None, "__loader__": None, "__package__": None,
-                "__spec__": None, "print": None, "exec": None,
-                "eval": None}
+from snake import handler
+from app.game import models as gm
 
 VECTOR_UP = (0, 1)
 VECTOR_DOWN = (0, -1)
@@ -48,7 +44,8 @@ def get_distance(el, target) -> int:
 
 
 class World:
-    def __init__(self, x_max: int, y_max: int, view_distance: int, mode_id: int):
+    def __init__(self, x_max: int, y_max: int, mode_id: int,
+                 view_distance: int):
         self.x_max = x_max
         self.y_max = y_max
         self.snakes = list()
@@ -96,7 +93,7 @@ class World:
                 if snake.head.x == loc[0] and snake.head.y == loc[1]:
                     continue
 
-            snake = Snake(uid, loc[0], loc[1], loc[2], self, self. mode_id)
+            snake = Snake(uid, loc[0], loc[1], loc[2], self, self.mode_id)
             self.snakes.append(snake)
             self.demo['players'].append(snake.id)
             break
@@ -122,11 +119,11 @@ class World:
         # Выполнение пользовательских скриптов
         for snake in self.snakes:
             try:
-                exec(compiled_scripts[snake.id], exec_options, snake.get_controls())
+                exec(compiled_scripts[snake.id], handler.exec_options, snake.get_controls())
             except Exception:
-                print("Oops...")
+                pass
 
-        # Отключение голода
+        # Отключение голод
         if self.mode_id == 0 or self.mode_id == 2:
             damaged = self.tick % 20 == 19
         else:
@@ -151,7 +148,6 @@ class World:
             while el is not None:
                 temp.append((el.x, el.y))
                 el = el.next
-
             # Переспавн в яблоки
             if snake.is_collided():
                 for snaky in self.snakes:
@@ -355,7 +351,6 @@ class Snake:
                     continue
                 direction = pre_last.get_next_el_vector()
 
-                #Убрать это при режиме без уменьшения хвоста
                 if self.mode_id != 2:
                     last.x -= direction[0]
                     last.y -= direction[1]
@@ -365,18 +360,21 @@ class Snake:
 
 
 class Game:
-    def __init__(self, game_id: str, players: list, x_max: int, y_max: int, view_distance: int,
+    def __init__(self, game_data: gm.GameModel, x_max: int, y_max: int,
                  mode_id: int):
-        self.game_id = game_id
-        self.players = players
+        self.game_data = game_data
         self.mode_id = mode_id
-        self.world = World(x_max, y_max, view_distance, mode_id)
+        self.players = [str(player.id) for player in game_data.players]
+        self.world = World(x_max, y_max, self.mode_id, **game_data.settings)
 
-    def start(self, scripts: dict):
+    def start(self, scripts: dict) -> str:
         # Компилирование скриптов
         compiled_scripts = dict()
         for player in scripts.keys():
-            compiled_scripts[player] = compile(str(scripts[player]), "", "exec")
+            try:
+                compiled_scripts[player] = compile(scripts[player], "", "exec")
+            except Exception:
+                compiled_scripts[player] = compile("", "", "exec")
 
         # Спавн игроков
         for player in self.players:
@@ -388,43 +386,9 @@ class Game:
                 break
 
         # Подведение итогов
-        scores = dict()
+        best = None
         for snake in self.world.snakes:
-            scores[snake.id] = snake.score
-        # database.db_end_game(self.game_id, scores)
+            if best is None or best[1] < snake.score:
+                best = (snake.id, snake.score)
 
-
-if __name__ == '__main__':
-    players = [f"test{i}" for i in range(20)]
-    game = Game("123", players, 120, 100, 5, 2)
-    codes = ["""
-if check_forward() == 1:
-    if check_right() != 1:
-        turn_right()
-    else:
-        turn_left()
-if check_left() == 2:
-    turn_left()
-elif check_right() == 2:
-    turn_right()
-        """,
-        """
-if check_forward() == 1:
-    if check_right() != 1:
-        turn_right()
-    else:
-        turn_left()
-if check_left() == 2:
-    turn_left()
-elif check_right() == 2:
-    turn_right()
-            """]
-
-    scripts = dict()
-    for player in players:
-        scripts[player] = codes[randint(0, len(codes) - 1)]
-
-    game.start(scripts)
-    print(game.world.tick)
-    with open(f"demo.json", 'w') as file:
-        file.write(encoder.JSONEncoder().encode(game.world.demo))
+        return best[0]
