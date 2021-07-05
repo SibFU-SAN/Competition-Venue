@@ -19,10 +19,9 @@ class User(UserMixin):
         return self.id
 
     def change_password(self, new_password: str) -> str:
-        self.hashed_password = hash_password(new_password)
         with db.connect() as conn, conn.cursor() as cursor:
             cursor.execute(f"""
-                UPDATE users SET password = %s WHERE id = {self.id} LIMIT 1;
+                UPDATE users SET password = MD5(%s) WHERE id = {self.id} LIMIT 1;
             """, new_password)
             conn.commit()
             return self.token
@@ -39,6 +38,18 @@ class User(UserMixin):
             cursor.execute(f"""
                 UPDATE users SET played = played + 1, wins = wins + {int(winner)} WHERE id = {self.id} LIMIT 1;
             """)
+            conn.commit()
+
+    def edit_settings(self,
+                      about: str or None = None
+                      ):
+        self.about = self.about if about is None else about.strip()
+        with db.connect() as conn, conn.cursor() as cursor:
+            cursor.execute(f"""
+                UPDATE users SET
+                about = %s
+                WHERE id = {self.id} LIMIT 1;
+            """, [self.about])
             conn.commit()
 
 
