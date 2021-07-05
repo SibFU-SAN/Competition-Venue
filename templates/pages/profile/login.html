@@ -23,9 +23,9 @@
             	<a href="{{ url_for("register_page") }}" class="form-btn">Регистрация</a>
 			</div>
 
-            {% if form.is_submitted() %}
+            {% if error %}
                 <div class="lost-access">
-                    <p class="text-danger">Введен неверный логин и пароль</p>
+                    <p class="text-danger">{{ error }}</p>
                 </div>
             {% endif %}
 		</form>
