@@ -76,7 +76,7 @@ class GameModel:
         with open(f'./resources/scripts/{self.id}/{user.id}.py', 'r', encoding="utf-8") as file:
             return file.read()
 
-    def end(self, best_player: um.User, time_end: int):
+    def end(self, best_player: um.User):
         with db.connect() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"""
@@ -90,7 +90,7 @@ class GameModel:
             with conn.cursor() as cursor:
                 cursor.execute(f"""
                     UPDATE games SET status = {gc.HANDLED}
-                    WHERE status = {gc.NOT_STARTED} AND end_time <= {time_end};
+                    WHERE id = {self.id} LIMIT 1;;
                 """)
 
     def close(self):
