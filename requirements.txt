@@ -3,3 +3,4 @@ pymongo~=3.11.3
 flask-mysql
 pyyaml~=5.4.1
 PyMySQL~=1.0.2
+flask-wtf
