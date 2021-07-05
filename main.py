@@ -259,8 +259,22 @@ def connect_page():
 @app.route("/join/<int:game_id>")
 @login_required
 def join_page(game_id: int):
-    # TODO: Вход в комнату
-    return ""
+    game = g.get_active_game(current_user)
+    if game is not None:
+        if game != g.constants.STARTED:
+            return flask.redirect(flask.url_for("editor_page"))
+        else:
+            return flask.redirect(flask.url_for("game_page", game_id=game_id))
+
+    game = g.get_by_id(game_id)
+    if game is None:
+        return err404()
+
+    game.add_player(current_user)
+    if game != g.constants.STARTED:
+        return flask.redirect(flask.url_for("editor_page"))
+    else:
+        return flask.redirect(flask.url_for("game_page", game_id=game_id))
 
 
 @app.route("/create")
