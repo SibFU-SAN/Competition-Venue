@@ -73,15 +73,22 @@ class GameModel:
         with open(f'./resources/scripts/{self.id}/{user.id}.py', 'r', encoding="utf-8") as file:
             return file.read()
 
-    def end(self, best_player: um.User):
-        with db.connect() as conn, conn.cursor() as cursor:
-            cursor.execute(f"""
-                INSERT INTO winners (game, user) VALUES ({self.id}, {best_player.id});
-            """)
+    def end(self, best_player: um.User, time_end: int):
+        with db.connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(f"""
+                    INSERT INTO winners (game, user) VALUES ({self.id}, {best_player.id});
+                """)
 
             players = self.players
             for player in players:
                 player.end_game(best_player.id == player.id)
+
+            with conn.cursor() as cursor:
+                cursor.execute(f"""
+                    UPDATE games SET status = {gc.HANDLED}
+                    WHERE status = {gc.NOT_STARTED} AND end_time <= {time_end};
+                """)
 
     def close(self):
         with db.connect() as conn, conn.cursor() as cursor:
@@ -143,14 +150,23 @@ def get_user_games(user: um.User, count: int = 7) -> list:
         return [GameModel(data) for data in cursor.fetchall()]
 
 
-def get_ended_games() -> list:
+def get_ended_games(mark_as_handling: bool = True) -> list:
     now = int(time.time())
-    with db.connect() as conn, conn.cursor() as cursor:
-        cursor.execute(f"""
-                    SELECT * FROM games 
-                    WHERE status = {gc.NOT_STARTED} AND end_time >= {now};
+    with db.connect() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(f"""
+                        SELECT * FROM games 
+                        WHERE status = {gc.NOT_STARTED} AND end_time <= {now};
+                    """)
+            result = [GameModel(data) for data in cursor.fetchall()]
+
+        if mark_as_handling:
+            with conn.cursor() as cursor:
+                cursor.execute(f"""
+                    UPDATE games SET status = {gc.HANDLING}
+                    WHERE status = {gc.NOT_STARTED} AND end_time <= {now};
                 """)
-        return [GameModel(data) for data in cursor.fetchall()]
+        return result
 
 
 def create(owner: um.User, add_self: bool, name: str, period: int, start_time: int,
