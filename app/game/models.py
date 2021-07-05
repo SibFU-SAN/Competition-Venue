@@ -143,6 +143,16 @@ def get_user_games(user: um.User, count: int = 7) -> list:
         return [GameModel(data) for data in cursor.fetchall()]
 
 
+def get_ended_games() -> list:
+    now = int(time.time())
+    with db.connect() as conn, conn.cursor() as cursor:
+        cursor.execute(f"""
+                    SELECT * FROM games 
+                    WHERE status = {gc.NOT_STARTED} AND end_time >= {now};
+                """)
+        return [GameModel(data) for data in cursor.fetchall()]
+
+
 def create(owner: um.User, add_self: bool, name: str, period: int, start_time: int,
            private: bool, mode: int, view_distance: int, **kwargs) -> GameModel:
 
