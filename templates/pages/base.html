@@ -23,9 +23,9 @@
 		</div>
 		<nav>
 			<ul class="head-menu">
-				<li><a href="/">Главная</a></li>
+				<li><a href="{{ url_for("index_page") }}">Главная</a></li>
 
-                {% if auth %}
+                {% if user and user.is_authenticated %}
 				<li><a href="#">Игра</a>
 					<ul class="submenu">
 
@@ -45,14 +45,14 @@
 
 				<li class="left-bottom">
 
-					{% if auth %}
-					    <a href="/login"><img src="/templates/static/images/profile_stub.png" alt=" " class="small-profile_logo"> Аккаунт</a>
+					{% if user and user.is_authenticated %}
+					    <a href="{{ url_for("login_page") }}"><img src="/templates/static/images/profile_stub.png" alt=" " class="small-profile_logo"> Аккаунт</a>
 					    <ul class="submenu">
 						    <li><a href="/profile/settings">Редактировать</a></li>
 						    <li><a href="/profile/sign_out">Выход</a></li>
 					    </ul>
                     {% else %}
-                        <a href="/login">Вход</a>
+                        <a href="{{ url_for("login_page") }}">Вход</a>
                     {% endif %}
 
 				</li>
