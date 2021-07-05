@@ -83,6 +83,12 @@ class GameModel:
             for player in players:
                 player.end_game(best_player.id == player.id)
 
+    def close(self):
+        with db.connect() as conn, conn.cursor() as cursor:
+            cursor.execute(f"""
+                UPDATE games SET status = {gc.CANCELLED_BY_OWNER} WHERE id = {self.id} LIMIT 1;
+            """)
+
     def contains_player(self, user: um.User) -> bool:
         game = user.active_game
         return False if game is None else (game.id == self.id)
