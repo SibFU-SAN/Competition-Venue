@@ -13,6 +13,7 @@ from json.encoder import JSONEncoder
 import snake.handler as sh
 from app.database import db
 import app.user as u
+import app.game as g
 from app.user.constants import LOGIN_REGEX
 
 
@@ -208,6 +209,65 @@ def settings_page():
 
     return flask.render_template("pages/profile/settings.html",
                                  user=current_user, settings=settings, password_form=password_form, error=error)
+
+
+@app.route("/watch/<int:game_id>")
+def watch_page(game_id: int):
+    game = g.get_by_id(game_id)
+    if game is None:
+        return err404()
+
+    if game.status != g.constants.HANDLED:
+        return flask.redirect(flask.url_for("game_page", game_id=game_id))
+
+    if game.has_demo:
+        return err404()
+
+    return flask.render_template("pages/game/watch.html", user=current_user, game=game)
+
+
+@app.route("/game/<int:game_id>")
+@login_required
+def game_page(game_id: int):
+    game = g.get_by_id(game_id)
+    if game is None:
+        return err404()
+
+    return flask.render_template("pages/game/info.html", user=current_user, game=game, constants=g.constants)
+
+
+@app.route("/demos")
+def demos_page():
+    # TODO: Список демок
+    return ""
+
+
+@app.route("/editor")
+@login_required
+def editor_page():
+    # TODO: Редактор кода
+    return ""
+
+
+@app.route("/connect")
+@login_required
+def connect_page():
+    # TODO: Поиск комнат
+    return ""
+
+
+@app.route("/join/<int:game_id>")
+@login_required
+def join_page(game_id: int):
+    # TODO: Вход в комнату
+    return ""
+
+
+@app.route("/create")
+@login_required
+def create_game_page():
+    # TODO: Создание игры
+    return ""
 
 
 if __name__ == '__main__':
