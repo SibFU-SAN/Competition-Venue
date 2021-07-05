@@ -120,6 +120,12 @@ class GameModel:
                 DELETE FROM games WHERE id = {self.id} LIMIT 1;
             """)
 
+    def handled_with_errors(self):
+        with db.connect() as conn, conn.cursor() as cursor:
+            cursor.execute(f"""
+                UPDATE games SET status = {gc.ENDED_WITH_ERRORS} WHERE id = {self.id} LIMIT 1;
+            """)
+
 
 class GameError(Exception):
     def __init__(self, message: str):
