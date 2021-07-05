@@ -17,7 +17,7 @@ class GameModel:
         self.owner = u.get_by_id(data[5])
         self.status = data[6]
         self.private = data[7]
-        self.node = data[8]
+        self.mode = data[8]
         self.settings = json.JSONEncoder().encode(data[9])
         self.__cached_players = None
 
