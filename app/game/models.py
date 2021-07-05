@@ -104,6 +104,12 @@ class GameModel:
                 INSERT INTO players (game, user) VALUES ({self.id}, {user.id});
             """)
 
+    def remove(self):
+        with db.connect() as conn, conn.cursor() as cursor:
+            cursor.execute(f"""
+                DELETE FROM games WHERE id = {self.id} LIMIT 1;
+            """)
+
 
 class GameError(Exception):
     def __init__(self, message: str):
