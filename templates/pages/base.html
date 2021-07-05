@@ -30,10 +30,10 @@
 					<ul class="submenu">
 
                         {% if game %}
-                            <li><a href="/game/editor">Продолжить игру</a></li>
+                            <li><a href="{{ url_for("editor_page") }}">Продолжить игру</a></li>
                         {% else %}
-                            <li><a href="/game/connect">Играть</a></li>
-                            <li><a href="/game/create">Создать комнату</a></li>
+                            <li><a href="{{ url_for("connect_page") }}">Найти комнату</a></li>
+                            <li><a href="{{ url_for("create_game_page") }}">Создать комнату</a></li>
                         {% endif %}
 
 						<li><a href="{{ url_for("top_page") }}">Таблица лидеров</a></li>
@@ -41,7 +41,7 @@
 				</li>
                 {% endif %}
 
-				<li><a href="/game/demo">Записи Игр</a></li>
+				<li><a href="{{ url_for("demos_page") }}">Записи Игр</a></li>
 
 				<li class="left-bottom">
 
