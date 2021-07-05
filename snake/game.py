@@ -1,7 +1,8 @@
-from json import encoder
-from modules import game_starter, database
 from random import randint, choice
 from copy import deepcopy
+
+from snake import handler
+from app.game import models as gm
 
 VECTOR_UP = (0, 1)
 VECTOR_DOWN = (0, -1)
@@ -116,7 +117,7 @@ class World:
         # Выполнение пользовательских скриптов
         for snake in self.snakes:
             try:
-                exec(compiled_scripts[snake.id], game_starter.exec_options, snake.get_controls())
+                exec(compiled_scripts[snake.id], handler.exec_options, snake.get_controls())
             except Exception:
                 pass
 
@@ -356,12 +357,12 @@ class Snake:
 
 
 class Game:
-    def __init__(self, game_id: str, players: list, x_max: int, y_max: int, view_distance: int):
-        self.game_id = game_id
-        self.players = players
-        self.world = World(x_max, y_max, view_distance)
+    def __init__(self, game_data: gm.GameModel, x_max: int, y_max: int):
+        self.game_data = game_data
+        self.players = [str(player.id) for player in game_data.players]
+        self.world = World(x_max, y_max, **game_data.settings)
 
-    def start(self, scripts: dict):
+    def start(self, scripts: dict) -> str:
         # Компилирование скриптов
         compiled_scripts = dict()
         for player in scripts.keys():
@@ -380,59 +381,9 @@ class Game:
                 break
 
         # Подведение итогов
-        scores = dict()
+        best = None
         for snake in self.world.snakes:
-            scores[snake.id] = snake.score
-        # database.db_end_game(self.game_id, scores)
+            if best is None or best[1] < snake.score:
+                best = (snake.id, snake.score)
 
-
-if __name__ == '__main__':
-    players = [f"test{i}" for i in range(10)]
-    game = Game("123", players, 120, 100, 5)
-    codes = ["""
-if not contains_memory('right'):
-    put_memory('right', 0)
-
-if check_forward() == 1:
-    if get_memory('right') == 1 and check_right() != 1:
-        turn_right()
-    elif check_left() != 1: 
-        turn_left()
-    else:
-        turn_right()
-
-if get_memory('right') == 1 and check_left() == 2 or check_right() == 1 and check_left() == 2:
-    put_memory('right', 0)
-    turn_left()
-elif check_right() == 2:
-    put_memory('right', 1)
-    turn_right()
-            """,
-             """
-if check_forward() == 1:
-    if check_right() != 1:
-        turn_right()
-    else: 
-        turn_left()
-             """,
-             """
-if check_forward() == 1:
-    if check_right() != 1:
-        turn_right()
-    else: 
-        turn_left() 
-
-if check_left() == 2:
-    turn_left() 
-elif check_right() == 2:
-    turn_right()
-             """]
-
-    scripts = dict()
-    for player in players:
-        scripts[player] = codes[randint(0, len(codes) - 1)]
-
-    game.start(scripts)
-    print(game.world.tick)
-    with open(f"demo.json", 'w') as file:
-        file.write(encoder.JSONEncoder().encode(game.world.demo))
+        return best[0]

@@ -2,8 +2,7 @@ import time
 from threading import Thread
 import asyncio
 from logging import Logger
-from modules import database, account_methods
-from modules.database import db_get_ended_games, db_get_game_data, db_remove_game
+from app.game import models as gm, constants as gc
 from snake import game as s
 
 
@@ -21,39 +20,41 @@ class GameHandler(Thread):
     def run(self) -> None:
         self.logger.info("Запуск обработчика игр")
         while True:
-            games = db_get_ended_games()
+            time_end = int(time.time())
+            games = gm.get_ended_games(time_end)
 
-            for game_id in games:
-                asyncio.run(self.handle(game_id))
+            for game in games:
+                asyncio.run(self.handle(game))
             time.sleep(5)
 
-    async def handle(self, game_id: str):
-        log = self.logger.getChild(game_id)
+    async def handle(self, game: gm.GameModel):
+        log = self.logger.getChild(game.id)
         log.info("Запуск обработки игры")
 
-        game_data = db_get_game_data(game_id)
-        if len(game_data['players']) == 0:
+        if len(game.players) == 0:
             log.info("В игре не участвовали пользователи. Удаляю игру из базы данных")
-            db_remove_game(game_id)
+            game.remove()
             return
 
         try:
-            start(game_id)
+            start(game)
         except Exception as ex:
             log.exception("Произошла ошибка при обработке игры", exc_info=ex)
+            game.handled_with_errors()
         else:
             log.info("Обработка игры успешно завершена")
 
 
-def start(game_hash: str):
-    game_data = database.db_get_game_data(game_hash)
-    game = s.Game(game_hash, game_data['players'], game_data['map_size'] * 2,
-                  game_data['map_size'], game_data['view_distance'])
+def start(game_data: gm.GameModel):
+    game = s.Game(game_data, 50 * 2, 50)
 
     scripts = dict()
     for player in game.players:
-        script = account_methods.read_script(game_hash, player)
+        script = game_data.read_script(player)
         scripts[player] = script
 
-    game.start(scripts)
-    account_methods.save_demo(game_hash, game.world.demo)
+    winner_id = int(game.start(scripts))
+    winner, *_ = [player for player in game.players if player.id == winner_id]
+
+    game_data.save_demo(game.world.demo)
+    game_data.end(winner)
