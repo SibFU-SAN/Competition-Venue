@@ -63,6 +63,10 @@ class GameModel:
         with open(f'./resources/demos/{self.id}', 'r') as file:
             return file.read()
 
+    @property
+    def has_demo(self):
+        return os.path.exists(f"./resources/demos/{self.id}")
+
     def save_demo(self, demo):
         with open(f'./resources/demos/{self.id}', 'w') as file:
             file.write(json.JSONEncoder().encode(demo))
