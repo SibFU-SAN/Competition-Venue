@@ -1,14 +1,23 @@
 {% extends "pages/base.html" %}
 
+{% block title %}
+    Таблица лидеров
+{% endblock %}
+
 {% block content %}
 	<main class="main centered-box">
 		<section class="table-section">
 			<table class="table">
 				<caption>Таблица лидеров</caption>
 				<tr><th>Имя</th><th>Кол-во побед</th><th>Кол-во игр</th></tr>
-				{% for user in top %}
-                    <tr><td><a href="/target/{{ user['login'] }}">{{ user['name'] }}</a></td><td>{{ user['wins'] }}</td><td>{{ user['played_games'] }}</td></tr>
+
+				{% for target in top %}
+                    <tr>
+                        <td><a href="{{ url_for("other_profile_page", login=target.login) }}">{{ target.login }}</a></td>
+                        <td>{{ target.wins }}</td>
+                        <td>{{ target.played }}</td></tr>
                 {% endfor %}
+
 			</table>
 		</section>
 	</main>

@@ -2,7 +2,7 @@ from random import randint, choice
 from copy import deepcopy
 
 from snake import handler
-from app.game import models as gm
+from app import game as gm
 
 VECTOR_UP = (0, 1)
 VECTOR_DOWN = (0, -1)
