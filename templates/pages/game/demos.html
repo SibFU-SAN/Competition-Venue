@@ -10,7 +10,8 @@
 			<form method="post" action="#" class="form-field" id="form">
 				<h2>Поиск демо по ID</h2>
 				<div class="form-menu">
-					<label>Id Игры <input type="text" name="game_id" id="game_id" required style="width: 240px;"></label>
+					{{ form.demo.label() }}
+                    {{ form.demo() }}
 					<input type="submit" value="Найти" class="form-btn" style="margin-left: auto;">
 				</div>
 			</form>
@@ -18,24 +19,26 @@
 			<div>
 				<h2>Записи последних игр</h2>
 				<section class="session-list" id="session_list">
+
                     {% for game in games %}
 					<div class="session">
 						<div class="session-head">
 							<h3><span>{{ game['name'] }}</span></h3>
-                            <a href="/game/demo/{{ game['id'] }}" class="btn" style="margin-left: auto;">Смотреть</a>
+                            <a href="{{ url_for("watch_page", game_id=game.id) }}" class="btn" style="margin-left: auto;">Смотреть</a>
 						</div>
 						<div class="session-info">
 							<ul>
-                                <li>ID: <span>{{ game['id'] }}</span></li>
-								<li>Кол-во участников: <span>{{ game['players'] }}</span></li>
+                                <li>ID: <span>{{ game.id }}</span></li>
+								<li>Кол-во участников: <span>{{ game.count_players }}</span></li>
 							</ul>
 							<ul>
-								<li>Дата окончания: <span>{{ game['end_time'] }}</span></li>
-								<li>Победитель: <span>{{ game['best_player'] }}</span></li>
+								<li>Дата окончания: <span>{{ game.end_time }}</span></li>
+								<li>Победитель: <span><a href="{{ url_for("other_profile_page", login=game.winner.login) }}">game.winner.login</a></span></li>
 							</ul>
 						</div>
 					</div>
                     {% endfor %}
+
 				</section>
 			</div>
 		</section>
