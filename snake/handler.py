@@ -13,10 +13,9 @@ exec_options = {"__cached__": None, "__doc__": None, "__file__": None,
 
 
 class GameHandler(Thread):
-    def __init__(self, logger: Logger, mode_id: int):
+    def __init__(self, logger: Logger):
         super().__init__()
         self.logger = logger
-        self.mode_id = mode_id
 
     def run(self) -> None:
         self.logger.info("Запуск обработчика игр")
