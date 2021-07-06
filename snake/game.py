@@ -2,7 +2,7 @@ from random import randint, choice
 from copy import deepcopy
 
 from snake import handler
-from app import game as g
+from app import game as gm
 
 VECTOR_UP = (0, 1)
 VECTOR_DOWN = (0, -1)
@@ -44,13 +44,15 @@ def get_distance(el, target) -> int:
 
 
 class World:
-    def __init__(self, x_max: int, y_max: int, view_distance: int):
+    def __init__(self, x_max: int, y_max: int, mode_id: int,
+                 view_distance: int):
         self.x_max = x_max
         self.y_max = y_max
         self.snakes = list()
         self.apples = set()
         self.view_distance = view_distance
         self.emtpy_tick = 0
+        self.mode_id = mode_id
         self.demo = {
             'players': list(),
             'gameSettings': {
@@ -91,7 +93,7 @@ class World:
                 if snake.head.x == loc[0] and snake.head.y == loc[1]:
                     continue
 
-            snake = Snake(uid, loc[0], loc[1], loc[2], self)
+            snake = Snake(uid, loc[0], loc[1], loc[2], self, self.mode_id)
             self.snakes.append(snake)
             self.demo['players'].append(snake.id)
             break
@@ -121,12 +123,13 @@ class World:
             except Exception:
                 pass
 
+        # Отключение голод
+        if self.mode_id == 0 or self.mode_id == 2:
+            damaged = self.tick % 20 == 19
+        else:
+            damaged = False
+
         # Обработка движений
-        damaged = self.tick % 20 == 19
-        # Сделать, если не нужен голод
-        "--------------------------------------------------"
-        damaged = 1
-        "--------------------------------------------------"
         for snake in self.snakes:
             if not snake.alive:
                 continue
@@ -146,7 +149,6 @@ class World:
                 temp.append((el.x, el.y))
                 el = el.next
             # Переспавн в яблоки
-            #---------------------------------------
             if snake.is_collided():
                 for snaky in self.snakes:
                     el = snaky.head
@@ -164,7 +166,7 @@ class World:
                             self.apples.add((tmp.x, tmp.y))
                         el = el.next
                     snake.alive = False
-        #---------------------------------------------
+
         # Запись демки
         for snake in self.snakes:
             if not snake.alive:
@@ -235,12 +237,14 @@ class Head(Point):
 
 
 class Snake:
-    def __init__(self, uid: str, x_spawn: int, y_spawn: int, direction: int, world: World):
+    def __init__(self, uid: str, x_spawn: int, y_spawn: int, direction: int, world: World,
+                 mode_id: int):
         self.id = uid
         self.head = Head(x_spawn, y_spawn, direction + 2)
         self.alive = True
         self.world = world
         self.score = 0
+        self.mode_id = mode_id
         self.memory = dict()
 
         vector = get_direction_vector(direction)
@@ -346,21 +350,22 @@ class Snake:
                 if eaten and i == 0:
                     continue
                 direction = pre_last.get_next_el_vector()
-                #Убрать это при режиме без уменьшения хвоста
-                #-------------------------------------------
-                last.x -= direction[0]
-                last.y -= direction[1]
-                #-------------------------------------------
+
+                if self.mode_id != 2:
+                    last.x -= direction[0]
+                    last.y -= direction[1]
 
         if self.head.next is None or get_distance(self.head, self.head.next) == 0:
             self.alive = False
 
 
 class Game:
-    def __init__(self, game_data: g.GameModel, x_max: int, y_max: int):
+    def __init__(self, game_data: gm.GameModel, x_max: int, y_max: int,
+                 mode_id: int):
         self.game_data = game_data
+        self.mode_id = mode_id
         self.players = [str(player.id) for player in game_data.players]
-        self.world = World(x_max, y_max, **game_data.settings)
+        self.world = World(x_max, y_max, self.mode_id, **game_data.settings)
 
     def start(self, scripts: dict) -> str:
         # Компилирование скриптов
