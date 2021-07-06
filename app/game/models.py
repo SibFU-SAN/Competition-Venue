@@ -28,6 +28,10 @@ class GameModel:
         return self.__status
 
     @property
+    def players(self) -> int:
+        return len(self.players)
+
+    @property
     def players(self) -> list:
         if self.__cached_players is None:
             with db.connect() as conn, conn.cursor() as cursor:
