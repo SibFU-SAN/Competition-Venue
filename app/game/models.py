@@ -168,8 +168,8 @@ def get_by_id(game_id: int) -> GameModel or None:
 def get_games(count: int = 7, status: int = g.NOT_STARTED) -> list:
     with db.connect() as conn, conn.cursor() as cursor:
         cursor.execute(f"""
-            SELECT * FROM games WHERE private = false AND status = {status} ORDER BY id DESC;
-        """ + (f"LIMIT {count}" if count > 0 else ""))
+            SELECT * FROM games WHERE (private = false) AND (status = {status}) ORDER BY id DESC
+        """ + (f"LIMIT {count};" if count > 0 else ";"))
         return [GameModel(data) for data in cursor.fetchall()]
 
 
