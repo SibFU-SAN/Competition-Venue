@@ -33,30 +33,22 @@
 				<dt>Размер карты</dt>
 					<dd id="info_map">32x48</dd>
 			</dl>
-			<!--<div>
-				<hr>
-				<h3>Список участиков</h3>
-				<ul>
-					<li>Валера 1</li>
-					<li>Валера 2</li>
-				</ul>
-			</div>-->
 		</div>
 	</section>
 </main>
 
 <script>
 // Данные Зрителя
-const accountHesh = '{{ user_id }}';
+const accountHesh = '{{ user.id if user else "0" }}';
 let personalSnakeId = accountHesh;
 
 // Данные Игроков: Hesh <=> Name
 //const playersHesh = JSON.parse(``);
 
 // Карта Игры
-const gameReplay = JSON.parse(`{{ demo }}`.replaceAll("&#34;", '"'));
+const gameReplay = JSON.parse(`{{ game.demo }}`.replaceAll("&#34;", '"'));
 
-let PlayersColors = new Map();;
+let PlayersColors = new Map();
 
 // HTML лементы
 const canvas  = document.getElementById("game_screen");
