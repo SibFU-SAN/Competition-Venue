@@ -20,6 +20,7 @@ class GameModel:
         self.mode = data[8]
         self.settings = json.JSONEncoder().encode(data[9])
         self.__cached_players = None
+        self.__cached_winner = None
 
     @property
     def status(self) -> int:
@@ -44,12 +45,14 @@ class GameModel:
 
     @property
     def winner(self) -> u.User or None:
-        with db.connect() as conn, conn.cursor() as cursor:
-            cursor.execute(f"""
-                SELECT game, user FROM winners WHERE game = {self.id} LIMIT 1;
-            """)
-            result = cursor.fetchone()
-            return None if result is None else u.get_by_id(result[1])
+        if self.__cached_winner is None:
+            with db.connect() as conn, conn.cursor() as cursor:
+                cursor.execute(f"""
+                    SELECT game, user FROM winners WHERE game = {self.id} LIMIT 1;
+                """)
+                result = cursor.fetchone()
+                self.__cached_winner = None if result is None else u.get_by_id(result[1])
+        return self.__cached_winner
 
     @property
     def can_play(self):
