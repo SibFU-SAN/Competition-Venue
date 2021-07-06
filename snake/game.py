@@ -360,10 +360,9 @@ class Snake:
 
 
 class Game:
-    def __init__(self, game_data: gm.GameModel, x_max: int, y_max: int,
-                 mode_id: int):
+    def __init__(self, game_data: gm.GameModel, x_max: int, y_max: int):
         self.game_data = game_data
-        self.mode_id = mode_id
+        self.mode_id = game_data.mode
         self.players = [str(player.id) for player in game_data.players]
         self.world = World(x_max, y_max, self.mode_id, **game_data.settings)
 
