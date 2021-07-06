@@ -20,12 +20,17 @@ class GameModel:
         self.mode = data[8]
         self.settings = json.JSONEncoder().encode(data[9])
         self.__cached_players = None
+        self.__cached_winner = None
 
     @property
     def status(self) -> int:
         if self.__status == g.NOT_STARTED and time.time() > self.start_time:
             return g.STARTED
         return self.__status
+
+    @property
+    def count_players(self) -> int:
+        return len(self.players)
 
     @property
     def players(self) -> list:
@@ -40,12 +45,14 @@ class GameModel:
 
     @property
     def winner(self) -> u.User or None:
-        with db.connect() as conn, conn.cursor() as cursor:
-            cursor.execute(f"""
-                SELECT game, user FROM winners WHERE game = {self.id} LIMIT 1;
-            """)
-            result = cursor.fetchone()
-            return None if result is None else u.get_by_id(result[1])
+        if self.__cached_winner is None:
+            with db.connect() as conn, conn.cursor() as cursor:
+                cursor.execute(f"""
+                    SELECT game, user FROM winners WHERE game = {self.id} LIMIT 1;
+                """)
+                result = cursor.fetchone()
+                self.__cached_winner = None if result is None else u.get_by_id(result[1])
+        return self.__cached_winner
 
     @property
     def can_play(self):
@@ -161,8 +168,8 @@ def get_by_id(game_id: int) -> GameModel or None:
 def get_games(count: int = 7, status: int = g.NOT_STARTED) -> list:
     with db.connect() as conn, conn.cursor() as cursor:
         cursor.execute(f"""
-            SELECT * FROM games WHERE private = false AND status = {status} ORDER BY id DESC;
-        """ + (f"LIMIT {count}" if count > 0 else ""))
+            SELECT * FROM games WHERE (private = false) AND (status = {status}) ORDER BY id DESC
+        """ + (f"LIMIT {count};" if count > 0 else ";"))
         return [GameModel(data) for data in cursor.fetchall()]
 
 

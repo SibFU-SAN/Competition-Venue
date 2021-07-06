@@ -236,10 +236,18 @@ def game_page(game_id: int):
     return flask.render_template("pages/game/info.html", user=current_user, game=game, constants=g.constants)
 
 
-@app.route("/demos")
+@app.route("/demos", methods=["post", "get"])
 def demos_page():
-    # TODO: Список демок
-    return ""
+    games = g.get_games(7, g.constants.HANDLED)
+    form = forms.FindDemoForm()
+    if form.is_submitted():
+        try:
+            game_id = int(form.demo.data)
+            return flask.redirect(flask.url_for("watch_page", game_id=game_id))
+        except ValueError:
+            pass
+
+    return flask.render_template("pages/game/demos.html", user=current_user, games=games, form=form)
 
 
 @app.route("/editor")

@@ -27,3 +27,8 @@ class ChangePasswordForm(FlaskForm):
     new_password = PasswordField("Новый пароль", validators=[DataRequired(), Length(5)])
     confirmation = PasswordField("Подтверждение пароля", validators=[DataRequired(), Length(5)])
     submit = SubmitField("Изменить")
+
+
+class FindDemoForm(FlaskForm):
+    demo = StringField("ID игры", validators=[DataRequired(), Regexp("^[\\d]+$")])
+    submit = SubmitField("Найти")
