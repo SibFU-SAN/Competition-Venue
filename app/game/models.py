@@ -28,7 +28,7 @@ class GameModel:
         return self.__status
 
     @property
-    def players(self) -> int:
+    def count_players(self) -> int:
         return len(self.players)
 
     @property
