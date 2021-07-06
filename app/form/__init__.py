@@ -1,1 +1,1 @@
-from .models import LoginForm, RegisterForm, SettingsForm, ChangePasswordForm
+from .models import LoginForm, RegisterForm, SettingsForm, ChangePasswordForm, FindDemoForm
